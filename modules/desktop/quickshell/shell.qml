@@ -1,25 +1,45 @@
 //@ pragma UseQApplication
+import QtQuick
 import Quickshell
+import Quickshell.Io
 import Quickshell.Wayland
+import Quickshell.Hyprland
+import Quickshell.Services.Pipewire
 
-// Xmarchy Brutalist Shell
+// Xmarchy Brutalist Desktop Shell
 ShellRoot {
-    id: root
+    id: shell
 
-    // Brutalist Renk Paleti (Saf Siyah / Beyaz)
-    readonly property string colorBg: "#000000"
-    readonly property string colorFg: "#FFFFFF"
+    // Brutalist Renk Sistemi
+    readonly property string bg: "#000000"
+    readonly property string fg: "#FFFFFF"
+    readonly property string dim: "#666666"
+    readonly property string accent: "#FFFFFF"
+    readonly property int barHeight: 28
+    readonly property string fontFamily: "JetBrains Mono"
+
+    // Pipewire Ses Servisi
+    PwObjectTracker {
+        objects: [Pipewire.defaultAudioSink]
+    }
 
     // Her ekran için Bar paneli
     Variants {
         model: Quickshell.screens
-        delegate: WlrLayershell {
+        delegate: Bar {
             required property var modelData
             screen: modelData
-            anchors { top: true; left: true; right: true }
-            exclusiveZone: 24
-            height: 24
-            color: root.colorBg
+        }
+    }
+
+    // OSD (Ses/Parlaklık göstergesi)
+    Osd { id: osd }
+
+    // IPC: Dışarıdan komutlarla shell'i kontrol etme
+    IpcHandler {
+        target: "osd"
+        function show(icon: string, value: int) {
+            osd.show(icon, value)
         }
     }
 }
