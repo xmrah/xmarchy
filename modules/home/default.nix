@@ -173,18 +173,22 @@
         "$mod, J, movefocus, d"
 
         # Ekran görüntüsü
-        ", Print, exec, grim - | wl-copy"
+        ", Print, exec, xmarchy-capture screen"
         "$mod, Print, exec, grim -g "$(slurp)" - | wl-copy"
       ];
 
       # Ses kontrolleri (OSD ile)
+      
       bindel = [
-        ", XF86AudioRaiseVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"
-        ", XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
+        ", XF86MonBrightnessUp, exec, xmarchy-bright up"
+        ", XF86MonBrightnessDown, exec, xmarchy-bright down"
+
+        ", XF86AudioRaiseVolume, exec, xmarchy-audio up"
+        ", XF86AudioLowerVolume, exec, xmarchy-audio down"
       ];
 
       bindl = [
-        ", XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+        ", XF86AudioMute, exec, xmarchy-audio mute"
       ];
     };
   };

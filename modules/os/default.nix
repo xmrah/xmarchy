@@ -3,6 +3,10 @@
 {
   imports = [
     ../cli/default.nix
+    ../cli/core.nix
+    ../apps/browser.nix
+    ../apps/ai.nix
+    ../apps/gaming.nix
     inputs.impermanence.nixosModules.impermanence
     ./impermanence.nix
   ];
