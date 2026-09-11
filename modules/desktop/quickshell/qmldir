@@ -1,2 +1,5 @@
 Bar 1.0 plugins/bar/Bar.qml
 Osd 1.0 plugins/osd/Osd.qml
+Notifications 1.0 plugins/notifications/Notifications.qml
+Launcher 1.0 plugins/launcher/Launcher.qml
+Lock 1.0 plugins/lock/Lock.qml

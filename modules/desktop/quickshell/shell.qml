@@ -23,6 +23,8 @@ ShellRoot {
         objects: [Pipewire.defaultAudioSink]
     }
 
+    // ═══════════ Bileşenler ═══════════
+
     // Her ekran için Bar paneli
     Variants {
         model: Quickshell.screens
@@ -35,11 +37,28 @@ ShellRoot {
     // OSD (Ses/Parlaklık göstergesi)
     Osd { id: osd }
 
-    // IPC: Dışarıdan komutlarla shell'i kontrol etme
+    // Bildirim Sunucusu
+    Notifications { id: notifications }
+
+    // Uygulama Başlatıcı
+    Launcher { id: launcher }
+
+    // Kilit Ekranı
+    Lock { id: lock }
+
+    // ═══════════ IPC Kontrolleri ═══════════
+
     IpcHandler {
         target: "osd"
         function show(icon: string, value: int) {
             osd.show(icon, value)
+        }
+    }
+
+    IpcHandler {
+        target: "launcher"
+        function toggle() {
+            launcher.toggle()
         }
     }
 }
