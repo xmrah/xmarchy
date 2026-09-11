@@ -2,7 +2,6 @@
 
 {
   # Xmarchy: Developer Arsenal (Piller Dahil)
-  # Brutalist ama iş yapmaya hazır, modern Rust tabanlı araçlarla donatılmış cephanelik.
 
   environment.systemPackages = with pkgs; [
     # --- Dosya ve Arama (Rust Tabanlı Modern Araçlar) ---
@@ -21,12 +20,11 @@
     # --- Sistem İzleme ---
     btop       # Modern kaynak izleme
     fastfetch  # Sistem bilgisi
-    
+
     # --- Dil / Sürüm Yönetimi ---
-    mise       # asdf/rtx alternatifi (Python, Node, Go vb. yönetimi için)
+    mise       # asdf/rtx alternatifi
   ];
 
-  # Docker Daemon
   virtualisation.docker.enable = true;
   virtualisation.docker.rootless = {
     enable = true;

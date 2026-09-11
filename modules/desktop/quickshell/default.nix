@@ -1,14 +1,8 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 
 {
-  # Xmarchy Quickshell Integration
-  
-  environment.systemPackages = with pkgs; [
-    quickshell
-    qt6.qtdeclarative
-    qt6.qtwayland
+  # Quickshell: Resmi flake'ten gelen paket (Nixpkgs senkronizasyonu zorunlu)
+  environment.systemPackages = [
+    inputs.quickshell.packages.${pkgs.system}.default
   ];
-
-  # Home Manager üzerinden Systemd User Service olarak Quickshelli başlat
-  # Şimdilik ana modüle referans bırakıyoruz, ileride systemd eklenecek.
 }

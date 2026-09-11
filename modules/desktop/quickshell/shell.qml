@@ -1,34 +1,25 @@
 //@ pragma UseQApplication
 import Quickshell
-import Quickshell.Io
-import "Ui"
-import "services"
-import "plugins"
+import Quickshell.Wayland
 
-// Xmarchy Brutalist Shell Root
+// Xmarchy Brutalist Shell
 ShellRoot {
     id: root
 
     // Brutalist Renk Paleti (Saf Siyah / Beyaz)
-    property string colorBg: "#000000"
-    property string colorFg: "#FFFFFF"
-    property int borderW: 1
+    readonly property string colorBg: "#000000"
+    readonly property string colorFg: "#FFFFFF"
 
-    // Ana Ekranlar için Bar Bileşeni
+    // Her ekran için Bar paneli
     Variants {
         model: Quickshell.screens
-        delegate: Rectangle {
+        delegate: WlrLayershell {
             required property var modelData
-            // Şimdilik test için siyah bir bar (İleride Ui/Bar.qml olacak)
+            screen: modelData
+            anchors { top: true; left: true; right: true }
+            exclusiveZone: 24
+            height: 24
             color: root.colorBg
-            border.color: root.colorFg
-            border.width: root.borderW
-            height: 30
-            width: modelData.width
         }
     }
-
-    // İleride eklenecek bileşenler:
-    // Dashboard {}
-    // Osd {}
 }
