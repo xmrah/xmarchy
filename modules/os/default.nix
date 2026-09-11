@@ -3,6 +3,7 @@
 {
   imports = [
     inputs.impermanence.nixosModules.impermanence
+    ./impermanence.nix
   ];
 
   # The Killer Feature: Impermanence (tmpfs dayatması)
