@@ -49,8 +49,8 @@ Item {
                     required property var notif
                     width: 304
                     height: notifContent.implicitHeight + 16
-                    color: shell.bg
-                    border.color: shell.fg
+                    color: shell.theme.bg
+                    border.color: shell.theme.fg
                     border.width: 1
 
                     Column {
@@ -60,7 +60,7 @@ Item {
 
                         Text {
                             text: notif.summary ?? ""
-                            color: shell.fg
+                            color: shell.theme.fg
                             font.family: shell.fontFamily
                             font.pixelSize: 12
                             font.bold: true
@@ -70,7 +70,7 @@ Item {
 
                         Text {
                             text: notif.body ?? ""
-                            color: shell.dim
+                            color: shell.theme.dim
                             font.family: shell.fontFamily
                             font.pixelSize: 11
                             width: parent.width

@@ -12,7 +12,7 @@ WlrLayershell {
     anchors { top: true; left: true; right: true }
     exclusiveZone: shell.barHeight
     height: shell.barHeight
-    color: shell.bg
+    color: shell.theme.bg
 
     WlrLayer.layer: WlrLayer.Top
 
@@ -37,14 +37,14 @@ WlrLayershell {
                 Layout.preferredHeight: shell.barHeight - 8
                 Layout.alignment: Qt.AlignVCenter
 
-                color: focused ? shell.fg : (active ? shell.dim : "transparent")
-                border.color: active ? shell.fg : shell.dim
+                color: focused ? shell.theme.fg : (active ? shell.theme.dim : "transparent")
+                border.color: active ? shell.theme.fg : shell.theme.dim
                 border.width: 1
 
                 Text {
                     anchors.centerIn: parent
                     text: parent.wsId
-                    color: parent.focused ? shell.bg : shell.fg
+                    color: parent.focused ? shell.theme.bg : shell.theme.fg
                     font.family: shell.fontFamily
                     font.pixelSize: 10
                     font.bold: parent.focused
@@ -58,7 +58,7 @@ WlrLayershell {
         Text {
             id: clock
             Layout.alignment: Qt.AlignCenter
-            color: shell.fg
+            color: shell.theme.fg
             font.family: shell.fontFamily
             font.pixelSize: 13
             font.bold: true
@@ -80,7 +80,7 @@ WlrLayershell {
         // ═══════════════ SAĞ: Ses Seviyesi ═══════════════
         Text {
             Layout.alignment: Qt.AlignVCenter
-            color: shell.fg
+            color: shell.theme.fg
             font.family: shell.fontFamily
             font.pixelSize: 11
 
@@ -96,6 +96,6 @@ WlrLayershell {
         anchors.bottom: parent.bottom
         width: parent.width
         height: 1
-        color: shell.fg
+        color: shell.theme.fg
     }
 }

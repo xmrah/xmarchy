@@ -3,3 +3,5 @@ Osd 1.0 plugins/osd/Osd.qml
 Notifications 1.0 plugins/notifications/Notifications.qml
 Launcher 1.0 plugins/launcher/Launcher.qml
 Lock 1.0 plugins/lock/Lock.qml
+Background 1.0 plugins/background/Background.qml
+ThemeMenu 1.0 plugins/theme_menu/ThemeMenu.qml

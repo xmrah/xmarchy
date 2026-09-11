@@ -16,7 +16,7 @@ Item {
         locked: root.locked
 
         WlSessionLockSurface {
-            color: shell.bg
+            color: shell.theme.bg
 
             Column {
                 anchors.centerIn: parent
@@ -25,7 +25,7 @@ Item {
                 // Saat
                 Text {
                     anchors.horizontalCenter: parent.horizontalCenter
-                    color: shell.fg
+                    color: shell.theme.fg
                     font.family: shell.fontFamily
                     font.pixelSize: 64
                     font.bold: true
@@ -42,7 +42,7 @@ Item {
                 // Tarih
                 Text {
                     anchors.horizontalCenter: parent.horizontalCenter
-                    color: shell.dim
+                    color: shell.theme.dim
                     font.family: shell.fontFamily
                     font.pixelSize: 16
                     text: Qt.formatDateTime(new Date(), "dddd, d MMMM yyyy")
@@ -54,13 +54,13 @@ Item {
                     width: 300
                     height: 44
                     color: "transparent"
-                    border.color: shell.fg
+                    border.color: shell.theme.fg
                     border.width: 1
 
                     TextInput {
                         id: passInput
                         anchors { fill: parent; margins: 12 }
-                        color: shell.fg
+                        color: shell.theme.fg
                         font.family: shell.fontFamily
                         font.pixelSize: 16
                         echoMode: TextInput.Password
@@ -77,7 +77,7 @@ Item {
                 // Durum mesajı
                 Text {
                     anchors.horizontalCenter: parent.horizontalCenter
-                    color: root.status === "Incorrect" ? "#FF4444" : shell.dim
+                    color: root.status === "Incorrect" ? "#FF4444" : shell.theme.dim
                     font.family: shell.fontFamily
                     font.pixelSize: 12
                     text: root.status

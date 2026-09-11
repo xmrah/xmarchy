@@ -63,14 +63,14 @@ Item {
             Rectangle {
                 width: parent.width
                 height: 48
-                color: shell.bg
-                border.color: shell.fg
+                color: shell.theme.bg
+                border.color: shell.theme.fg
                 border.width: 1
 
                 TextInput {
                     id: searchInput
                     anchors { fill: parent; margins: 12 }
-                    color: shell.fg
+                    color: shell.theme.fg
                     font.family: shell.fontFamily
                     font.pixelSize: 16
                     clip: true
@@ -87,7 +87,7 @@ Item {
                     visible: searchInput.text.length === 0
                     anchors { left: parent.left; verticalCenter: parent.verticalCenter; leftMargin: 12 }
                     text: "Search..."
-                    color: shell.dim
+                    color: shell.theme.dim
                     font.family: shell.fontFamily
                     font.pixelSize: 16
                 }
@@ -101,14 +101,14 @@ Item {
                     required property int index
                     width: 400
                     height: 40
-                    color: index === 0 ? shell.fg : shell.bg
-                    border.color: shell.fg
+                    color: index === 0 ? shell.theme.fg : shell.theme.bg
+                    border.color: shell.theme.fg
                     border.width: 1
 
                     Text {
                         anchors { left: parent.left; verticalCenter: parent.verticalCenter; leftMargin: 12 }
                         text: modelData.name
-                        color: index === 0 ? shell.bg : shell.fg
+                        color: index === 0 ? shell.theme.bg : shell.theme.fg
                         font.family: shell.fontFamily
                         font.pixelSize: 13
                     }

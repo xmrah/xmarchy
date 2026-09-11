@@ -14,6 +14,7 @@
   environment.persistence."/persist/system" = {
     hideMounts = true;
     directories = [
+      "/var/lib/xmarchy"                       # Xmarchy State (Tema vb.)
       "/var/log"                               # Logları tut, sorun çıkarsa okuruz
       "/var/lib/bluetooth"                     # Kulaklık eşleşmeleri silinmesin
       "/var/lib/nixos"                         # NixOS state

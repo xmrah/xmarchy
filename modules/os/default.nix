@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ../cli/default.nix
     inputs.impermanence.nixosModules.impermanence
     ./impermanence.nix
   ];
