@@ -4,7 +4,7 @@
 
 Xmarchy, standart işletim sistemlerinin zayıflıklarını ve şişirilmiş arayüzlerini reddeden; NixOS'un matematiksel kesinliği üzerine inşa edilmiş acımasız bir masaüstü çerçevesidir.
 
-## Felsefe (The Opinions)
+## Felsefe
 - **Brutalist Estetik:** Yuvarlak köşeler, pastel renkler ve gereksiz animasyonlar yok. Sadece keskin hatlar, saf karanlık (#000000) ve maksimum kontrast.
 - **Sıfır Gecikme (0 Latency):** Boot ekranında logo veya bekleme süresi yok. Tmux escape-time 0. Neovim eklenti yığını olmadan en saf hızında.
 - **Ölümcül Vuruş (Impermanence):** Kök dizin (`/`) bellekte (tmpfs) yaşar. Her yeniden başlatmada sistem ilk günkü saflığıyla yeniden doğar. Çöp dosyalar ve kalıntılar diske yazılamaz.
