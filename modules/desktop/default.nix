@@ -1,6 +1,11 @@
 { pkgs, ... }:
 
 {
+  imports = [
+    ./quickshell/default.nix
+  ];
+
+{
   # Xmarchy Brutalist Desktop (Saf Hyprland)
   
   programs.hyprland = {
