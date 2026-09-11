@@ -40,5 +40,44 @@
     vimAlias = true;
   };
 
+  
+  # Brutalist Hyprland (Sıfır Animasyon, Sıfır Yuvarlak Köşe)
+  wayland.windowManager.hyprland = {
+    enable = true;
+    xwayland.enable = true;
+    settings = {
+      monitor = ",preferred,auto,1";
+
+      general = {
+        gaps_in = 0;
+        gaps_out = 0;
+        border_size = 1;
+        "col.active_border" = "rgb(FFFFFF)";
+        "col.inactive_border" = "rgb(000000)";
+        layout = "master";
+      };
+
+      decoration = {
+        rounding = 0;
+        blur = { enabled = false; };
+        drop_shadow = false;
+      };
+
+      animations = {
+        enabled = false;
+      };
+
+      # Brutalist Keybinds (Tmux stili, gecikmesiz)
+      "$mod" = "SUPER";
+      bind = [
+        "$mod, Return, exec, kitty"
+        "$mod, C, killactive,"
+        "$mod, M, exit,"
+        "$mod, F, togglefloating,"
+        "$mod, space, exec, wofi --show drun"
+      ];
+    };
+  };
+
   home.stateVersion = "24.05";
 }
