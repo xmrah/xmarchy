@@ -13,9 +13,10 @@
 
     # Impermanence (tmpfs dayatması)
     impermanence.url = "github:nix-community/impermanence";
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
   };
 
-  outputs = { self, nixpkgs, home-manager, impermanence, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, impermanence, nixos-hardware, ... }@inputs:
   let
     system = "x86_64-linux";
     pkgs = import nixpkgs { inherit system; config.allowUnfree = true; };
@@ -31,6 +32,10 @@
           
           # Temel OS Yapılandırması ve Impermanence Dayatması
           ./modules/os/default.nix
+          ./modules/developer/arsenal.nix
+          ./modules/hardware/auto.nix
+          ./modules/desktop/default.nix
+          ./iso/default.nix
           
           # Home Manager ve Developer Araçları (Brutalist Tema)
           home-manager.nixosModules.home-manager
