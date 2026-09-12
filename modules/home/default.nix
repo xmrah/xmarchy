@@ -8,23 +8,58 @@
   # Quickshell konfigürasyonunu ~/.config/quickshell altına bağla
   xdg.configFile."quickshell".source = ../desktop/quickshell;
 
-  # Kitty Terminal
+  # Kitty Terminal (Catppuccin Mocha Sleek Palette)
   programs.kitty = {
     enable = true;
     settings = {
-      background = "#000000";
-      foreground = "#ffffff";
-      cursor = "#ffffff";
-      cursor_text_color = "#000000";
-      selection_background = "#ffffff";
-      selection_foreground = "#000000";
-      window_padding_width = 4;
+      background = "#1e1e2e";
+      foreground = "#cdd6f4";
+      cursor = "#cba6f7";
+      cursor_text_color = "#11111b";
+      selection_background = "#cba6f7";
+      selection_foreground = "#11111b";
+      window_padding_width = 12;
       hide_window_decorations = true;
       font_family = "JetBrainsMono Nerd Font";
       font_size = 11;
       confirm_os_window_close = 0;
       enable_audio_bell = false;
-      background_opacity = "0.92";
+      background_opacity = "0.94";
+      # Modern Catppuccin Renkleri
+      color0 = "#45475a";
+      color8 = "#585b70";
+      color1 = "#f38ba8";
+      color9 = "#f38ba8";
+      color2 = "#a6e3a1";
+      color10 = "#a6e3a1";
+      color3 = "#f9e2af";
+      color11 = "#f9e2af";
+      color4 = "#89b4fa";
+      color12 = "#89b4fa";
+      color5 = "#f5c2e7";
+      color13 = "#f5c2e7";
+      color6 = "#94e2d5";
+      color14 = "#94e2d5";
+      color7 = "#bac2de";
+      color15 = "#a6adc8";
+    };
+  };
+
+  # Bash & Fastfetch Entegrasyonu
+  programs.bash = {
+    enable = true;
+    enableCompletion = true;
+    initExtra = ''
+      # Terminal her açıldığında estetik Xmarchy karşılama ekranı
+      if [[ $- == *i* ]]; then
+        fastfetch --logo-type small --structure title:separator:os:kernel:uptime:packages:shell:wm:terminal:cpu:memory:break:colors 2>/dev/null || true
+      fi
+    '';
+    shellAliases = {
+      ll = "ls -la --color=auto";
+      rebuild = "sudo nixos-rebuild switch --flake .";
+      theme = "xmarchy-theme-apply";
+      fetch = "fastfetch";
     };
   };
 
@@ -103,16 +138,16 @@
       ];
 
       general = {
-        gaps_in = 4;
-        gaps_out = 8;
+        gaps_in = 6;
+        gaps_out = 12;
         border_size = 2;
-        "col.active_border" = "rgb(88C0D0) rgb(81A1C1) 45deg";
-        "col.inactive_border" = "rgb(3B4252)";
+        "col.active_border" = "rgb(cba6f7) rgb(89b4fa) 45deg";
+        "col.inactive_border" = "rgb(313244)";
         layout = "dwindle";
       };
 
       decoration = {
-        rounding = 8;
+        rounding = 12;
         blur = {
           enabled = true;
           size = 6;
@@ -153,15 +188,14 @@
       };
 
       misc = {
-        disable_hyprland_logo = false;
-        disable_splash_rendering = false;
-        force_default_wallpaper = 1;
+        disable_hyprland_logo = true;
+        disable_splash_rendering = true;
+        force_default_wallpaper = 0;
       };
 
-      # Quickshell ve anında kontrol için Kitty otomatik başlatma
+      # Quickshell masaüstü kabuğunu başlat
       exec-once = [
         "quickshell"
-        "kitty"
       ];
 
       "$mod" = "SUPER";
@@ -170,8 +204,12 @@
         # Temel (Hem SUPER hem ALT - Host ve VM çakışmaz)
         "$mod, Return, exec, kitty"
         "$altMod, Return, exec, kitty"
+        "$mod, B, exec, brave || chromium || firefox"
+        "$altMod, B, exec, brave || chromium || firefox"
         "$mod, C, killactive,"
         "$altMod, C, killactive,"
+        "$mod, Q, killactive,"
+        "$altMod, Q, killactive,"
         "$mod, M, exit,"
         "$altMod, M, exit,"
         "$mod, F, togglefloating,"
