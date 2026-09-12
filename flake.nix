@@ -1,5 +1,5 @@
 {
-  description = "Xmarchy - Opinionated Declarative OS (Brutalist & Impermanent)";
+  description = "Xmarchy - Opinionated Declarative OS (Opinionated Declarative Desktop OS)";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";

@@ -5,7 +5,7 @@ import Quickshell.Wayland
 import Quickshell.Hyprland
 import Quickshell.Io
 
-// Xmarchy Brutalist App Launcher
+// Xmarchy App Launcher
 Item {
     id: root
 

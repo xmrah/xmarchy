@@ -1,20 +1,40 @@
-# Xmarchy OS
+# Xmarchy
 
-**Tavizsiz Deklaratif İşletim Sistemi (Brutalist & Impermanent)**
+**Opinionated Declarative Desktop OS** — NixOS Flakes üzerine kurulu, kullanıma hazır masaüstü işletim sistemi.
 
-Xmarchy, standart işletim sistemlerinin zayıflıklarını ve şişirilmiş arayüzlerini reddeden; NixOS'un matematiksel kesinliği üzerine inşa edilmiş acımasız bir masaüstü çerçevesidir.
+## Özellikler
 
-## Felsefe
-- **Brutalist Estetik:** Yuvarlak köşeler, pastel renkler ve gereksiz animasyonlar yok. Sadece keskin hatlar, saf karanlık (#000000) ve maksimum kontrast.
-- **Sıfır Gecikme (0 Latency):** Boot ekranında logo veya bekleme süresi yok. Tmux escape-time 0. Neovim eklenti yığını olmadan en saf hızında.
-- **Ölümcül Vuruş (Impermanence):** Kök dizin (`/`) bellekte (tmpfs) yaşar. Her yeniden başlatmada sistem ilk günkü saflığıyla yeniden doğar. Çöp dosyalar ve kalıntılar diske yazılamaz.
-- **Piller Dahil (Batteries Included):** Modern geliştirici cephaneliği (`eza`, `bat`, `lazydocker`, `btop`, `mise`) sistemle bütünleşik gelir.
+- **NixOS Flakes** — Tekrarlanabilir, deklaratif sistem yapılandırması
+- **Impermanence** — Her açılışta sıfırlanan temiz sistem (kalıcı veriler `/persist` altında)
+- **Quickshell** — Wayland-native masaüstü kabuğu (Bar, OSD, Bildirimler, Tema Motoru, Uygulama Başlatıcı, Kilit Ekranı)
+- **Hyprland** — Modern tiling Wayland compositor (blur, animasyonlar, gölgeler)
+- **Nix-Native CLI Suite** — `xmarchy-audio`, `xmarchy-bright`, `xmarchy-capture`, `xmarchy-power`, `xmarchy-theme-apply`
+- **Dinamik Tema Motoru** — Sağ tıkla tema değiştir, Hyprland + Terminal + Bar anında güncellenir
+- **Pipewire** — Düşük gecikmeli ses altyapısı (ALSA + PulseAudio + JACK uyumlu)
+- **Modüler Uygulama Ekosistemi** — AI, Gaming, Browser modülleri ayrı Nix dosyalarında
 
-## Kurulum ve Kullanım
-
-Sistemi yerel olarak derlemek veya Live CD (ISO) oluşturmak için NixOS yüklü bir makinede:
+## ISO İndirme
 
 ```bash
-# ISO İmajını Derlemek
 nix build .#nixosConfigurations.xmarchy-iso.config.system.build.isoImage
 ```
+
+## Yapı
+
+```
+modules/
+├── apps/          # Uygulama modülleri (ai, browser, gaming)
+├── cli/           # Nix-native CLI araçları
+├── desktop/       # Quickshell + Wayland bileşenleri
+│   └── quickshell/
+│       ├── plugins/   # Bar, OSD, Bildirimler, Launcher, Lock, ThemeMenu
+│       └── themes/    # JSON tema dosyaları
+├── developer/     # Geliştirici araçları (eza, bat, fzf, lazygit...)
+├── hardware/      # Donanım algılama
+├── home/          # Home Manager (Hyprland, Kitty, Tmux, Neovim, Starship)
+└── os/            # Sistem altyapısı (Pipewire, NetworkManager, SDDM, Fonts)
+```
+
+## Lisans
+
+MIT

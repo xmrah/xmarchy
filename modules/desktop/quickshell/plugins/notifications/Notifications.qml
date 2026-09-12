@@ -4,7 +4,7 @@ import Quickshell
 import Quickshell.Wayland
 import Quickshell.Services.Notifications
 
-// Xmarchy Brutalist Notification Server
+// Xmarchy Notification Server
 Item {
     id: root
 

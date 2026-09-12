@@ -2,10 +2,10 @@
 
 {
   # Xmarchy Live CD Ayarları
-  isoImage.isoName = lib.mkForce "xmarchy-brutalist.iso";
+  isoImage.isoName = lib.mkForce "xmarchy.iso";
   isoImage.makeEfiBootable = true;
   isoImage.makeUsbBootable = true;
-  
-  # Otomatik giriş (Live CD için)
+
+  # Live CD için otomatik giriş
   services.getty.autologinUser = "nixos";
 }

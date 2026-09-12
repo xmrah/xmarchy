@@ -2,7 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Wayland
 
-// Xmarchy Brutalist OSD (On-Screen Display)
+// Xmarchy OSD (On-Screen Display)
 Item {
     id: root
 

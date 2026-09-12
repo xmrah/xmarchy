@@ -2,12 +2,10 @@
 
 {
   home.packages = with pkgs; [
-    tmux
-    wofi        # Fallback launcher
     wl-clipboard
   ];
 
-  # Kitty (Brutalist Terminal)
+  # Kitty Terminal
   programs.kitty = {
     enable = true;
     settings = {
@@ -17,51 +15,50 @@
       cursor_text_color = "#000000";
       selection_background = "#ffffff";
       selection_foreground = "#000000";
-      window_padding_width = 0;
+      window_padding_width = 4;
       hide_window_decorations = true;
-      font_family = "JetBrains Mono";
+      font_family = "JetBrainsMono Nerd Font";
       font_size = 11;
       confirm_os_window_close = 0;
       enable_audio_bell = false;
+      background_opacity = "0.92";
     };
   };
 
-  # Starship Prompt (Brutalist — sadece dizin ve git)
+  # Starship Prompt
   programs.starship = {
     enable = true;
     settings = {
       add_newline = false;
       format = "$directory$git_branch$git_status$character";
       character = {
-        success_symbol = "[>](bold white)";
-        error_symbol = "[x](bold red)";
+        success_symbol = "[❯](bold cyan)";
+        error_symbol = "[❯](bold red)";
       };
       directory = {
-        style = "bold white";
+        style = "bold cyan";
         truncation_length = 2;
       };
       git_branch = {
-        style = "bold white";
+        style = "bold purple";
         format = " [$branch]($style)";
       };
       git_status = {
-        style = "bold white";
+        style = "bold yellow";
       };
     };
   };
 
-  # btop (Brutalist Sistem İzleme)
+  # btop Sistem İzleme
   programs.btop = {
     enable = true;
     settings = {
-      color_theme = "TTY";
-      theme_background = false;
       vim_keys = true;
-      rounded_corners = false;
+      rounded_corners = true;
     };
   };
 
-  # Tmux (0 Gecikme, Brutalist)
+  # Tmux
   programs.tmux = {
     enable = true;
     clock24 = true;
@@ -69,15 +66,15 @@
     keyMode = "vi";
     terminal = "screen-256color";
     extraConfig = ''
-      set -g status-style bg=black,fg=white
-      set -g window-status-current-style bg=white,fg=black,bold
-      set -g pane-border-style fg=white
-      set -g pane-active-border-style fg=white
-      set -g message-style bg=black,fg=white
+      set -g status-style bg=default,fg=white
+      set -g window-status-current-style bg=cyan,fg=black,bold
+      set -g pane-border-style fg=#444444
+      set -g pane-active-border-style fg=cyan
+      set -g message-style bg=black,fg=cyan
     '';
   };
 
-  # Neovim (Minimal, 0ms)
+  # Neovim
   programs.neovim = {
     enable = true;
     defaultEditor = true;
@@ -85,7 +82,7 @@
     vimAlias = true;
   };
 
-  # Hyprland (Brutalist WM)
+  # Hyprland Window Manager
   wayland.windowManager.hyprland = {
     enable = true;
     xwayland.enable = true;
@@ -93,30 +90,54 @@
       monitor = ",preferred,auto,1";
 
       general = {
-        gaps_in = 0;
-        gaps_out = 0;
-        border_size = 1;
-        "col.active_border" = "rgb(FFFFFF)";
-        "col.inactive_border" = "rgb(333333)";
-        layout = "master";
+        gaps_in = 4;
+        gaps_out = 8;
+        border_size = 2;
+        "col.active_border" = "rgb(88C0D0) rgb(81A1C1) 45deg";
+        "col.inactive_border" = "rgb(3B4252)";
+        layout = "dwindle";
       };
 
       decoration = {
-        rounding = 0;
-        blur = { enabled = false; };
-        shadow = { enabled = false; };
+        rounding = 8;
+        blur = {
+          enabled = true;
+          size = 6;
+          passes = 2;
+          new_optimizations = true;
+          ignore_opacity = true;
+        };
+        shadow = {
+          enabled = true;
+          range = 12;
+          render_power = 3;
+          color = "rgba(0,0,0,0.4)";
+        };
       };
 
-      animations = { enabled = false; };
+      animations = {
+        enabled = true;
+        bezier = "smooth, 0.25, 0.1, 0.25, 1";
+        animation = [
+          "windows, 1, 4, smooth, slide"
+          "windowsOut, 1, 4, smooth, slide"
+          "fade, 1, 4, smooth"
+          "workspaces, 1, 4, smooth, slide"
+        ];
+      };
 
       input = {
         kb_layout = "tr";
         follow_mouse = 1;
         sensitivity = 0;
+        touchpad = {
+          natural_scroll = true;
+        };
       };
 
-      master = {
-        new_status = "slave";
+      dwindle = {
+        pseudotile = true;
+        preserve_split = true;
       };
 
       misc = {
@@ -125,7 +146,7 @@
         force_default_wallpaper = 0;
       };
 
-      # Quickshell otomatik başlatma
+      # Quickshell ve Polkit otomatik başlatma
       exec-once = [
         "quickshell"
       ];
@@ -137,8 +158,9 @@
         "$mod, C, killactive,"
         "$mod, M, exit,"
         "$mod, F, togglefloating,"
+        "$mod, P, pseudo,"
 
-        # Launcher (Quickshell IPC ile)
+        # Launcher (Quickshell IPC)
         "$mod, space, exec, quickshell ipc call default launcher toggle"
 
         # Kilit Ekranı
@@ -174,15 +196,13 @@
 
         # Ekran görüntüsü
         ", Print, exec, xmarchy-capture screen"
-        "$mod, Print, exec, grim -g "$(slurp)" - | wl-copy"
+        "$mod, Print, exec, xmarchy-capture region"
       ];
 
-      # Ses kontrolleri (OSD ile)
-      
+      # Ses kontrolleri
       bindel = [
         ", XF86MonBrightnessUp, exec, xmarchy-bright up"
         ", XF86MonBrightnessDown, exec, xmarchy-bright down"
-
         ", XF86AudioRaiseVolume, exec, xmarchy-audio up"
         ", XF86AudioLowerVolume, exec, xmarchy-audio down"
       ];

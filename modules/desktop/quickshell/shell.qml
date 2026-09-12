@@ -6,7 +6,7 @@ import Quickshell.Wayland
 import Quickshell.Hyprland
 import Quickshell.Services.Pipewire
 
-// Xmarchy Brutalist Desktop Shell
+// Xmarchy Desktop Shell
 ShellRoot {
     id: shell
 
@@ -14,7 +14,7 @@ ShellRoot {
     readonly property string stateFile: "/var/lib/xmarchy/current-theme.json"
     
     // Varsayılan tema (fallback)
-    property string currentThemeName: "brutalist-dark"
+    property string currentThemeName: "xmarchy-dark"
     property var theme: ({bg: "#000000", fg: "#FFFFFF", dim: "#666666", accent: "#FFFFFF"})
 
     readonly property int barHeight: 28
@@ -28,8 +28,8 @@ ShellRoot {
         var path = Quickshell.env("XMARCHY_QS_DIR") + "/themes/" + name + ".json"
         // (Gerçek hayatta burada dosya okuma yapılır, biz mockluyoruz)
         var themes = {
-            "brutalist-dark": {bg: "#000000", fg: "#FFFFFF", dim: "#666666", accent: "#FFFFFF"},
-            "brutalist-light": {bg: "#FFFFFF", fg: "#000000", dim: "#999999", accent: "#000000"},
+            "xmarchy-dark": {bg: "#000000", fg: "#FFFFFF", dim: "#666666", accent: "#FFFFFF"},
+            "xmarchy-light": {bg: "#FFFFFF", fg: "#000000", dim: "#999999", accent: "#000000"},
             "hackerman": {bg: "#0D1117", fg: "#00FF41", dim: "#008F11", accent: "#00FF41"},
             "rose-pine": {bg: "#191724", fg: "#e0def4", dim: "#6e6a86", accent: "#c4a7e7"},
             "vantablack": {bg: "#050505", fg: "#888888", dim: "#333333", accent: "#aaaaaa"}

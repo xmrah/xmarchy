@@ -10,7 +10,7 @@ Item {
     property bool opened: false
     property int popupX: 0
     property int popupY: 0
-    property var themeList: ["brutalist-dark", "brutalist-light", "hackerman", "rose-pine", "vantablack"]
+    property var themeList: ["xmarchy-dark", "xmarchy-light", "hackerman", "rose-pine", "vantablack"]
     property int selectedIndex: 0
 
     function openAt(x: int, y: int) {

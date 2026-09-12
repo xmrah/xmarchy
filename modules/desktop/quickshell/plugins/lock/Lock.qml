@@ -3,7 +3,7 @@ import Quickshell
 import Quickshell.Wayland
 import Quickshell.Services.Pam
 
-// Xmarchy Brutalist Lock Screen
+// Xmarchy Lock Screen
 Item {
     id: root
 

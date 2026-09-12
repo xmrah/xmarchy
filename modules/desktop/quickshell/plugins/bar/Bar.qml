@@ -5,7 +5,7 @@ import Quickshell.Wayland
 import Quickshell.Hyprland
 import Quickshell.Services.Pipewire
 
-// Xmarchy Brutalist Bar
+// Xmarchy Bar
 WlrLayershell {
     id: bar
 
