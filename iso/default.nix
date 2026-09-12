@@ -2,7 +2,7 @@
 
 {
   # Xmarchy Live CD Ayarları
-  isoImage.isoName = lib.mkForce "xmarchy.iso";
+  image.fileName = lib.mkForce "xmarchy.iso";
   isoImage.makeEfiBootable = true;
   isoImage.makeUsbBootable = true;
 

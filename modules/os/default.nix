@@ -35,7 +35,7 @@
   services.fstrim.enable = true;
 
   # ═══════════ Zaman & Hızlı Açılış Servisleri ═══════════
-  services.timesyncd.enable = true;
+  services.timesyncd.enable = lib.mkDefault true;
   # Açılışta interneti bekleme, masaüstünü gecikmesiz aç
   systemd.services.NetworkManager-wait-online.enable = false;
 
@@ -110,7 +110,7 @@
       jetbrains-mono
       nerd-fonts.jetbrains-mono
       noto-fonts
-      noto-fonts-emoji
+      noto-fonts-color-emoji
       noto-fonts-cjk-sans
     ];
     fontconfig = {
