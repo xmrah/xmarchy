@@ -5,10 +5,8 @@
     ../cli/default.nix
     ../cli/core.nix
     ../apps/browser.nix
-    ../apps/ai.nix
-    ../apps/gaming.nix
-    inputs.impermanence.nixosModules.impermanence
-    ./impermanence.nix
+    # Not: ai.nix (Ollama/ROCm), gaming.nix (Steam/Wine) ve impermanence 
+    # canlı test ortamını şişirmemek ve çakışma yaratmamak için isteğe bağlı tutulmuştur.
   ];
 
   # ═══════════ Ağ ═══════════
@@ -17,6 +15,10 @@
   # mDNS ve yerel ağ keşfi
   networking.firewall.enable = true;
 
+  # ═══════════ Çekirdek (Kernel) ═══════════
+  # Zen Kernel: Masaüstü tepkiselliği ve düşük gecikme için optimize
+  boot.kernelPackages = pkgs.linuxPackages_zen;
+
   # ═══════════ Boot ═══════════
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -24,6 +26,18 @@
   boot.consoleLogLevel = 0;
   boot.initrd.verbose = false;
   boot.kernelParams = [ "quiet" "splash" ];
+
+  # ═══════════ Bellek & Disk Optimizasyonu (Systemd) ═══════════
+  zramSwap = {
+    enable = true;
+    algorithm = "zstd";
+  };
+  services.fstrim.enable = true;
+
+  # ═══════════ Zaman & Hızlı Açılış Servisleri ═══════════
+  services.timesyncd.enable = true;
+  # Açılışta interneti bekleme, masaüstünü gecikmesiz aç
+  systemd.services.NetworkManager-wait-online.enable = false;
 
   # ═══════════ Ses (Pipewire) ═══════════
   security.rtkit.enable = true; # Pipewire gerçek zamanlı öncelik için
