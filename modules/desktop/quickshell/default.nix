@@ -1,8 +1,8 @@
-{ pkgs, inputs, ... }:
+{ pkgs, ... }:
 
 {
-  # Quickshell: Resmi flake'ten gelen paket (Nixpkgs senkronizasyonu zorunlu)
+  # Quickshell: Resmi Nixpkgs ikili paketi (cache.nixos.org'dan hazır, derleme gerektirmez)
   environment.systemPackages = [
-    inputs.quickshell.packages.${pkgs.system}.default
+    pkgs.quickshell
   ];
 }
