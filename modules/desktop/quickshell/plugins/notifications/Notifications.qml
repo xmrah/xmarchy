@@ -29,8 +29,8 @@ Item {
         visible: notifModel.count > 0
         anchors { top: true; right: true }
         exclusiveZone: 0
-        width: 320
-        height: notifColumn.implicitHeight + 16
+        implicitWidth: 320
+        implicitHeight: notifColumn.implicitHeight + 16
 
         WlrLayershell.layer: WlrLayer.Overlay
         color: "transparent"

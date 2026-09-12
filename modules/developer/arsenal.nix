@@ -25,7 +25,7 @@
     mise       # asdf/rtx alternatifi
   ];
 
-  virtualisation.docker.enable = true;
+  # Docker: Sadece rootless mod (Claude audit #11 - rootful+rootless cakismasi)
   virtualisation.docker.rootless = {
     enable = true;
     setSocketVariable = true;

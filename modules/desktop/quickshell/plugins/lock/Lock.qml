@@ -85,7 +85,7 @@ Item {
     PamContext {
         id: pam
         configDirectory: "/etc/pam.d"
-        config: "login"
+        config: "quickshell-lock"
 
         onPamMessage: function(msg) {
             root.status = msg

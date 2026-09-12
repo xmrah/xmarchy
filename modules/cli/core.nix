@@ -3,7 +3,7 @@
 let
   xmarchy-audio = pkgs.writeShellApplication {
     name = "xmarchy-audio";
-    runtimeInputs = [ pkgs.wireplumber pkgs.jq pkgs.gawk ];
+    runtimeInputs = [ pkgs.wireplumber pkgs.jq pkgs.gawk pkgs.quickshell ];
     text = ''
       if [ "$#" -lt 1 ]; then
         echo "Usage: xmarchy-audio [up|down|mute]"
@@ -39,7 +39,7 @@ let
 
   xmarchy-bright = pkgs.writeShellApplication {
     name = "xmarchy-bright";
-    runtimeInputs = [ pkgs.brightnessctl pkgs.gawk ];
+    runtimeInputs = [ pkgs.brightnessctl pkgs.gawk pkgs.quickshell ];
     text = ''
       if [ "$#" -lt 1 ]; then
         echo "Usage: xmarchy-bright [up|down]"
@@ -86,7 +86,7 @@ let
 
   xmarchy-power = pkgs.writeShellApplication {
     name = "xmarchy-power";
-    runtimeInputs = [ pkgs.systemd ];
+    runtimeInputs = [ pkgs.systemd pkgs.quickshell ];
     text = ''
       case "$1" in
         lock) quickshell ipc call default lock toggle ;;

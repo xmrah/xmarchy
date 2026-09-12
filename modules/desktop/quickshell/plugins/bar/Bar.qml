@@ -4,13 +4,17 @@ import Quickshell
 import Quickshell.Wayland
 import Quickshell.Hyprland
 import Quickshell.Services.Pipewire
+import Quickshell.Services.SystemTray
+import Quickshell.Services.UPower
+import Quickshell.Bluetooth
+import Quickshell.Networking
 
 PanelWindow {
     id: bar
 
     anchors { top: true; left: true; right: true }
     exclusiveZone: shell.barHeight
-    height: shell.barHeight
+    implicitHeight: shell.barHeight
     color: "transparent"
 
     WlrLayershell.layer: WlrLayer.Top
@@ -114,10 +118,129 @@ PanelWindow {
             // Boşluk
             Item { Layout.fillWidth: true }
 
-            // ═══════════════ SAĞ: Tema, Ses ve Sistem ═══════════════
+            // ═══════════════ SAĞ: Tema, Ses, Ağ, BT, Pil ve Sistem Tepsisi ═══════════════
             Row {
                 Layout.alignment: Qt.AlignVCenter
-                spacing: 12
+                spacing: 8
+
+                // Sistem Tepsisi (SNI)
+                Row {
+                    spacing: 6
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    Repeater {
+                        model: SystemTray.items
+                        delegate: Item {
+                            required property var modelData
+                            width: 18
+                            height: 18
+                            anchors.verticalCenter: parent.verticalCenter
+
+                            Image {
+                                anchors.fill: parent
+                                source: modelData.icon ?? ""
+                                fillMode: Image.PreserveAspectFit
+                            }
+
+                            MouseArea {
+                                anchors.fill: parent
+                                cursorShape: Qt.PointingHandCursor
+                                onClicked: function(mouse) {
+                                    modelData.activate(mouse.x, mouse.y)
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Ağ Göstergesi
+                Rectangle {
+                    height: 22
+                    width: netText.implicitWidth + 16
+                    radius: 11
+                    color: shell.theme.surface
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    Text {
+                        id: netText
+                        anchors.centerIn: parent
+                        color: Networking.connectivity >= 3 ? shell.theme.fg : shell.theme.dim
+                        font.family: shell.fontFamily
+                        font.pixelSize: 11
+                        text: Networking.connectivity >= 3 ? "󰤨 NET" : "󰤭 OFFLINE"
+                    }
+                }
+
+                // Bluetooth Göstergesi
+                Rectangle {
+                    height: 22
+                    width: btText.implicitWidth + 16
+                    radius: 11
+                    color: shell.theme.surface
+                    anchors.verticalCenter: parent.verticalCenter
+                    visible: Bluetooth.defaultAdapter !== null
+
+                    Text {
+                        id: btText
+                        anchors.centerIn: parent
+                        color: (Bluetooth.defaultAdapter?.enabled ?? false) ? shell.theme.fg : shell.theme.dim
+                        font.family: shell.fontFamily
+                        font.pixelSize: 11
+                        text: (Bluetooth.defaultAdapter?.enabled ?? false) ? "󰂯 BT" : "󰂲 OFF"
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: {
+                            if (Bluetooth.defaultAdapter) {
+                                Bluetooth.defaultAdapter.enabled = !Bluetooth.defaultAdapter.enabled
+                            }
+                        }
+                    }
+                }
+
+                // Pil Durumu (Sadece donanımda pil varsa)
+                Rectangle {
+                    height: 22
+                    width: batText.implicitWidth + 16
+                    radius: 11
+                    color: shell.theme.surface
+                    anchors.verticalCenter: parent.verticalCenter
+                    visible: UPower.displayDevice?.isPresent ?? false
+
+                    Text {
+                        id: batText
+                        anchors.centerIn: parent
+                        color: shell.theme.fg
+                        font.family: shell.fontFamily
+                        font.pixelSize: 11
+                        property int pct: Math.round((UPower.displayDevice?.percentage ?? 0) * 100)
+                        text: (!UPower.onBattery ? "󰂄 " : "󰁹 ") + pct + "%"
+                    }
+                }
+
+                // Ses Seviyesi
+                Rectangle {
+                    height: 22
+                    width: volText.implicitWidth + 16
+                    radius: 11
+                    color: shell.theme.surface
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    Text {
+                        id: volText
+                        anchors.centerIn: parent
+                        color: shell.theme.fg
+                        font.family: shell.fontFamily
+                        font.pixelSize: 11
+
+                        property var sink: Pipewire.defaultAudioSink
+                        property int vol: sink?.audio?.volume ? Math.round(sink.audio.volume * 100) : 0
+                        property bool muted: sink?.audio?.muted ?? false
+                        text: muted ? "󰖁 MUTE" : "󰕾 " + vol + "%"
+                    }
+                }
 
                 // Tema Değiştirici Butonu
                 Rectangle {
@@ -156,28 +279,6 @@ PanelWindow {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
                         onClicked: shell.themeMenu.openAt(bar.width - 220, shell.barHeight + 6)
-                    }
-                }
-
-                // Ses Seviyesi
-                Rectangle {
-                    height: 22
-                    width: volText.implicitWidth + 16
-                    radius: 11
-                    color: shell.theme.surface
-                    anchors.verticalCenter: parent.verticalCenter
-
-                    Text {
-                        id: volText
-                        anchors.centerIn: parent
-                        color: shell.theme.fg
-                        font.family: shell.fontFamily
-                        font.pixelSize: 11
-
-                        property var sink: Pipewire.defaultAudioSink
-                        property int vol: sink?.audio?.volume ? Math.round(sink.audio.volume * 100) : 0
-                        property bool muted: sink?.audio?.muted ?? false
-                        text: muted ? "󰖁 MUTE" : "󰕾 " + vol + "%"
                     }
                 }
             }

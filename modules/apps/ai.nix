@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 {
   # NixOS paketlerinde mevcut AI araçları
@@ -8,9 +8,9 @@
     mods            # Komut satırı AI asistanı
   ];
 
-  # Ollama servisini başlat (Local LLM'ler için)
+  # Ollama servisi (CPU varsayılan, donanıma göre cuda/rocm seçilebilir)
   services.ollama = {
     enable = true;
-    acceleration = "rocm"; # AMD/Intel/Nvidia sistemine göre ayarlanabilir
+    acceleration = lib.mkDefault false;
   };
 }

@@ -70,6 +70,12 @@ ShellRoot {
     readonly property int barHeight: 34
     readonly property string fontFamily: "JetBrainsMono Nerd Font"
 
+    // Tema CLI aracını çalıştırmak için Process{} bileşeni (Quickshell.Io)
+    Process {
+        id: themeProcess
+        running: false
+    }
+
     // Tema Değiştirme Fonksiyonu
     function applyTheme(name: string) {
         if (!themes[name]) return;
@@ -77,11 +83,8 @@ ShellRoot {
         theme = themes[name];
 
         // Hyprland ve sistem renklerini CLI üzerinden güncelle
-        try {
-            Quickshell.process(["xmarchy-theme-apply", name, theme.bg, theme.accent]);
-        } catch (e) {
-            console.log("Process exec note:", e);
-        }
+        themeProcess.command = ["xmarchy-theme-apply", name, theme.bg, theme.accent];
+        themeProcess.running = true;
     }
 
     PwObjectTracker { objects: [Pipewire.defaultAudioSink] }
@@ -118,6 +121,6 @@ ShellRoot {
     IpcHandler { target: "osd"; function show(icon: string, value: int) { osd.show(icon, value) } }
     IpcHandler { target: "launcher"; function toggle() { launcher.toggle() } }
     IpcHandler { target: "theme"; function apply(name: string) { shell.applyTheme(name) } }
-    IpcHandler { target: "themeMenu"; function openAt(x: int, y: int) { themeMenu.openAt(x, y) } }
-    IpcHandler { target: "lock"; function toggle() { lock.toggle() } }
+    // Not: "themeMenu" IPC handler ThemeMenu.qml icerisinde tanimli
+    // Not: "lock" IPC handler Lock.qml icerisinde tanimli
 }

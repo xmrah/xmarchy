@@ -1,0 +1,31 @@
+name: Xmarchy CI
+
+on:
+  push:
+    branches: [ "master", "main" ]
+  pull_request:
+    branches: [ "master", "main" ]
+
+jobs:
+  check:
+    name: Nix Flake Check & Verification
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v27
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+            accept-flake-config = true
+
+      - name: Magic Nix Cache
+        uses: DeterminateSystems/magic-nix-cache-action@v8
+
+      - name: Flake Check
+        run: nix flake check --show-trace
+
+      - name: Build VM Target
+        run: nix build .#nixosConfigurations.xmarchy-vm.config.system.build.vm --show-trace

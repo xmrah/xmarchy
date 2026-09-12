@@ -26,8 +26,8 @@ Item {
         visible: root.visible_
         anchors { bottom: true }
         exclusiveZone: 0
-        height: 48
-        width: 280
+        implicitHeight: 48
+        implicitWidth: 280
 
         WlrLayershell.layer: WlrLayer.Overlay
         color: shell.theme.bg

@@ -31,8 +31,13 @@ let
       fi
     '';
   };
-in{
+in {
   environment.systemPackages = [
     xmarchy-theme-apply
+  ];
+
+  # /var/lib/xmarchy dizini icin kullanici erisim yetkisi
+  systemd.tmpfiles.rules = [
+    "d /var/lib/xmarchy 0775 nixos users -"
   ];
 }

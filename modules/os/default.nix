@@ -9,6 +9,9 @@
     # canlı test ortamını şişirmemek ve çakışma yaratmamak için isteğe bağlı tutulmuştur.
   ];
 
+  # ═══════════ Paket İzinleri ═══════════
+  nixpkgs.config.allowUnfree = true;
+
   # ═══════════ Wayland & Grafik Ortam Değişkenleri ═══════════
   environment.sessionVariables = {
     NIXOS_OZONE_WL = "1";
@@ -68,6 +71,9 @@
   };
   services.blueman.enable = true;
 
+  # ═══════════ Güç & Pil Yönetimi (UPower) ═══════════
+  services.upower.enable = true;
+
   # ═══════════ Hyprland (Sistem Seviyesi) ═══════════
   programs.hyprland = {
     enable = true;
@@ -88,9 +94,12 @@
 
   # ═══════════ Güvenlik (Polkit) ═══════════
   security.polkit.enable = true;
+  # ═══════════ Quickshell Lock Ekranı PAM Servisi ═══════════
+  security.pam.services.quickshell-lock = {};
+
 
   # ═══════════ Kullanıcı ═══════════
-  users.mutableUsers = false;
+  users.mutableUsers = true; # Kullanicinin sifresini degistirebilmesi icin
   users.users.nixos = {
     isNormalUser = true;
     description = "Xmarchy User";

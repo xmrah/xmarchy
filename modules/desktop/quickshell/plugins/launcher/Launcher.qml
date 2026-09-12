@@ -33,7 +33,7 @@ Item {
             root.results = []
             return
         }
-        var apps = Quickshell.desktopEntries.applications
+        var apps = DesktopEntries.applications.values
         root.results = apps.filter(function(app) {
             return (app.name && app.name.toLowerCase().indexOf(q.toLowerCase()) >= 0) ||
                    (app.genericName && app.genericName.toLowerCase().indexOf(q.toLowerCase()) >= 0)
@@ -42,7 +42,7 @@ Item {
 
     function launch(entry) {
         if (entry) {
-            entry.launch()
+            entry.execute()
         }
         root.toggle()
     }
