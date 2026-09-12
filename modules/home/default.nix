@@ -5,6 +5,9 @@
     wl-clipboard
   ];
 
+  # Quickshell konfigürasyonunu ~/.config/quickshell altına bağla
+  xdg.configFile."quickshell".source = ../desktop/quickshell;
+
   # Kitty Terminal
   programs.kitty = {
     enable = true;
@@ -92,6 +95,13 @@
     settings = {
       monitor = ",preferred,auto,1";
 
+      # Sanal makine ve Wayland render uyumluluğu
+      env = [
+        "WLR_NO_HARDWARE_CURSORS,1"
+        "WLR_RENDERER_ALLOW_SOFTWARE,1"
+        "AQ_NO_MODIFIERS,1"
+      ];
+
       general = {
         gaps_in = 4;
         gaps_out = 8;
@@ -144,14 +154,15 @@
       };
 
       misc = {
-        disable_hyprland_logo = true;
-        disable_splash_rendering = true;
-        force_default_wallpaper = 0;
+        disable_hyprland_logo = false;
+        disable_splash_rendering = false;
+        force_default_wallpaper = 1;
       };
 
-      # Quickshell ve Polkit otomatik başlatma
+      # Quickshell ve anında kontrol için Kitty otomatik başlatma
       exec-once = [
         "quickshell"
+        "kitty"
       ];
 
       "$mod" = "SUPER";

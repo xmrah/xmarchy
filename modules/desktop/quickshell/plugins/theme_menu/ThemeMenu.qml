@@ -3,7 +3,6 @@ import Quickshell
 import Quickshell.Wayland
 import Quickshell.Io
 
-// Xmarchy Sağ Tık Tema Seçici
 Item {
     id: root
 
@@ -25,66 +24,67 @@ Item {
         root.opened = false
     }
 
-    WlrLayershell {
+    PanelWindow {
         visible: root.opened
-        anchors.fill: parent
+        anchors { top: true; bottom: true; left: true; right: true }
         exclusiveZone: -1
         color: "transparent"
         
-        WlrLayer.layer: WlrLayer.Overlay
-        WlrLayer.keyboardFocus: WlrLayer.Exclusive
+        WlrLayershell.layer: WlrLayer.Overlay
+        WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
 
-        // Kapatmak için arka plan
-        MouseArea {
+        Item {
             anchors.fill: parent
-            onClicked: root.opened = false
-        }
 
-        // Menü Kutusu
-        Rectangle {
-            x: root.popupX
-            y: root.popupY
-            width: 200
-            height: root.themeList.length * 40
-            color: shell.theme.bg
-            border.color: shell.theme.fg
-            border.width: 1
-
-            Column {
+            MouseArea {
                 anchors.fill: parent
-                Repeater {
-                    model: root.themeList
-                    delegate: Rectangle {
-                        width: 200
-                        height: 40
-                        color: index === root.selectedIndex ? shell.theme.fg : "transparent"
-                        
-                        Text {
-                            anchors { left: parent.left; verticalCenter: parent.verticalCenter; leftMargin: 12 }
-                            text: modelData
-                            color: index === root.selectedIndex ? shell.theme.bg : shell.theme.fg
-                            font.family: shell.fontFamily
-                            font.pixelSize: 13
-                        }
+                onClicked: root.opened = false
+            }
 
-                        MouseArea {
-                            anchors.fill: parent
-                            hoverEnabled: true
-                            onEntered: root.selectedIndex = index
-                            onClicked: root.applyTheme(modelData)
+            Rectangle {
+                x: root.popupX
+                y: root.popupY
+                width: 200
+                height: root.themeList.length * 40
+                color: shell.theme.bg
+                border.color: shell.theme.fg
+                border.width: 1
+
+                Column {
+                    anchors.fill: parent
+                    Repeater {
+                        model: root.themeList
+                        delegate: Rectangle {
+                            width: 200
+                            height: 40
+                            color: index === root.selectedIndex ? shell.theme.fg : "transparent"
+                            
+                            Text {
+                                anchors { left: parent.left; verticalCenter: parent.verticalCenter; leftMargin: 12 }
+                                text: modelData
+                                color: index === root.selectedIndex ? shell.theme.bg : shell.theme.fg
+                                font.family: shell.fontFamily
+                                font.pixelSize: 13
+                            }
+
+                            MouseArea {
+                                anchors.fill: parent
+                                hoverEnabled: true
+                                onEntered: root.selectedIndex = index
+                                onClicked: root.applyTheme(modelData)
+                            }
                         }
                     }
                 }
             }
-        }
 
-        // Klavye ile gezinme
-        Item {
-            focus: root.opened
-            Keys.onEscapePressed: root.opened = false
-            Keys.onUpPressed: root.selectedIndex = Math.max(0, root.selectedIndex - 1)
-            Keys.onDownPressed: root.selectedIndex = Math.min(root.themeList.length - 1, root.selectedIndex + 1)
-            Keys.onReturnPressed: root.applyTheme(root.themeList[root.selectedIndex])
+            Item {
+                focus: root.opened
+                Keys.onEscapePressed: root.opened = false
+                Keys.onUpPressed: root.selectedIndex = Math.max(0, root.selectedIndex - 1)
+                Keys.onDownPressed: root.selectedIndex = Math.min(root.themeList.length - 1, root.selectedIndex + 1)
+                Keys.onReturnPressed: root.applyTheme(root.themeList[root.selectedIndex])
+            }
         }
     }
 

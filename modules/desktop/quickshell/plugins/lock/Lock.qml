@@ -2,8 +2,8 @@ import QtQuick
 import Quickshell
 import Quickshell.Wayland
 import Quickshell.Services.Pam
+import Quickshell.Io
 
-// Xmarchy Lock Screen
 Item {
     id: root
 
@@ -22,7 +22,6 @@ Item {
                 anchors.centerIn: parent
                 spacing: 16
 
-                // Saat
                 Text {
                     anchors.horizontalCenter: parent.horizontalCenter
                     color: shell.theme.fg
@@ -39,7 +38,6 @@ Item {
                     }
                 }
 
-                // Tarih
                 Text {
                     anchors.horizontalCenter: parent.horizontalCenter
                     color: shell.theme.dim
@@ -48,7 +46,6 @@ Item {
                     text: Qt.formatDateTime(new Date(), "dddd, d MMMM yyyy")
                 }
 
-                // Şifre alanı
                 Rectangle {
                     anchors.horizontalCenter: parent.horizontalCenter
                     width: 300
@@ -74,7 +71,6 @@ Item {
                     }
                 }
 
-                // Durum mesajı
                 Text {
                     anchors.horizontalCenter: parent.horizontalCenter
                     color: root.status === "Incorrect" ? "#FF4444" : shell.theme.dim
@@ -88,31 +84,32 @@ Item {
 
     PamContext {
         id: pam
-        configDir: "/etc/pam.d"
+        configDirectory: "/etc/pam.d"
         config: "login"
 
         onPamMessage: function(msg) {
             root.status = msg
         }
 
-        onAuthSucceeded: {
+        onCompleted: {
             root.locked = false
             root.password = ""
             root.status = ""
             passInput.text = ""
         }
 
-        onAuthFailed: {
+        onError: {
             root.status = "Incorrect"
             passInput.text = ""
         }
 
-        onAuthRequest: function(request) {
-            respond(root.password)
+        onResponseRequiredChanged: {
+            if (pam.responseRequired) {
+                pam.respond(root.password)
+            }
         }
     }
 
-    // IPC ile kilitleme
     IpcHandler {
         target: "lock"
         function toggle() {

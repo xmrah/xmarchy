@@ -3,25 +3,22 @@ import Quickshell
 import Quickshell.Wayland
 import Quickshell.Hyprland
 
-// Xmarchy Masaüstü Zemini
-WlrLayershell {
+PanelWindow {
     id: root
-    anchors.fill: parent
-    exclusiveZone: -1
+    anchors { top: true; bottom: true; left: true; right: true }
     color: shell.theme.bg
 
-    WlrLayer.layer: WlrLayer.Background
-    WlrLayer.keyboardFocus: WlrLayer.None
+    WlrLayershell.layer: WlrLayer.Background
 
-    MouseArea {
+    Item {
         anchors.fill: parent
-        acceptedButtons: Qt.LeftButton | Qt.RightButton
-        
-        onClicked: function(mouse) {
-            if (mouse.button === Qt.RightButton) {
-                Quickshell.ipc.call("default", "themeMenu", "openAt", [mouse.x, mouse.y])
-            } else if (mouse.button === Qt.LeftButton) {
-                // TODO: Wallpaper menüsü
+        MouseArea {
+            anchors.fill: parent
+            acceptedButtons: Qt.LeftButton | Qt.RightButton
+            onClicked: function(mouse) {
+                if (mouse.button === Qt.RightButton) {
+                    Quickshell.ipc.call("default", "themeMenu", "openAt", [mouse.x, mouse.y])
+                }
             }
         }
     }
