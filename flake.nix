@@ -56,6 +56,11 @@
             nixpkgs.config.allowUnfree = true;
           }
           "${nixpkgs}/nixos/modules/virtualisation/qemu-vm.nix"
+          {
+            virtualisation.memorySize = 4096;
+            virtualisation.cores = 4;
+            virtualisation.qemu.options = [ "-vga virtio" ];
+          }
 
           ./modules/os/default.nix
           ./modules/developer/arsenal.nix
