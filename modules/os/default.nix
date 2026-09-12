@@ -58,13 +58,17 @@
   services.blueman.enable = true;
 
   # ═══════════ Hyprland (Sistem Seviyesi) ═══════════
-  programs.hyprland.enable = true;
+  programs.hyprland = {
+    enable = true;
+    withUWSM = false; # Doğrudan saf Hyprland ikili oturumu (UWSM bağımlılığı ve çöküşünü engeller)
+    xwayland.enable = true;
+  };
 
-  # ═══════════ Display Manager (SDDM) ═══════════
+  # SDDM Varsayılan Oturum
+  services.displayManager.defaultSession = "hyprland";
   services.displayManager.sddm = {
     enable = true;
     wayland.enable = true;
-    theme = "where_is_my_sddm_theme"; # Sonra özelleştirilecek
   };
 
   # ═══════════ Güvenlik (Polkit) ═══════════
