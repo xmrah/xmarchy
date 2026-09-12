@@ -165,21 +165,29 @@
       ];
 
       "$mod" = "SUPER";
+      "$altMod" = "ALT";
       bind = [
-        # Temel
+        # Temel (Hem SUPER hem ALT - Host ve VM çakışmaz)
         "$mod, Return, exec, kitty"
+        "$altMod, Return, exec, kitty"
         "$mod, C, killactive,"
+        "$altMod, C, killactive,"
         "$mod, M, exit,"
+        "$altMod, M, exit,"
         "$mod, F, togglefloating,"
+        "$altMod, F, togglefloating,"
         "$mod, P, pseudo,"
+        "$altMod, P, pseudo,"
 
         # Launcher (Quickshell IPC)
         "$mod, space, exec, quickshell ipc call default launcher toggle"
+        "$altMod, space, exec, quickshell ipc call default launcher toggle"
 
         # Kilit Ekranı
         "$mod SHIFT, L, exec, quickshell ipc call default lock toggle"
+        "$altMod SHIFT, L, exec, quickshell ipc call default lock toggle"
 
-        # Workspace geçişleri
+        # Workspace geçişleri (SUPER)
         "$mod, 1, workspace, 1"
         "$mod, 2, workspace, 2"
         "$mod, 3, workspace, 3"
@@ -190,7 +198,18 @@
         "$mod, 8, workspace, 8"
         "$mod, 9, workspace, 9"
 
-        # Pencere taşıma
+        # Workspace geçişleri (ALT - Sanal Makinede Doğrudan Çalışır)
+        "$altMod, 1, workspace, 1"
+        "$altMod, 2, workspace, 2"
+        "$altMod, 3, workspace, 3"
+        "$altMod, 4, workspace, 4"
+        "$altMod, 5, workspace, 5"
+        "$altMod, 6, workspace, 6"
+        "$altMod, 7, workspace, 7"
+        "$altMod, 8, workspace, 8"
+        "$altMod, 9, workspace, 9"
+
+        # Pencere taşıma (SUPER)
         "$mod SHIFT, 1, movetoworkspace, 1"
         "$mod SHIFT, 2, movetoworkspace, 2"
         "$mod SHIFT, 3, movetoworkspace, 3"
@@ -201,15 +220,31 @@
         "$mod SHIFT, 8, movetoworkspace, 8"
         "$mod SHIFT, 9, movetoworkspace, 9"
 
+        # Pencere taşıma (ALT)
+        "$altMod SHIFT, 1, movetoworkspace, 1"
+        "$altMod SHIFT, 2, movetoworkspace, 2"
+        "$altMod SHIFT, 3, movetoworkspace, 3"
+        "$altMod SHIFT, 4, movetoworkspace, 4"
+        "$altMod SHIFT, 5, movetoworkspace, 5"
+        "$altMod SHIFT, 6, movetoworkspace, 6"
+        "$altMod SHIFT, 7, movetoworkspace, 7"
+        "$altMod SHIFT, 8, movetoworkspace, 8"
+        "$altMod SHIFT, 9, movetoworkspace, 9"
+
         # Odak değiştirme
         "$mod, H, movefocus, l"
+        "$altMod, H, movefocus, l"
         "$mod, L, movefocus, r"
+        "$altMod, L, movefocus, r"
         "$mod, K, movefocus, u"
+        "$altMod, K, movefocus, u"
         "$mod, J, movefocus, d"
+        "$altMod, J, movefocus, d"
 
         # Ekran görüntüsü
         ", Print, exec, xmarchy-capture screen"
         "$mod, Print, exec, xmarchy-capture region"
+        "$altMod, Print, exec, xmarchy-capture region"
       ];
 
       # Ses kontrolleri

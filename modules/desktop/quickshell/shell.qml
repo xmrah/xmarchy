@@ -10,39 +10,78 @@ import Quickshell.Services.Pipewire
 ShellRoot {
     id: shell
 
-    // State Directory (Impermanence ile /persist/system'e bağlanacak)
     readonly property string stateFile: "/var/lib/xmarchy/current-theme.json"
     
-    // Varsayılan tema (fallback)
+    // Varsayılan tema (Premium Modern Koyu Tema)
     property string currentThemeName: "xmarchy-dark"
-    property var theme: ({bg: "#000000", fg: "#FFFFFF", dim: "#666666", accent: "#FFFFFF"})
+    property var themes: ({
+        "xmarchy-dark": {
+            bg: "#0f111a",
+            surface: "#1a1c2b",
+            fg: "#c0caf5",
+            dim: "#565f89",
+            accent: "#7aa2f7",
+            accent2: "#bb9af7"
+        },
+        "catppuccin": {
+            bg: "#1e1e2e",
+            surface: "#25273a",
+            fg: "#cdd6f4",
+            dim: "#6c7086",
+            accent: "#cba6f7",
+            accent2: "#89b4fa"
+        },
+        "rose-pine": {
+            bg: "#191724",
+            surface: "#21202e",
+            fg: "#e0def4",
+            dim: "#6e6a86",
+            accent: "#ebbcba",
+            accent2: "#c4a7e7"
+        },
+        "nord": {
+            bg: "#242933",
+            surface: "#2e3440",
+            fg: "#eceff4",
+            dim: "#768299",
+            accent: "#88c0d0",
+            accent2: "#81a1c1"
+        },
+        "cyberpunk": {
+            bg: "#0b0e14",
+            surface: "#151924",
+            fg: "#e6e6e6",
+            dim: "#4d5b70",
+            accent: "#00f0ff",
+            accent2: "#ff0055"
+        },
+        "xmarchy-light": {
+            bg: "#f2f4f8",
+            surface: "#ffffff",
+            fg: "#1e2030",
+            dim: "#8990a2",
+            accent: "#3b82f6",
+            accent2: "#8b5cf6"
+        }
+    })
 
-    readonly property int barHeight: 28
-    readonly property string fontFamily: "JetBrains Mono"
+    property var theme: themes[currentThemeName]
+
+    readonly property int barHeight: 34
+    readonly property string fontFamily: "JetBrainsMono Nerd Font"
 
     // Tema Değiştirme Fonksiyonu
     function applyTheme(name: string) {
-        currentThemeName = name
-        
-        // Quickshell'in kendi içindeki renkleri değiştir
-        var path = Quickshell.env("XMARCHY_QS_DIR") + "/themes/" + name + ".json"
-        // (Gerçek hayatta burada dosya okuma yapılır, biz mockluyoruz)
-        var themes = {
-            "xmarchy-dark": {bg: "#000000", fg: "#FFFFFF", dim: "#666666", accent: "#FFFFFF"},
-            "xmarchy-light": {bg: "#FFFFFF", fg: "#000000", dim: "#999999", accent: "#000000"},
-            "hackerman": {bg: "#0D1117", fg: "#00FF41", dim: "#008F11", accent: "#00FF41"},
-            "rose-pine": {bg: "#191724", fg: "#e0def4", dim: "#6e6a86", accent: "#c4a7e7"},
-            "vantablack": {bg: "#050505", fg: "#888888", dim: "#333333", accent: "#aaaaaa"}
+        if (!themes[name]) return;
+        currentThemeName = name;
+        theme = themes[name];
+
+        // Hyprland ve sistem renklerini CLI üzerinden güncelle
+        try {
+            Quickshell.process(["xmarchy-theme-apply", name, theme.bg, theme.accent]);
+        } catch (e) {
+            console.log("Process exec note:", e);
         }
-        theme = themes[name]
-
-        // Dış sistemleri (Hyprland, Kitty, Tmux) anında güncellemek için CLI aracını tetikle
-        var proc = Quickshell.process(["xmarchy-theme-apply", name, theme.bg, theme.fg])
-    }
-
-    // Başlangıçta temayı yükle
-    Component.onCompleted: {
-        // Gerçekte stateFile okunur. Biz şimdilik bash scriptinin yapmasını bekleyeceğiz.
     }
 
     PwObjectTracker { objects: [Pipewire.defaultAudioSink] }
@@ -70,8 +109,15 @@ ShellRoot {
     Lock { id: lock }
     ThemeMenu { id: themeMenu }
 
+    property alias themeMenu: themeMenu
+    property alias launcher: launcher
+    property alias lock: lock
+    property alias osd: osd
+
     // ═══════════ IPC Kontrolleri ═══════════
     IpcHandler { target: "osd"; function show(icon: string, value: int) { osd.show(icon, value) } }
     IpcHandler { target: "launcher"; function toggle() { launcher.toggle() } }
     IpcHandler { target: "theme"; function apply(name: string) { shell.applyTheme(name) } }
+    IpcHandler { target: "themeMenu"; function openAt(x: int, y: int) { themeMenu.openAt(x, y) } }
+    IpcHandler { target: "lock"; function toggle() { lock.toggle() } }
 }

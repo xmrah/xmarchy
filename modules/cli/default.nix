@@ -6,30 +6,32 @@ let
     runtimeInputs = [ pkgs.jq pkgs.coreutils pkgs.hyprland ];
     text = ''
       if [ "$#" -lt 3 ]; then
-        echo "Usage: xmarchy-theme-apply <theme-name> <bg-color> <fg-color>"
+        echo "Usage: xmarchy-theme-apply <theme-name> <bg-color> <accent-color>"
         exit 1
       fi
 
       THEME_NAME="$1"
       BG_COLOR="$2"
-      FG_COLOR="$3"
+      ACCENT_COLOR="$3"
 
-      # 1. Hyprland Border Renklerini Güncelle
-      # Hyprland rgb() formatı istiyor, '#' işaretini kaldırıyoruz
-      FG_HEX="''${FG_COLOR#\#}"
-      BG_HEX="''${BG_COLOR#\#}"
-      hyprctl keyword general:col.active_border "rgb(''${FG_HEX})"
-      hyprctl keyword general:col.inactive_border "rgb(''${BG_HEX})"
+      # 1. Hyprland Border Renklerini Guncelle
+      BG_HEX="''${BG_COLOR##}"
+      ACCENT_HEX="''${ACCENT_COLOR##}"
+      
+      hyprctl keyword general:col.active_border "rgb(''${ACCENT_HEX})" || true
+      hyprctl keyword general:col.inactive_border "rgb(''${BG_HEX})" || true
 
-      # 2. Seçilen temayı Impermanence state dosyasına kaydet
-      mkdir -p /var/lib/xmarchy
-      echo "{\"theme\": \"$THEME_NAME\"}" > /var/lib/xmarchy/current-theme.json
+      # 2. Secilen temayi kullanici config dizinine kaydet
+      mkdir -p "$HOME/.config/xmarchy"
+      echo "{\"theme\": \"''${THEME_NAME}\"}" > "$HOME/.config/xmarchy/current-theme.json"
 
-      # TODO: Kitty ve Tmux canlı güncelleme komutları
+      # Sistem dizini yazilabilirse oraya da kaydet
+      if [ -w /var/lib/xmarchy ]; then
+        echo "{\"theme\": \"''${THEME_NAME}\"}" > /var/lib/xmarchy/current-theme.json || true
+      fi
     '';
   };
-in
-{
+in{
   environment.systemPackages = [
     xmarchy-theme-apply
   ];

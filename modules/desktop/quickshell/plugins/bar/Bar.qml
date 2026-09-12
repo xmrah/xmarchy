@@ -11,93 +11,176 @@ PanelWindow {
     anchors { top: true; left: true; right: true }
     exclusiveZone: shell.barHeight
     height: shell.barHeight
-    color: shell.theme.bg
+    color: "transparent"
 
     WlrLayershell.layer: WlrLayer.Top
 
-    Item {
+    Rectangle {
         anchors.fill: parent
+        color: shell.theme.bg
+        opacity: 0.95
 
-        RowLayout {
-            anchors.fill: parent
-            anchors.leftMargin: 8
-            anchors.rightMargin: 8
-            spacing: 0
-
-            // ═══════════════ SOL: Workspace Göstergeleri ═══════════════
-            Repeater {
-                model: 9
-                delegate: Rectangle {
-                    required property int index
-                    property int wsId: index + 1
-                    property bool active: Hyprland.workspaces.values.some(
-                        function(ws) { return ws.id === wsId }
-                    )
-                    property bool focused: Hyprland.focusedMonitor?.activeWorkspace?.id === wsId
-
-                    Layout.preferredWidth: shell.barHeight - 8
-                    Layout.preferredHeight: shell.barHeight - 8
-                    Layout.alignment: Qt.AlignVCenter
-
-                    color: focused ? shell.theme.fg : (active ? shell.theme.dim : "transparent")
-                    border.color: active ? shell.theme.fg : shell.theme.dim
-                    border.width: 1
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: parent.wsId
-                        color: parent.focused ? shell.theme.bg : shell.theme.fg
-                        font.family: shell.fontFamily
-                        font.pixelSize: 10
-                        font.bold: parent.focused
-                    }
-                }
-            }
-
-            // ═══════════════ ORTA: Saat ═══════════════
-            Item { Layout.fillWidth: true }
-
-            Text {
-                id: clock
-                Layout.alignment: Qt.AlignCenter
-                color: shell.theme.fg
-                font.family: shell.fontFamily
-                font.pixelSize: 13
-                font.bold: true
-
-                property var now: new Date()
-                text: Qt.formatDateTime(now, "dddd HH:mm")
-
-                Timer {
-                    running: true
-                    repeat: true
-                    interval: 10000
-                    onTriggered: clock.now = new Date()
-                }
-            }
-
-            Item { Layout.fillWidth: true }
-
-            // ═══════════════ SAĞ: Ses Seviyesi ═══════════════
-            Text {
-                Layout.alignment: Qt.AlignVCenter
-                color: shell.theme.fg
-                font.family: shell.fontFamily
-                font.pixelSize: 11
-
-                property var sink: Pipewire.defaultAudioSink
-                property int vol: sink?.audio?.volume ? Math.round(sink.audio.volume * 100) : 0
-                property bool muted: sink?.audio?.muted ?? false
-                text: muted ? "MUTE" : "VOL " + vol + "%"
-            }
-        }
-
-        // Alt kenar çizgisi (1px)
+        // Alt kenar çizgisi (Aksan renginde ince 1px şerit)
         Rectangle {
             anchors.bottom: parent.bottom
             width: parent.width
             height: 1
-            color: shell.theme.fg
+            color: shell.theme.surface
+        }
+
+        RowLayout {
+            anchors.fill: parent
+            anchors.leftMargin: 12
+            anchors.rightMargin: 12
+            spacing: 8
+
+            // ═══════════════ SOL: Workspace Göstergeleri (Pills) ═══════════════
+            Row {
+                spacing: 4
+                Layout.alignment: Qt.AlignVCenter
+
+                Repeater {
+                    model: 9
+                    delegate: Rectangle {
+                        required property int index
+                        property int wsId: index + 1
+                        property bool active: Hyprland.workspaces.values.some(
+                            function(ws) { return ws.id === wsId }
+                        )
+                        property bool focused: Hyprland.focusedMonitor?.activeWorkspace?.id === wsId
+
+                        width: focused ? 28 : (active ? 20 : 16)
+                        height: 18
+                        radius: 9
+                        color: focused ? shell.theme.accent : (active ? shell.theme.surface : "transparent")
+                        border.color: focused ? shell.theme.accent : (active ? shell.theme.dim : shell.theme.surface)
+                        border.width: 1
+
+                        Behavior on width { NumberAnimation { duration: 150; easing.type: Easing.OutQuad } }
+                        Behavior on color { ColorAnimation { duration: 150 } }
+
+                        Text {
+                            anchors.centerIn: parent
+                            text: parent.wsId
+                            color: parent.focused ? shell.theme.bg : shell.theme.fg
+                            font.family: shell.fontFamily
+                            font.pixelSize: 10
+                            font.bold: parent.focused
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: Hyprland.dispatch("workspace " + parent.wsId)
+                        }
+                    }
+                }
+            }
+
+            // Boşluk
+            Item { Layout.fillWidth: true }
+
+            // ═══════════════ ORTA: Saat & Tarih ═══════════════
+            Row {
+                Layout.alignment: Qt.AlignCenter
+                spacing: 6
+
+                Text {
+                    id: clock
+                    color: shell.theme.fg
+                    font.family: shell.fontFamily
+                    font.pixelSize: 13
+                    font.bold: true
+
+                    property var now: new Date()
+                    text: Qt.formatDateTime(now, "HH:mm")
+
+                    Timer {
+                        running: true
+                        repeat: true
+                        interval: 1000
+                        onTriggered: clock.now = new Date()
+                    }
+                }
+
+                Text {
+                    color: shell.theme.dim
+                    font.family: shell.fontFamily
+                    font.pixelSize: 12
+                    text: "•  " + Qt.formatDateTime(clock.now, "dddd, d MMMM")
+                }
+            }
+
+            // Boşluk
+            Item { Layout.fillWidth: true }
+
+            // ═══════════════ SAĞ: Tema, Ses ve Sistem ═══════════════
+            Row {
+                Layout.alignment: Qt.AlignVCenter
+                spacing: 12
+
+                // Tema Değiştirici Butonu
+                Rectangle {
+                    width: themeLabel.implicitWidth + 16
+                    height: 22
+                    radius: 11
+                    color: shell.theme.surface
+                    border.color: shell.theme.dim
+                    border.width: 1
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    Row {
+                        anchors.centerIn: parent
+                        spacing: 6
+
+                        Rectangle {
+                            width: 8
+                            height: 8
+                            radius: 4
+                            color: shell.theme.accent
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+
+                        Text {
+                            id: themeLabel
+                            text: shell.currentThemeName
+                            color: shell.theme.fg
+                            font.family: shell.fontFamily
+                            font.pixelSize: 11
+                            font.bold: true
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: shell.themeMenu.openAt(bar.width - 220, shell.barHeight + 6)
+                    }
+                }
+
+                // Ses Seviyesi
+                Rectangle {
+                    height: 22
+                    width: volText.implicitWidth + 16
+                    radius: 11
+                    color: shell.theme.surface
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    Text {
+                        id: volText
+                        anchors.centerIn: parent
+                        color: shell.theme.fg
+                        font.family: shell.fontFamily
+                        font.pixelSize: 11
+
+                        property var sink: Pipewire.defaultAudioSink
+                        property int vol: sink?.audio?.volume ? Math.round(sink.audio.volume * 100) : 0
+                        property bool muted: sink?.audio?.muted ?? false
+                        text: muted ? "󰖁 MUTE" : "󰕾 " + vol + "%"
+                    }
+                }
+            }
         }
     }
 }
