@@ -9,6 +9,17 @@
     # canlı test ortamını şişirmemek ve çakışma yaratmamak için isteğe bağlı tutulmuştur.
   ];
 
+  # ═══════════ Wayland & Grafik Ortam Değişkenleri ═══════════
+  environment.sessionVariables = {
+    NIXOS_OZONE_WL = "1";
+    # Hyprland 0.56 (Aquamarine) VM Uyumluluk Kalkanı:
+    AQ_DRM_DEVICES = "/dev/dri/card0";
+    AQ_NO_ATOMIC = "1";    # QEMU VirtIO GPU için legacy DRM arayüzünü zorlar
+    AQ_NO_MODIFIERS = "1"; # DRM modifiers olmadan düz bellek alanı kullanır
+    WLR_NO_HARDWARE_CURSORS = "1";
+    WLR_RENDERER_ALLOW_SOFTWARE = "1";
+  };
+
   # ═══════════ Ağ ═══════════
   networking.hostName = "xmarchy";
   networking.networkmanager.enable = true;
@@ -64,8 +75,12 @@
     xwayland.enable = true;
   };
 
-  # SDDM Varsayılan Oturum
+  # SDDM Varsayılan Oturum & Otomatik Giriş
   services.displayManager.defaultSession = "hyprland";
+  services.displayManager.autoLogin = {
+    enable = true;
+    user = "nixos";
+  };
   services.displayManager.sddm = {
     enable = true;
     wayland.enable = true;
