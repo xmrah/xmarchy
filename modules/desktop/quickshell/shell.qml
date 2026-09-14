@@ -101,6 +101,7 @@ ShellRoot {
         if (bluetoothMenu) bluetoothMenu.opened = false;
         if (calendarMenu) calendarMenu.opened = false;
         if (weatherMenu) weatherMenu.opened = false;
+        if (displayMenu) displayMenu.opened = false;
     }
 
     PwObjectTracker { objects: [Pipewire.defaultAudioSink] }
@@ -133,6 +134,7 @@ ShellRoot {
     PowerMenu { id: powerMenu }
     CalendarMenu { id: calendarMenu }
     WeatherMenu { id: weatherMenu }
+    DisplayMenu { id: displayMenu }
 
     property alias themeMenu: themeMenu
     property alias launcher: launcher
@@ -144,6 +146,7 @@ ShellRoot {
     property alias powerMenu: powerMenu
     property alias calendarMenu: calendarMenu
     property alias weatherMenu: weatherMenu
+    property alias displayMenu: displayMenu
 
     // ═══════════ IPC Kontrolleri ═══════════
     IpcHandler { target: "osd"; function show(icon: string, value: int) { osd.show(icon, value) } }
@@ -152,4 +155,5 @@ ShellRoot {
     IpcHandler { target: "power"; function open() { powerMenu.open() } }
     IpcHandler { target: "calendar"; function toggle() { calendarMenu.toggle() } }
     IpcHandler { target: "weather"; function toggle() { weatherMenu.toggle(shell.width / 2 - 100, shell.barHeight + 6) } }
+    IpcHandler { target: "display"; function toggle() { displayMenu.toggle(shell.width - 400, shell.barHeight + 6) } }
 }

@@ -283,7 +283,7 @@ PanelWindow {
                         }
                     }
 
-                    // Aktiflik Çizgisi (Ekran görüntüsündeki gibi açıldığında parlar)
+                    // Aktiflik Çizgisi
                     Rectangle {
                         anchors.bottom: parent.bottom
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -340,7 +340,7 @@ PanelWindow {
                         }
                     }
 
-                    // Aktiflik Çizgisi (Ekran görüntüsündeki gibi açıldığında parlar)
+                    // Aktiflik Çizgisi
                     Rectangle {
                         anchors.bottom: parent.bottom
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -363,7 +363,7 @@ PanelWindow {
             // Boşluk
             Item { Layout.fillWidth: true }
 
-            // ═══════════════ SAĞ: Sistem Tepsisi, Kaynaklar, Ağ, BT, Pil, Ses, Tema ve Güç ═══════════════
+            // ═══════════════ SAĞ: Sistem Tepsisi, Kaynaklar, Ağ, Ekran, BT, Pil, Ses, Tema ve Güç ═══════════════
             Row {
                 Layout.alignment: Qt.AlignVCenter
                 spacing: 8
@@ -424,21 +424,36 @@ PanelWindow {
                     }
                 }
 
-                // Ağ Göstergesi
-                Rectangle {
-                    height: 22
+                // 1. Ağ Göstergesi (Tıklanınca NetworkMenu açılır)
+                Item {
                     width: netText.implicitWidth + 16
-                    radius: 11
-                    color: netMouse.containsMouse ? shell.theme.accent : shell.theme.surface
+                    height: 24
                     anchors.verticalCenter: parent.verticalCenter
 
-                    Text {
-                        id: netText
-                        anchors.centerIn: parent
-                        color: netMouse.containsMouse ? shell.theme.bg : (Networking.connectivity >= 3 ? shell.theme.fg : shell.theme.dim)
-                        font.family: shell.fontFamily
-                        font.pixelSize: 11
-                        text: Networking.connectivity >= 3 ? "󰤨 NET" : "󰤭 OFFLINE"
+                    Rectangle {
+                        anchors.fill: parent
+                        radius: 11
+                        color: netMouse.containsMouse ? shell.theme.accent : shell.theme.surface
+
+                        Text {
+                            id: netText
+                            anchors.centerIn: parent
+                            color: netMouse.containsMouse ? shell.theme.bg : (Networking.connectivity >= 3 ? shell.theme.fg : shell.theme.dim)
+                            font.family: shell.fontFamily
+                            font.pixelSize: 11
+                            text: Networking.connectivity >= 3 ? "󰤨 NET" : "󰤭 OFFLINE"
+                        }
+                    }
+
+                    // Aktiflik Çizgisi
+                    Rectangle {
+                        anchors.bottom: parent.bottom
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        width: parent.width - 4
+                        height: 2
+                        radius: 1
+                        color: shell.theme.accent
+                        visible: shell.networkMenu?.opened ?? false
                     }
 
                     MouseArea {
@@ -446,11 +461,51 @@ PanelWindow {
                         anchors.fill: parent
                         hoverEnabled: true
                         cursorShape: Qt.PointingHandCursor
-                        onClicked: shell.networkMenu.openAt(bar.width - 350, shell.barHeight + 6)
+                        onClicked: shell.networkMenu.toggle(bar.width - 480, shell.barHeight + 6)
                     }
                 }
 
-                // Bluetooth Göstergesi
+                // 2. Ekran & Ölçekleme Göstergesi (Tıklanınca DisplayMenu açılır)
+                Item {
+                    width: 24
+                    height: 24
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    Rectangle {
+                        anchors.fill: parent
+                        radius: 12
+                        color: dispMouse.containsMouse ? shell.theme.accent : shell.theme.surface
+
+                        Text {
+                            anchors.centerIn: parent
+                            text: "󰍹"
+                            color: dispMouse.containsMouse ? shell.theme.bg : shell.theme.fg
+                            font.family: shell.fontFamily
+                            font.pixelSize: 12
+                        }
+                    }
+
+                    // Aktiflik Çizgisi
+                    Rectangle {
+                        anchors.bottom: parent.bottom
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        width: parent.width - 4
+                        height: 2
+                        radius: 1
+                        color: shell.theme.accent
+                        visible: shell.displayMenu?.opened ?? false
+                    }
+
+                    MouseArea {
+                        id: dispMouse
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: shell.displayMenu.toggle(bar.width - 400, shell.barHeight + 6)
+                    }
+                }
+
+                // 3. Bluetooth Göstergesi
                 Rectangle {
                     height: 22
                     width: btText.implicitWidth + 16
@@ -477,7 +532,7 @@ PanelWindow {
                     }
                 }
 
-                // Pil Durumu (Sadece donanımda pil varsa)
+                // 4. Pil Durumu (Sadece donanımda pil varsa)
                 Rectangle {
                     height: 22
                     width: batText.implicitWidth + 16
@@ -497,25 +552,40 @@ PanelWindow {
                     }
                 }
 
-                // Ses Seviyesi
-                Rectangle {
-                    height: 22
+                // 5. Ses Seviyesi (Tıklanınca AudioMenu açılır)
+                Item {
                     width: volText.implicitWidth + 16
-                    radius: 11
-                    color: volMouse.containsMouse ? shell.theme.accent : shell.theme.surface
+                    height: 24
                     anchors.verticalCenter: parent.verticalCenter
 
-                    Text {
-                        id: volText
-                        anchors.centerIn: parent
-                        color: volMouse.containsMouse ? shell.theme.bg : shell.theme.fg
-                        font.family: shell.fontFamily
-                        font.pixelSize: 11
+                    Rectangle {
+                        anchors.fill: parent
+                        radius: 11
+                        color: volMouse.containsMouse ? shell.theme.accent : shell.theme.surface
 
-                        property var sink: Pipewire.defaultAudioSink
-                        property int vol: sink?.audio?.volume ? Math.round(sink.audio.volume * 100) : 0
-                        property bool muted: sink?.audio?.muted ?? false
-                        text: muted ? "󰖁 MUTE" : "󰕾 " + vol + "%"
+                        Text {
+                            id: volText
+                            anchors.centerIn: parent
+                            color: volMouse.containsMouse ? shell.theme.bg : shell.theme.fg
+                            font.family: shell.fontFamily
+                            font.pixelSize: 11
+
+                            property var sink: Pipewire.defaultAudioSink
+                            property int vol: sink?.audio?.volume ? Math.round(sink.audio.volume * 100) : 0
+                            property bool muted: sink?.audio?.muted ?? false
+                            text: muted ? "󰖁 MUTE" : "󰕾 " + vol + "%"
+                        }
+                    }
+
+                    // Aktiflik Çizgisi
+                    Rectangle {
+                        anchors.bottom: parent.bottom
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        width: parent.width - 4
+                        height: 2
+                        radius: 1
+                        color: shell.theme.accent
+                        visible: shell.audioMenu?.opened ?? false
                     }
 
                     MouseArea {
@@ -531,13 +601,13 @@ PanelWindow {
                                     sink.audio.muted = !sink.audio.muted;
                                 }
                             } else {
-                                shell.audioMenu.openAt(bar.width - 330, shell.barHeight + 6)
+                                shell.audioMenu.toggle(bar.width - 380, shell.barHeight + 6)
                             }
                         }
                     }
                 }
 
-                // Tema Değiştirici Butonu
+                // 6. Tema Değiştirici Butonu
                 Rectangle {
                     width: themeLabel.implicitWidth + 16
                     height: 22
@@ -579,7 +649,7 @@ PanelWindow {
                     }
                 }
 
-                // Kilit & Güç Butonu
+                // 7. Kilit & Güç Butonu
                 Rectangle {
                     width: 24
                     height: 24

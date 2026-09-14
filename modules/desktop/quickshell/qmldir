@@ -11,3 +11,4 @@ BluetoothMenu 1.0 plugins/bluetooth_menu/BluetoothMenu.qml
 PowerMenu 1.0 plugins/power_menu/PowerMenu.qml
 CalendarMenu 1.0 plugins/calendar/CalendarMenu.qml
 WeatherMenu 1.0 plugins/weather/WeatherMenu.qml
+DisplayMenu 1.0 plugins/display/DisplayMenu.qml
