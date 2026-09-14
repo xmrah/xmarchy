@@ -30,6 +30,16 @@ Item {
             isMenu: true
         },
         {
+            id: "learn",
+            label: "Öğren & Kısayollar",
+            icon: "󰧑",
+            category: "Rehber & Tuşlar",
+            subtext: "Hyprland tuşları, Neovim, Bash, Nix",
+            description: "Xmarchy ve Hyprland klavye kısayolları, Neovim, Tmux ve NixOS komut rehberleri.",
+            badge: "Learn ›",
+            isMenu: true
+        },
+        {
             id: "tools",
             label: "Araçlar & Tetikleyiciler",
             icon: "󱓞",
@@ -47,6 +57,16 @@ Item {
             subtext: "Xmarchy renkleri, temalar, ölçek",
             description: "Xmarchy renk paletleri, temalar, duvar kağıtları ve Wayland dinamik ekran ölçekleme ayarları.",
             badge: "Style ›",
+            isMenu: true
+        },
+        {
+            id: "install",
+            label: "Yazılım & Geliştirme",
+            icon: "󰉉",
+            category: "Paket Kataloğu",
+            subtext: "Go, Rust, Python, Node, AI ortamları",
+            description: "NixOS uyumlu izole geliştirme kabukları (Dev Shells), AI araçları ve paketler.",
+            badge: "Install ›",
             isMenu: true
         },
         {
@@ -70,6 +90,17 @@ Item {
             isMenu: true
         },
         {
+            id: "about",
+            label: "Xmarchy Hakkında",
+            icon: "",
+            category: "Sistem Künyesi",
+            subtext: "Versiyon, donanım, çekirdek ve kabuk",
+            description: "Xmarchy Sovereign Declarative OS sürümü, Linux Zen çekirdeği ve sistem donanım özeti.",
+            action: "kitty -e xmarchy status",
+            badge: "About",
+            isAbout: true
+        },
+        {
             id: "power",
             label: "Güç & Oturum",
             icon: "",
@@ -78,6 +109,264 @@ Item {
             description: "Ekran kilitleme, askıya alma, yeniden başlatma ve güvenli kapatma seçenekleri.",
             badge: "Power ›",
             isMenu: true
+        }
+    ]
+
+    readonly property var learnItems: [
+        {
+            id: "learn.keys",
+            label: "Hyprland Tuş Kombinasyonları",
+            icon: "",
+            category: "Öğren",
+            subtext: "Tüm masaüstü klavye kısayolları",
+            description: "Xmarchy ve Hyprland pencere yöneticisi kısayollarını interaktif keşfedin.",
+            badge: "Kısayollar ›",
+            isMenu: true
+        },
+        {
+            id: "learn.neovim",
+            label: "Neovim / Vim Hareket Rehberi",
+            icon: "",
+            category: "Öğren",
+            subtext: "Modal metin düzenleme tuşları",
+            description: "Vim hareketleri (h, j, k, l, w, b, ciw, y, p) ve LazyVim ipuçları rehberi.",
+            action: "kitty -e nvim +help",
+            badge: "Neovim",
+            isGuide: true
+        },
+        {
+            id: "learn.tmux",
+            label: "Tmux Terminal Çoğullayıcı",
+            icon: "",
+            category: "Öğren",
+            subtext: "Prefix + tuş kombinasyonları",
+            description: "Tmux oturum, pencere ve dikey/yatay bölme (split) kontrol tuşları rehberi.",
+            action: "kitty -e man tmux",
+            badge: "Tmux",
+            isGuide: true
+        },
+        {
+            id: "learn.nixos_cmd",
+            label: "NixOS Temel Komutları",
+            icon: "",
+            category: "Öğren",
+            subtext: "Rebuild, shell, search, profile",
+            description: "Sık kullanılan deklaratif ve imperatif Nix komutları (nix-shell, nix-env) rehberi.",
+            action: "kitty -e man nix",
+            badge: "NixOS",
+            isGuide: true
+        },
+        {
+            id: "learn.hypr_wiki",
+            label: "Hyprland Resmi El Kitabı (Wiki)",
+            icon: "",
+            category: "Öğren",
+            subtext: "wiki.hypr.land dökümantasyonu",
+            description: "Hyprland Wayland pencere yöneticisi resmi çevrimiçi el kitabı.",
+            action: "xmarchy webapp https://wiki.hypr.land",
+            badge: "Web",
+            isGuide: true
+        },
+        {
+            id: "learn.bash",
+            label: "Bash & Linux Shell Cheat Sheet",
+            icon: "󱆃",
+            category: "Öğren",
+            subtext: "devhints.io/bash ipuçları",
+            description: "Bash betik yazımı ve pratik Linux terminal komutları rehberi.",
+            action: "xmarchy webapp https://devhints.io/bash",
+            badge: "Web",
+            isGuide: true
+        }
+    ]
+
+    readonly property var keybindingItems: [
+        {
+            id: "keys.term",
+            label: "Terminal Başlat",
+            icon: "",
+            category: "Kısayol",
+            subtext: "Super + Return (veya Alt)",
+            description: "Hızlı, donanım hızlandırmalı Kitty terminal penceresi açar.",
+            badge: "Super+Return",
+            kbd: "SUPER + RETURN",
+            isKey: true
+        },
+        {
+            id: "keys.launcher",
+            label: "Komut Merkezi / Başlatıcı",
+            icon: "󰍉",
+            category: "Kısayol",
+            subtext: "Super + Space (veya Alt)",
+            description: "Xmarchy Command Center arama ve sistem paletini açar veya kapatır.",
+            badge: "Super+Space",
+            kbd: "SUPER + SPACE",
+            isKey: true
+        },
+        {
+            id: "keys.browser",
+            label: "Web Tarayıcısı Başlat",
+            icon: "",
+            category: "Kısayol",
+            subtext: "Super + B (veya Alt)",
+            description: "Varsayılan web tarayıcısını (Brave / Chromium / Firefox) çalıştırır.",
+            badge: "Super+B",
+            kbd: "SUPER + B",
+            isKey: true
+        },
+        {
+            id: "keys.close",
+            label: "Aktif Pencereyi Kapat",
+            icon: "󰅙",
+            category: "Kısayol",
+            subtext: "Super + Q veya Super + C",
+            description: "Odaklanılmış aktif pencereyi sonlandırır (killactive).",
+            badge: "Super+Q",
+            kbd: "SUPER + Q",
+            isKey: true
+        },
+        {
+            id: "keys.float",
+            label: "Yüzen Pencere Modu (Floating)",
+            icon: "",
+            category: "Kısayol",
+            subtext: "Super + F (veya Alt)",
+            description: "Pencereyi döşeme (tiling) ile serbest yüzen pencere modu arasında değiştirir.",
+            badge: "Super+F",
+            kbd: "SUPER + F",
+            isKey: true
+        },
+        {
+            id: "keys.lock",
+            label: "Ekranı Kilitle",
+            icon: "",
+            category: "Kısayol",
+            subtext: "Super + Shift + L",
+            description: "Masaüstü oturumunu anında kilitler.",
+            badge: "Super+Shift+L",
+            kbd: "SUPER + SHIFT + L",
+            isKey: true
+        },
+        {
+            id: "keys.ws_switch",
+            label: "Çalışma Alanı Değiştir (1-9)",
+            icon: "󱂬",
+            category: "Kısayol",
+            subtext: "Super + 1..9 (veya Alt)",
+            description: "Hedef masaüstü çalışma alanına (workspace 1-9) doğrudan geçiş yapar.",
+            badge: "Super+1..9",
+            kbd: "SUPER + 1..9",
+            isKey: true
+        },
+        {
+            id: "keys.ws_move",
+            label: "Pencereyi Alana Taşı",
+            icon: "󰆏",
+            category: "Kısayol",
+            subtext: "Super + Shift + 1..9",
+            description: "Aktif pencereyi seçilen numaralı çalışma alanına taşır.",
+            badge: "Super+Shift+1..9",
+            kbd: "SUPER + SHIFT + 1..9",
+            isKey: true
+        }
+    ]
+
+    readonly property var installItems: [
+        {
+            id: "install.dev_go",
+            label: "Go (Golang) Geliştirme Ortamı",
+            icon: "",
+            category: "Geliştirme",
+            subtext: "Nix izole derleyici kabuğu",
+            description: "Go derleyicisi ve geliştirme araçlarıyla izole bir terminal geliştirme ortamı açar.",
+            action: "kitty -e nix shell nixpkgs#go",
+            badge: "nix shell",
+            isInstall: true,
+            pkg: "nixpkgs#go"
+        },
+        {
+            id: "install.dev_rust",
+            label: "Rust & Cargo Geliştirme Ortamı",
+            icon: "",
+            category: "Geliştirme",
+            subtext: "Rustc ve Cargo paket yöneticisi",
+            description: "Rustc ve Cargo yüklü izole bir Nix geliştirme kabuğu başlatır.",
+            action: "kitty -e nix shell nixpkgs#rustc nixpkgs#cargo",
+            badge: "nix shell",
+            isInstall: true,
+            pkg: "nixpkgs#rustc nixpkgs#cargo"
+        },
+        {
+            id: "install.dev_python",
+            label: "Python3 & Pip Ortamı",
+            icon: "",
+            category: "Geliştirme",
+            subtext: "Python 3 ve Pip paket yöneticisi",
+            description: "İzole Python 3 yorumlayıcısı ve pip ortamı sunar.",
+            action: "kitty -e nix shell nixpkgs#python3 nixpkgs#python3Packages.pip",
+            badge: "nix shell",
+            isInstall: true,
+            pkg: "nixpkgs#python3"
+        },
+        {
+            id: "install.dev_node",
+            label: "Node.js & Bun JavaScript Ortamı",
+            icon: "",
+            category: "Geliştirme",
+            subtext: "Modern JS/TS çalışma ortamı",
+            description: "Node.js ve ultra hızlı Bun çalışma ortamı sağlar.",
+            action: "kitty -e nix shell nixpkgs#nodejs nixpkgs#bun",
+            badge: "nix shell",
+            isInstall: true,
+            pkg: "nixpkgs#nodejs nixpkgs#bun"
+        },
+        {
+            id: "install.dev_gcc",
+            label: "C / C++ Araçları (GCC & Make)",
+            icon: "󰙲",
+            category: "Geliştirme",
+            subtext: "GCC, G++, Make derleme paketi",
+            description: "C ve C++ projelerini derlemek için eksiksiz GNU toolchain sunar.",
+            action: "kitty -e nix shell nixpkgs#gcc nixpkgs#gnumake",
+            badge: "nix shell",
+            isInstall: true,
+            pkg: "nixpkgs#gcc nixpkgs#gnumake"
+        },
+        {
+            id: "install.ai_ollama",
+            label: "Ollama (Yerel LLM Motoru)",
+            icon: "󱚤",
+            category: "Yapay Zeka",
+            subtext: "Cihazda çalışan yerel modeller",
+            description: "Llama, Mistral ve Qwen modellerini çevrimdışı çalıştıran açık kaynak motor.",
+            action: "kitty -e nix run nixpkgs#ollama -- serve",
+            badge: "Ollama",
+            isInstall: true,
+            pkg: "nixpkgs#ollama"
+        },
+        {
+            id: "install.ai_chatgpt",
+            label: "ChatGPT WebApp (PWA)",
+            icon: "󰭻",
+            category: "Yapay Zeka",
+            subtext: "OpenAI ChatGPT bağımsız pencere",
+            description: "ChatGPT web arayüzünü Chromium PWA penceresi olarak başlatır.",
+            action: "xmarchy webapp https://chatgpt.com",
+            badge: "PWA",
+            isInstall: true,
+            pkg: "WebApp PWA"
+        },
+        {
+            id: "install.ai_claude",
+            label: "Claude AI WebApp (PWA)",
+            icon: "󰛄",
+            category: "Yapay Zeka",
+            subtext: "Anthropic Claude bağımsız pencere",
+            description: "Claude AI web arayüzünü bağımsız masaüstü uygulaması olarak açar.",
+            action: "xmarchy webapp https://claude.ai",
+            badge: "PWA",
+            isInstall: true,
+            pkg: "WebApp PWA"
         }
     ]
 
@@ -504,10 +793,14 @@ Item {
         }
         var shortNames = {
             "apps": "Uygulamalar",
+            "learn": "Öğren",
+            "learn.keys": "Kısayollar",
+            "install": "Yazılım",
             "tools": "Araçlar",
             "style": "Görünüm",
             "nixos": "NixOS",
             "setup": "Ayarlar",
+            "about": "Hakkında",
             "power": "Güç"
         }
         return "Kök › " + (shortNames[root.currentMenuId] || root.currentMenuId)
@@ -515,6 +808,9 @@ Item {
 
     function getAllStaticItems() {
         var all = []
+        all = all.concat(root.learnItems)
+        all = all.concat(root.keybindingItems)
+        all = all.concat(root.installItems)
         all = all.concat(root.toolItems)
         all = all.concat(root.styleItems)
         all = all.concat(root.nixosItems)
@@ -539,7 +835,8 @@ Item {
                     item.category.toLowerCase().indexOf(q) >= 0 ||
                     (item.subtext && item.subtext.toLowerCase().indexOf(q) >= 0) ||
                     item.description.toLowerCase().indexOf(q) >= 0 ||
-                    (item.badge && item.badge.toLowerCase().indexOf(q) >= 0)) {
+                    (item.badge && item.badge.toLowerCase().indexOf(q) >= 0) ||
+                    (item.kbd && item.kbd.toLowerCase().indexOf(q) >= 0)) {
                     matches.push(item)
                 }
             }
@@ -602,6 +899,12 @@ Item {
             }
             appList.sort(function(x, y) { return x.label.localeCompare(y.label) })
             root.displayItems = appList
+        } else if (root.currentMenuId === "learn") {
+            root.displayItems = root.learnItems
+        } else if (root.currentMenuId === "learn.keys") {
+            root.displayItems = root.keybindingItems
+        } else if (root.currentMenuId === "install") {
+            root.displayItems = root.installItems
         } else if (root.currentMenuId === "tools") {
             root.displayItems = root.toolItems
         } else if (root.currentMenuId === "style") {
@@ -649,6 +952,8 @@ Item {
         if (!item) return ""
         if (item.isMenu) return "Alt Menüye Gir [↵]"
         if (item.isApp) return "Uygulamayı Başlat [↵]"
+        if (item.isKey) return "Kısayolu Uygula [↵]"
+        if (item.isAbout) return "Canlı Künyeyi Aç [↵]"
         return "Eylemi Çalıştır [↵]"
     }
 
@@ -788,7 +1093,7 @@ Item {
                                 visible: searchInput.text.length === 0
                                 anchors.fill: parent
                                 verticalAlignment: Text.AlignVCenter
-                                text: "Bir eylem veya uygulama arayın..."
+                                text: "Bir eylem, kılavuz veya uygulama arayın..."
                                 color: shell.theme.dim
                                 font.family: shell.fontFamily
                                 font.pixelSize: 14
@@ -985,7 +1290,7 @@ Item {
 
                             Text {
                                 anchors.horizontalCenter: parent.horizontalCenter
-                                text: "Eşleşen eylem veya uygulama bulunamadı"
+                                text: "Eşleşen eylem, rehber veya uygulama bulunamadı"
                                 color: shell.theme.dim
                                 font.family: shell.fontFamily
                                 font.pixelSize: 12
@@ -1180,7 +1485,154 @@ Item {
                                 }
                             }
 
-                            // ─── ÖZEL CONTEXT 3: Araç / DNS Önizlemesi ───
+                            // ─── ÖZEL CONTEXT 3: Kısayol Tuşu (Keybinding) Önizlemesi ───
+                            Column {
+                                width: parent.width
+                                spacing: 8
+                                visible: rightPane.selItem?.isKey ?? false
+
+                                Text {
+                                    text: "KLAVYE KISAYOLU"
+                                    color: shell.theme.dim
+                                    font.family: shell.fontFamily
+                                    font.pixelSize: 10
+                                    font.bold: true
+                                }
+
+                                Rectangle {
+                                    width: parent.width
+                                    height: 48
+                                    radius: 8
+                                    color: shell.theme.surface
+                                    border.color: shell.theme.accent
+                                    border.width: 1
+
+                                    RowLayout {
+                                        anchors.centerIn: parent
+                                        spacing: 8
+
+                                        Text {
+                                            text: ""
+                                            color: shell.theme.accent
+                                            font.family: shell.fontFamily
+                                            font.pixelSize: 16
+                                        }
+
+                                        Text {
+                                            text: rightPane.selItem?.kbd ?? ""
+                                            color: shell.theme.fg
+                                            font.family: shell.fontFamily
+                                            font.pixelSize: 13
+                                            font.bold: true
+                                        }
+                                    }
+                                }
+                            }
+
+                            // ─── ÖZEL CONTEXT 4: Hakkında (About) Sistem Künyesi ───
+                            Column {
+                                width: parent.width
+                                spacing: 6
+                                visible: rightPane.selItem?.isAbout ?? false
+
+                                Text {
+                                    text: "SİSTEM BİLGİLERİ"
+                                    color: shell.theme.dim
+                                    font.family: shell.fontFamily
+                                    font.pixelSize: 10
+                                    font.bold: true
+                                }
+
+                                Rectangle {
+                                    width: parent.width
+                                    height: 80
+                                    radius: 6
+                                    color: shell.theme.surface
+                                    border.color: shell.theme.dim
+                                    border.width: 1
+
+                                    Column {
+                                        anchors.fill: parent
+                                        anchors.margins: 8
+                                        spacing: 4
+
+                                        Text {
+                                            text: "• Dağıtım: Xmarchy (NixOS Linux Zen)"
+                                            color: shell.theme.fg
+                                            font.family: shell.fontFamily
+                                            font.pixelSize: 10
+                                        }
+
+                                        Text {
+                                            text: "• Compositor: Hyprland Wayland"
+                                            color: shell.theme.fg
+                                            font.family: shell.fontFamily
+                                            font.pixelSize: 10
+                                        }
+
+                                        Text {
+                                            text: "• Masaüstü Kabuğu: Quickshell 0.3.0 QML"
+                                            color: shell.theme.fg
+                                            font.family: shell.fontFamily
+                                            font.pixelSize: 10
+                                        }
+
+                                        Text {
+                                            text: "• Flake Deposu: /persist/nixos-config"
+                                            color: shell.theme.accent
+                                            font.family: shell.fontFamily
+                                            font.pixelSize: 10
+                                        }
+                                    }
+                                }
+                            }
+
+                            // ─── ÖZEL CONTEXT 5: Yazılım & Geliştirme (Install) ───
+                            Column {
+                                width: parent.width
+                                spacing: 6
+                                visible: rightPane.selItem?.isInstall ?? false
+
+                                Text {
+                                    text: "KURULUM / ÇALIŞTIRMA MODELİ"
+                                    color: shell.theme.dim
+                                    font.family: shell.fontFamily
+                                    font.pixelSize: 10
+                                    font.bold: true
+                                }
+
+                                Rectangle {
+                                    width: parent.width
+                                    height: 46
+                                    radius: 6
+                                    color: shell.theme.surface
+                                    border.color: shell.theme.dim
+                                    border.width: 1
+
+                                    Column {
+                                        anchors.fill: parent
+                                        anchors.margins: 6
+                                        spacing: 2
+
+                                        Text {
+                                            text: "Model: " + (rightPane.selItem?.pkg ?? "Nix Ephemeral Shell")
+                                            color: shell.theme.accent
+                                            font.family: shell.fontFamily
+                                            font.pixelSize: 10
+                                            font.bold: true
+                                        }
+
+                                        Text {
+                                            text: "Sistemi kirletmeden anında izole geliştirme kabuğu açar"
+                                            color: shell.theme.dim
+                                            font.family: shell.fontFamily
+                                            font.pixelSize: 9
+                                        }
+                                    }
+                                }
+                            }
+
+                            // ─── ÖZEL CONTEXT 6: Araç / DNS Önizlemesi ───
                             Column {
                                 width: parent.width
                                 spacing: 6
@@ -1225,7 +1677,7 @@ Item {
                                 }
                             }
 
-                            // ─── ÖZEL CONTEXT 4: Uygulama Teknik Detayları ───
+                            // ─── ÖZEL CONTEXT 7: Uygulama Teknik Detayları ───
                             Column {
                                 width: parent.width
                                 spacing: 6
@@ -1271,7 +1723,7 @@ Item {
                                 }
                             }
 
-                            // ─── ÖZEL CONTEXT 5: Kategori Rehberi ───
+                            // ─── ÖZEL CONTEXT 8: Kategori Rehberi ───
                             Column {
                                 width: parent.width
                                 spacing: 6
