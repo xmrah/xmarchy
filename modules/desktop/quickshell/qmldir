@@ -9,3 +9,5 @@ AudioMenu 1.0 plugins/audio_menu/AudioMenu.qml
 NetworkMenu 1.0 plugins/network_menu/NetworkMenu.qml
 BluetoothMenu 1.0 plugins/bluetooth_menu/BluetoothMenu.qml
 PowerMenu 1.0 plugins/power_menu/PowerMenu.qml
+CalendarMenu 1.0 plugins/calendar/CalendarMenu.qml
+WeatherMenu 1.0 plugins/weather/WeatherMenu.qml

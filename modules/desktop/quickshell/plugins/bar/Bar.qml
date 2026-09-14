@@ -246,29 +246,60 @@ PanelWindow {
                 Layout.alignment: Qt.AlignCenter
                 spacing: 8
 
-                Text {
-                    id: clock
-                    color: shell.theme.fg
-                    font.family: shell.fontFamily
-                    font.pixelSize: 13
-                    font.bold: true
+                // 1. Saat ve Tarih Alanı (Tıklanınca CalendarMenu açılır)
+                Item {
+                    width: clockRow.implicitWidth
+                    height: 26
+                    anchors.verticalCenter: parent.verticalCenter
 
-                    property var now: new Date()
-                    text: Qt.formatDateTime(now, "HH:mm")
+                    Row {
+                        id: clockRow
+                        anchors.centerIn: parent
+                        spacing: 6
 
-                    Timer {
-                        running: true
-                        repeat: true
-                        interval: 1000
-                        onTriggered: clock.now = new Date()
+                        Text {
+                            id: clock
+                            color: shell.calendarMenu?.opened ? shell.theme.accent : shell.theme.fg
+                            font.family: shell.fontFamily
+                            font.pixelSize: 13
+                            font.bold: true
+
+                            property var now: new Date()
+                            text: Qt.formatDateTime(now, "HH:mm")
+
+                            Timer {
+                                running: true
+                                repeat: true
+                                interval: 1000
+                                onTriggered: clock.now = new Date()
+                            }
+                        }
+
+                        Text {
+                            color: shell.calendarMenu?.opened ? shell.theme.fg : shell.theme.dim
+                            font.family: shell.fontFamily
+                            font.pixelSize: 12
+                            text: "•  " + Qt.formatDateTime(clock.now, "dddd, d MMMM")
+                        }
                     }
-                }
 
-                Text {
-                    color: shell.theme.dim
-                    font.family: shell.fontFamily
-                    font.pixelSize: 12
-                    text: "•  " + Qt.formatDateTime(clock.now, "dddd, d MMMM")
+                    // Aktiflik Çizgisi (Ekran görüntüsündeki gibi açıldığında parlar)
+                    Rectangle {
+                        anchors.bottom: parent.bottom
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        width: clockRow.implicitWidth
+                        height: 2
+                        radius: 1
+                        color: shell.theme.accent
+                        visible: shell.calendarMenu?.opened ?? false
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: shell.calendarMenu.toggle()
+                    }
                 }
 
                 Text {
@@ -276,67 +307,55 @@ PanelWindow {
                     font.family: shell.fontFamily
                     font.pixelSize: 12
                     text: "•"
+                    anchors.verticalCenter: parent.verticalCenter
                 }
 
-                // Canlı Hava Durumu
-                Row {
-                    id: weatherWidget
-                    property string temp: "--°C"
-                    property string icon: "󰖙"
-                    property bool loaded: false
-                    spacing: 4
+                // 2. Canlı Hava Durumu Alanı (Tıklanınca WeatherMenu açılır)
+                Item {
+                    id: weatherPill
+                    width: weatherWidget.implicitWidth + 8
+                    height: 26
                     anchors.verticalCenter: parent.verticalCenter
 
-                    Text {
-                        text: weatherWidget.icon
+                    Row {
+                        id: weatherWidget
+                        anchors.centerIn: parent
+                        spacing: 5
+
+                        Text {
+                            text: shell.weatherMenu?.currentIcon ?? "󰖙"
+                            color: shell.weatherMenu?.opened ? shell.theme.accent : shell.theme.accent
+                            font.family: shell.fontFamily
+                            font.pixelSize: 14
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+
+                        Text {
+                            text: shell.weatherMenu?.currentTemp ?? "--°C"
+                            color: shell.weatherMenu?.opened ? shell.theme.accent : shell.theme.fg
+                            font.family: shell.fontFamily
+                            font.pixelSize: 11
+                            font.bold: true
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+                    }
+
+                    // Aktiflik Çizgisi (Ekran görüntüsündeki gibi açıldığında parlar)
+                    Rectangle {
+                        anchors.bottom: parent.bottom
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        width: weatherWidget.implicitWidth
+                        height: 2
+                        radius: 1
                         color: shell.theme.accent
-                        font.family: shell.fontFamily
-                        font.pixelSize: 13
-                        anchors.verticalCenter: parent.verticalCenter
+                        visible: shell.weatherMenu?.opened ?? false
                     }
 
-                    Text {
-                        text: weatherWidget.temp
-                        color: shell.theme.fg
-                        font.family: shell.fontFamily
-                        font.pixelSize: 11
-                        font.bold: true
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
-
-                    function fetchWeather() {
-                        var xhr = new XMLHttpRequest();
-                        xhr.open("GET", "https://api.open-meteo.com/v1/forecast?latitude=41.0082&longitude=28.9784&current=temperature_2m,weather_code");
-                        xhr.onreadystatechange = function() {
-                            if (xhr.readyState === XMLHttpRequest.DONE) {
-                                if (xhr.status === 200) {
-                                    try {
-                                        var res = JSON.parse(xhr.responseText);
-                                        var cur = res.current;
-                                        weatherWidget.temp = Math.round(cur.temperature_2m) + "°C";
-                                        var code = cur.weather_code;
-                                        if (code === 0) weatherWidget.icon = "󰖙";
-                                        else if (code <= 3) weatherWidget.icon = "󰖕";
-                                        else if (code >= 45 && code <= 48) weatherWidget.icon = "󰖑";
-                                        else if (code >= 51 && code <= 67) weatherWidget.icon = "󰖗";
-                                        else if (code >= 71 && code <= 86) weatherWidget.icon = "󰼶";
-                                        else if (code >= 95) weatherWidget.icon = "󰙾";
-                                        else weatherWidget.icon = "󰖐";
-                                        weatherWidget.loaded = true;
-                                    } catch (e) {}
-                                }
-                            }
-                        };
-                        xhr.send();
-                    }
-
-                    Component.onCompleted: fetchWeather()
-
-                    Timer {
-                        interval: 900000 // 15 dakikada bir yenile
-                        running: true
-                        repeat: true
-                        onTriggered: weatherWidget.fetchWeather()
+                    MouseArea {
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: shell.weatherMenu.toggle(bar.width / 2 - 40, shell.barHeight + 6)
                     }
                 }
             }
