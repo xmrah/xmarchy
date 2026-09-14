@@ -21,7 +21,8 @@ ShellRoot {
             fg: "#c0caf5",
             dim: "#565f89",
             accent: "#7aa2f7",
-            accent2: "#bb9af7"
+            accent2: "#bb9af7",
+            wallpaper: "xmarchy-dark.jpg"
         },
         "catppuccin": {
             bg: "#1e1e2e",
@@ -29,7 +30,8 @@ ShellRoot {
             fg: "#cdd6f4",
             dim: "#6c7086",
             accent: "#cba6f7",
-            accent2: "#89b4fa"
+            accent2: "#89b4fa",
+            wallpaper: "catppuccin.jpg"
         },
         "rose-pine": {
             bg: "#191724",
@@ -37,7 +39,8 @@ ShellRoot {
             fg: "#e0def4",
             dim: "#6e6a86",
             accent: "#ebbcba",
-            accent2: "#c4a7e7"
+            accent2: "#c4a7e7",
+            wallpaper: "rose-pine.jpg"
         },
         "nord": {
             bg: "#242933",
@@ -45,7 +48,8 @@ ShellRoot {
             fg: "#eceff4",
             dim: "#768299",
             accent: "#88c0d0",
-            accent2: "#81a1c1"
+            accent2: "#81a1c1",
+            wallpaper: "nord.jpg"
         },
         "cyberpunk": {
             bg: "#0b0e14",
@@ -53,7 +57,8 @@ ShellRoot {
             fg: "#e6e6e6",
             dim: "#4d5b70",
             accent: "#00f0ff",
-            accent2: "#ff0055"
+            accent2: "#ff0055",
+            wallpaper: "cyberpunk.jpg"
         },
         "xmarchy-light": {
             bg: "#f2f4f8",
@@ -61,7 +66,8 @@ ShellRoot {
             fg: "#1e2030",
             dim: "#8990a2",
             accent: "#3b82f6",
-            accent2: "#8b5cf6"
+            accent2: "#8b5cf6",
+            wallpaper: "xmarchy-light.jpg"
         }
     })
 
@@ -138,6 +144,4 @@ ShellRoot {
     IpcHandler { target: "launcher"; function toggle() { launcher.toggle() } }
     IpcHandler { target: "theme"; function apply(name: string) { shell.applyTheme(name) } }
     IpcHandler { target: "power"; function open() { powerMenu.open() } }
-    // Not: "themeMenu" IPC handler ThemeMenu.qml icerisinde tanimli
-    // Not: "lock" IPC handler Lock.qml icerisinde tanimli
 }

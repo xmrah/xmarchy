@@ -1,6 +1,10 @@
 { pkgs, inputs, ... }:
 
 {
+  imports = [
+    ../apps/webapps.nix
+  ];
+
   home.packages = with pkgs; [
     wl-clipboard
   ];

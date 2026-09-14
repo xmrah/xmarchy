@@ -6,6 +6,7 @@ import Quickshell.Hyprland
 import Quickshell.Services.Pipewire
 import Quickshell.Services.SystemTray
 import Quickshell.Services.UPower
+import Quickshell.Services.Mpris
 import Quickshell.Bluetooth
 import Quickshell.Networking
 
@@ -181,15 +182,69 @@ PanelWindow {
                         }
                     }
                 }
+
+                // ═══════════════ Medya (MPRIS) Oynatıcı Pill ═══════════════
+                Rectangle {
+                    id: mprisPill
+                    property var player: Mpris.players.values.length > 0 ? Mpris.players.values[0] : null
+                    property bool hasMedia: player !== null && player.trackTitle && player.trackTitle.length > 0
+                    visible: hasMedia
+                    height: 22
+                    width: Math.min(220, mprisRow.implicitWidth + 16)
+                    radius: 11
+                    color: mprisMouse.containsMouse ? shell.theme.surface : "transparent"
+                    border.color: shell.theme.accent
+                    border.width: 1
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    Row {
+                        id: mprisRow
+                        anchors.centerIn: parent
+                        spacing: 6
+
+                        Text {
+                            text: mprisPill.player?.isPlaying ? "󰏤" : "󰐊"
+                            color: shell.theme.accent
+                            font.family: shell.fontFamily
+                            font.pixelSize: 11
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+
+                        Text {
+                            text: (mprisPill.player?.trackArtist ? (mprisPill.player.trackArtist + " - ") : "") + (mprisPill.player?.trackTitle ?? "")
+                            color: shell.theme.fg
+                            font.family: shell.fontFamily
+                            font.pixelSize: 11
+                            elide: Text.ElideRight
+                            width: Math.min(160, implicitWidth)
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+                    }
+
+                    MouseArea {
+                        id: mprisMouse
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+                        acceptedButtons: Qt.LeftButton | Qt.RightButton
+                        onClicked: function(mouse) {
+                            if (mouse.button === Qt.RightButton) {
+                                mprisPill.player?.next()
+                            } else {
+                                mprisPill.player?.togglePlaying()
+                            }
+                        }
+                    }
+                }
             }
 
             // Boşluk
             Item { Layout.fillWidth: true }
 
-            // ═══════════════ ORTA: Saat & Tarih ═══════════════
+            // ═══════════════ ORTA: Saat, Tarih & Canlı Hava Durumu ═══════════════
             Row {
                 Layout.alignment: Qt.AlignCenter
-                spacing: 6
+                spacing: 8
 
                 Text {
                     id: clock
@@ -215,12 +270,81 @@ PanelWindow {
                     font.pixelSize: 12
                     text: "•  " + Qt.formatDateTime(clock.now, "dddd, d MMMM")
                 }
+
+                Text {
+                    color: shell.theme.dim
+                    font.family: shell.fontFamily
+                    font.pixelSize: 12
+                    text: "•"
+                }
+
+                // Canlı Hava Durumu
+                Row {
+                    id: weatherWidget
+                    property string temp: "--°C"
+                    property string icon: "󰖙"
+                    property bool loaded: false
+                    spacing: 4
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    Text {
+                        text: weatherWidget.icon
+                        color: shell.theme.accent
+                        font.family: shell.fontFamily
+                        font.pixelSize: 13
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+
+                    Text {
+                        text: weatherWidget.temp
+                        color: shell.theme.fg
+                        font.family: shell.fontFamily
+                        font.pixelSize: 11
+                        font.bold: true
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+
+                    function fetchWeather() {
+                        var xhr = new XMLHttpRequest();
+                        xhr.open("GET", "https://api.open-meteo.com/v1/forecast?latitude=41.0082&longitude=28.9784&current=temperature_2m,weather_code");
+                        xhr.onreadystatechange = function() {
+                            if (xhr.readyState === XMLHttpRequest.DONE) {
+                                if (xhr.status === 200) {
+                                    try {
+                                        var res = JSON.parse(xhr.responseText);
+                                        var cur = res.current;
+                                        weatherWidget.temp = Math.round(cur.temperature_2m) + "°C";
+                                        var code = cur.weather_code;
+                                        if (code === 0) weatherWidget.icon = "󰖙";
+                                        else if (code <= 3) weatherWidget.icon = "󰖕";
+                                        else if (code >= 45 && code <= 48) weatherWidget.icon = "󰖑";
+                                        else if (code >= 51 && code <= 67) weatherWidget.icon = "󰖗";
+                                        else if (code >= 71 && code <= 86) weatherWidget.icon = "󰼶";
+                                        else if (code >= 95) weatherWidget.icon = "󰙾";
+                                        else weatherWidget.icon = "󰖐";
+                                        weatherWidget.loaded = true;
+                                    } catch (e) {}
+                                }
+                            }
+                        };
+                        xhr.send();
+                    }
+
+                    Component.onCompleted: fetchWeather()
+
+                    Timer {
+                        interval: 900000 // 15 dakikada bir yenile
+                        running: true
+                        repeat: true
+                        onTriggered: weatherWidget.fetchWeather()
+                    }
+                }
             }
 
             // Boşluk
             Item { Layout.fillWidth: true }
 
-            // ═══════════════ SAĞ: Sistem Tepsisi, Ağ, BT, Pil, Ses, Tema ve Güç ═══════════════
+            // ═══════════════ SAĞ: Sistem Tepsisi, Kaynaklar, Ağ, BT, Pil, Ses, Tema ve Güç ═══════════════
             Row {
                 Layout.alignment: Qt.AlignVCenter
                 spacing: 8
@@ -252,6 +376,32 @@ PanelWindow {
                                 }
                             }
                         }
+                    }
+                }
+
+                // Sistem Kaynak Monitörü (btop kısayolu)
+                Rectangle {
+                    height: 22
+                    width: resText.implicitWidth + 16
+                    radius: 11
+                    color: resMouse.containsMouse ? shell.theme.accent : shell.theme.surface
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    Text {
+                        id: resText
+                        anchors.centerIn: parent
+                        color: resMouse.containsMouse ? shell.theme.bg : shell.theme.fg
+                        font.family: shell.fontFamily
+                        font.pixelSize: 11
+                        text: "󰍛 SYS"
+                    }
+
+                    MouseArea {
+                        id: resMouse
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: Hyprland.dispatch("exec kitty -e btop")
                     }
                 }
 

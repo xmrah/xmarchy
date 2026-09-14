@@ -25,10 +25,22 @@ PanelWindow {
             }
         }
 
+        // Tematik Sanatsal Duvar Kağıdı
+        Image {
+            id: wallpaperImg
+            anchors.fill: parent
+            source: shell.theme.wallpaper ? Qt.resolvedUrl("../../wallpapers/" + shell.theme.wallpaper) : ""
+            fillMode: Image.PreserveAspectCrop
+            asynchronous: true
+            opacity: status === Image.Ready ? 0.65 : 0.0
+            Behavior on opacity { NumberAnimation { duration: 400 } }
+        }
+
         // Fütüristik Geometrik Izgara Çizgileri (Subtle Cyber Grid)
         Canvas {
+            id: cyberGrid
             anchors.fill: parent
-            opacity: 0.06
+            opacity: 0.05
             onPaint: {
                 var ctx = getContext("2d");
                 ctx.strokeStyle = shell.theme.accent;
@@ -46,6 +58,13 @@ PanelWindow {
                     ctx.lineTo(width, y);
                     ctx.stroke();
                 }
+            }
+        }
+
+        Connections {
+            target: shell
+            function onCurrentThemeNameChanged() {
+                cyberGrid.requestPaint()
             }
         }
 
