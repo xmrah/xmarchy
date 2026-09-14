@@ -260,16 +260,24 @@ PanelWindow {
                     height: 22
                     width: netText.implicitWidth + 16
                     radius: 11
-                    color: shell.theme.surface
+                    color: netMouse.containsMouse ? shell.theme.accent : shell.theme.surface
                     anchors.verticalCenter: parent.verticalCenter
 
                     Text {
                         id: netText
                         anchors.centerIn: parent
-                        color: Networking.connectivity >= 3 ? shell.theme.fg : shell.theme.dim
+                        color: netMouse.containsMouse ? shell.theme.bg : (Networking.connectivity >= 3 ? shell.theme.fg : shell.theme.dim)
                         font.family: shell.fontFamily
                         font.pixelSize: 11
                         text: Networking.connectivity >= 3 ? "󰤨 NET" : "󰤭 OFFLINE"
+                    }
+
+                    MouseArea {
+                        id: netMouse
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: shell.networkMenu.openAt(bar.width - 350, shell.barHeight + 6)
                     }
                 }
 
@@ -278,27 +286,25 @@ PanelWindow {
                     height: 22
                     width: btText.implicitWidth + 16
                     radius: 11
-                    color: shell.theme.surface
+                    color: btMouse.containsMouse ? shell.theme.accent : shell.theme.surface
                     anchors.verticalCenter: parent.verticalCenter
                     visible: Bluetooth.defaultAdapter !== null
 
                     Text {
                         id: btText
                         anchors.centerIn: parent
-                        color: (Bluetooth.defaultAdapter?.enabled ?? false) ? shell.theme.fg : shell.theme.dim
+                        color: btMouse.containsMouse ? shell.theme.bg : ((Bluetooth.defaultAdapter?.enabled ?? false) ? shell.theme.fg : shell.theme.dim)
                         font.family: shell.fontFamily
                         font.pixelSize: 11
                         text: (Bluetooth.defaultAdapter?.enabled ?? false) ? "󰂯 BT" : "󰂲 OFF"
                     }
 
                     MouseArea {
+                        id: btMouse
                         anchors.fill: parent
+                        hoverEnabled: true
                         cursorShape: Qt.PointingHandCursor
-                        onClicked: {
-                            if (Bluetooth.defaultAdapter) {
-                                Bluetooth.defaultAdapter.enabled = !Bluetooth.defaultAdapter.enabled
-                            }
-                        }
+                        onClicked: shell.bluetoothMenu.openAt(bar.width - 330, shell.barHeight + 6)
                     }
                 }
 
@@ -327,13 +333,13 @@ PanelWindow {
                     height: 22
                     width: volText.implicitWidth + 16
                     radius: 11
-                    color: shell.theme.surface
+                    color: volMouse.containsMouse ? shell.theme.accent : shell.theme.surface
                     anchors.verticalCenter: parent.verticalCenter
 
                     Text {
                         id: volText
                         anchors.centerIn: parent
-                        color: shell.theme.fg
+                        color: volMouse.containsMouse ? shell.theme.bg : shell.theme.fg
                         font.family: shell.fontFamily
                         font.pixelSize: 11
 
@@ -344,12 +350,19 @@ PanelWindow {
                     }
 
                     MouseArea {
+                        id: volMouse
                         anchors.fill: parent
+                        hoverEnabled: true
                         cursorShape: Qt.PointingHandCursor
-                        onClicked: {
-                            var sink = Pipewire.defaultAudioSink;
-                            if (sink && sink.audio) {
-                                sink.audio.muted = !sink.audio.muted;
+                        acceptedButtons: Qt.LeftButton | Qt.RightButton
+                        onClicked: function(mouse) {
+                            if (mouse.button === Qt.RightButton) {
+                                var sink = Pipewire.defaultAudioSink;
+                                if (sink && sink.audio) {
+                                    sink.audio.muted = !sink.audio.muted;
+                                }
+                            } else {
+                                shell.audioMenu.openAt(bar.width - 330, shell.barHeight + 6)
                             }
                         }
                     }
@@ -360,7 +373,7 @@ PanelWindow {
                     width: themeLabel.implicitWidth + 16
                     height: 22
                     radius: 11
-                    color: shell.theme.surface
+                    color: themeMouse.containsMouse ? shell.theme.accent : shell.theme.surface
                     border.color: shell.theme.dim
                     border.width: 1
                     anchors.verticalCenter: parent.verticalCenter
@@ -373,14 +386,14 @@ PanelWindow {
                             width: 8
                             height: 8
                             radius: 4
-                            color: shell.theme.accent
+                            color: themeMouse.containsMouse ? shell.theme.bg : shell.theme.accent
                             anchors.verticalCenter: parent.verticalCenter
                         }
 
                         Text {
                             id: themeLabel
                             text: shell.currentThemeName
-                            color: shell.theme.fg
+                            color: themeMouse.containsMouse ? shell.theme.bg : shell.theme.fg
                             font.family: shell.fontFamily
                             font.pixelSize: 11
                             font.bold: true
@@ -389,7 +402,9 @@ PanelWindow {
                     }
 
                     MouseArea {
+                        id: themeMouse
                         anchors.fill: parent
+                        hoverEnabled: true
                         cursorShape: Qt.PointingHandCursor
                         onClicked: shell.themeMenu.openAt(bar.width - 220, shell.barHeight + 6)
                     }
@@ -416,7 +431,14 @@ PanelWindow {
                         anchors.fill: parent
                         hoverEnabled: true
                         cursorShape: Qt.PointingHandCursor
-                        onClicked: shell.lock.toggle()
+                        acceptedButtons: Qt.LeftButton | Qt.RightButton
+                        onClicked: function(mouse) {
+                            if (mouse.button === Qt.RightButton) {
+                                shell.lock.toggle()
+                            } else {
+                                shell.powerMenu.open()
+                            }
+                        }
                     }
                 }
             }

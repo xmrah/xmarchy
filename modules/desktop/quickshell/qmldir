@@ -5,3 +5,7 @@ Launcher 1.0 plugins/launcher/Launcher.qml
 Lock 1.0 plugins/lock/Lock.qml
 Background 1.0 plugins/background/Background.qml
 ThemeMenu 1.0 plugins/theme_menu/ThemeMenu.qml
+AudioMenu 1.0 plugins/audio_menu/AudioMenu.qml
+NetworkMenu 1.0 plugins/network_menu/NetworkMenu.qml
+BluetoothMenu 1.0 plugins/bluetooth_menu/BluetoothMenu.qml
+PowerMenu 1.0 plugins/power_menu/PowerMenu.qml

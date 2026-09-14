@@ -87,6 +87,14 @@ ShellRoot {
         themeProcess.running = true;
     }
 
+    // Tüm açılır panelleri kapatma fonksiyonu
+    function closeAllMenus() {
+        if (themeMenu) themeMenu.opened = false;
+        if (audioMenu) audioMenu.opened = false;
+        if (networkMenu) networkMenu.opened = false;
+        if (bluetoothMenu) bluetoothMenu.opened = false;
+    }
+
     PwObjectTracker { objects: [Pipewire.defaultAudioSink] }
 
     // ═══════════ Masaüstü Bileşenleri ═══════════
@@ -111,16 +119,25 @@ ShellRoot {
     Launcher { id: launcher }
     Lock { id: lock }
     ThemeMenu { id: themeMenu }
+    AudioMenu { id: audioMenu }
+    NetworkMenu { id: networkMenu }
+    BluetoothMenu { id: bluetoothMenu }
+    PowerMenu { id: powerMenu }
 
     property alias themeMenu: themeMenu
     property alias launcher: launcher
     property alias lock: lock
     property alias osd: osd
+    property alias audioMenu: audioMenu
+    property alias networkMenu: networkMenu
+    property alias bluetoothMenu: bluetoothMenu
+    property alias powerMenu: powerMenu
 
     // ═══════════ IPC Kontrolleri ═══════════
     IpcHandler { target: "osd"; function show(icon: string, value: int) { osd.show(icon, value) } }
     IpcHandler { target: "launcher"; function toggle() { launcher.toggle() } }
     IpcHandler { target: "theme"; function apply(name: string) { shell.applyTheme(name) } }
+    IpcHandler { target: "power"; function open() { powerMenu.open() } }
     // Not: "themeMenu" IPC handler ThemeMenu.qml icerisinde tanimli
     // Not: "lock" IPC handler Lock.qml icerisinde tanimli
 }
