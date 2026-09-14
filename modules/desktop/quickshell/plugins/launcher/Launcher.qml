@@ -96,7 +96,7 @@ Item {
             category: "Sistem Künyesi",
             subtext: "Versiyon, donanım, çekirdek ve kabuk",
             description: "Xmarchy Sovereign Declarative OS sürümü, Linux Zen çekirdeği ve sistem donanım özeti.",
-            action: "kitty -e xmarchy status",
+            action: "kitty --hold -e xmarchy status",
             badge: "About",
             isAbout: true
         },
@@ -562,7 +562,7 @@ Item {
             category: "NixOS",
             subtext: "Yapılandırmayı derle ve etkinleştir",
             description: "Sistem yapılandırmasını derler ve oturumu kapatmadan anında etkinleştirir.",
-            action: "kitty -e sudo nixos-rebuild switch --flake /persist/nixos-config",
+            action: "kitty --hold -e sudo nixos-rebuild switch",
             badge: "switch",
             isNixos: true
         },
@@ -573,7 +573,7 @@ Item {
             category: "NixOS",
             subtext: "flake.lock girdilerini güncelle",
             description: "flake.lock dosyasındaki girdi depolarını ve paket sürümlerini günceller.",
-            action: "kitty -e nix flake update /persist/nixos-config",
+            action: "kitty --hold -e sudo nix flake update",
             badge: "update",
             isNixos: true
         },
@@ -584,7 +584,7 @@ Item {
             category: "NixOS",
             subtext: "Eski nesilleri ve artıkları sil",
             description: "Eski nesillerdeki artık paketleri temizler ve disk alanını boşaltır.",
-            action: "kitty -e nix-collect-garbage -d",
+            action: "kitty --hold -e nix-collect-garbage -d",
             badge: "clean",
             isNixos: true
         },
@@ -595,7 +595,7 @@ Item {
             category: "NixOS",
             subtext: "Donanım ve OS özetini görüntüle",
             description: "Donanım, işletim sistemi, çekirdek ve masaüstü özetini terminalde gösterir.",
-            action: "kitty -e xmarchy fetch",
+            action: "kitty --hold -e xmarchy fetch",
             badge: "fetch",
             isNixos: true
         },
@@ -940,6 +940,13 @@ Item {
             return
         }
 
+        if (item.isTheme && item.themeKey) {
+            // Temayı Anında Uygula
+            shell.applyTheme(item.themeKey)
+            root.close()
+            return
+        }
+
         if (item.action) {
             // Komut / Eylemi Çalıştır
             Hyprland.dispatch("exec " + item.action)
@@ -949,12 +956,13 @@ Item {
     }
 
     function getActionButtonText(item) {
-        if (!item) return ""
-        if (item.isMenu) return "Alt Menüye Gir [↵]"
-        if (item.isApp) return "Uygulamayı Başlat [↵]"
-        if (item.isKey) return "Kısayolu Uygula [↵]"
-        if (item.isAbout) return "Canlı Künyeyi Aç [↵]"
-        return "Eylemi Çalıştır [↵]"
+        if (!item) return "Enter [↵]"
+        if (item.isMenu) return "Enter [↵]"
+        if (item.isApp) return "Başlat [↵]"
+        if (item.isAbout) return "Aç [↵]"
+        if (item.isTheme) return "Uygula [↵]"
+        if (item.isKey) return "Gözat [↵]"
+        return "Çalıştır [↵]"
     }
 
     // ═══════════════ Görsel Pencere (PanelWindow) ═══════════════
@@ -1578,7 +1586,7 @@ Item {
                                         }
 
                                         Text {
-                                            text: "• Flake Deposu: /persist/nixos-config"
+                                            text: "• Dağıtım Modeli: Deklaratif Flake Sistemi"
                                             color: shell.theme.accent
                                             font.family: shell.fontFamily
                                             font.pixelSize: 10
@@ -1723,50 +1731,7 @@ Item {
                                 }
                             }
 
-                            // ─── ÖZEL CONTEXT 8: Kategori Rehberi ───
-                            Column {
-                                width: parent.width
-                                spacing: 6
-                                visible: rightPane.selItem?.isMenu ?? false
 
-                                Text {
-                                    text: "MENÜ GEZİNİM İPUCU"
-                                    color: shell.theme.dim
-                                    font.family: shell.fontFamily
-                                    font.pixelSize: 10
-                                    font.bold: true
-                                }
-
-                                Rectangle {
-                                    width: parent.width
-                                    height: 46
-                                    radius: 6
-                                    color: shell.theme.surface
-                                    border.color: shell.theme.dim
-                                    border.width: 1
-
-                                    Column {
-                                        anchors.fill: parent
-                                        anchors.margins: 6
-                                        spacing: 2
-
-                                        Text {
-                                            text: "Alt menüye girmek için [↵] veya [→] tuşuna basın"
-                                            color: shell.theme.accent
-                                            font.family: shell.fontFamily
-                                            font.pixelSize: 10
-                                            font.bold: true
-                                        }
-
-                                        Text {
-                                            text: "Geri dönmek için [←] veya [Backspace] kullanın"
-                                            color: shell.theme.dim
-                                            font.family: shell.fontFamily
-                                            font.pixelSize: 10
-                                        }
-                                    }
-                                }
-                            }
 
                             // Boşluk Doldurucu
                             Item { Layout.fillHeight: true }

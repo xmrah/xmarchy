@@ -30,9 +30,9 @@ let
       MUTED=$(wpctl get-volume "$SINK" | grep -q MUTED && echo "1" || echo "0")
       
       if [ "$MUTED" = "1" ]; then
-        quickshell ipc call default osd show "MUTE" 0 || true
+        quickshell ipc call osd show "MUTE" 0 || true
       else
-        quickshell ipc call default osd show "VOL" "$VOL" || true
+        quickshell ipc call osd show "VOL" "$VOL" || true
       fi
     '';
   };
@@ -60,7 +60,7 @@ let
       CUR=$(brightnessctl g)
       VAL=$(awk "BEGIN {print int(($CUR/$MAX)*100)}")
       
-      quickshell ipc call default osd show "BRT" "$VAL" || true
+      quickshell ipc call osd show "BRT" "$VAL" || true
     '';
   };
 
@@ -89,7 +89,7 @@ let
     runtimeInputs = [ pkgs.systemd pkgs.quickshell ];
     text = ''
       case "''${1:-}" in
-        lock) quickshell ipc call default lock toggle ;;
+        lock) quickshell ipc call lock toggle ;;
         reboot) systemctl reboot ;;
         shutdown) systemctl poweroff ;;
         sleep) systemctl suspend ;;
@@ -230,7 +230,7 @@ BANNER
             echo ""
             echo "Uygulamak için: xmarchy theme <ad>"
           else
-            quickshell ipc call default theme apply "$THEME_NAME" || echo "Quickshell IPC ulaşılamadı."
+            quickshell ipc call theme apply "$THEME_NAME" || echo "Quickshell IPC ulaşılamadı."
             echo "Tema '$THEME_NAME' uygulandı."
           fi
           ;;

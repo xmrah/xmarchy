@@ -222,12 +222,12 @@
         "$altMod, P, pseudo,"
 
         # Launcher (Quickshell IPC)
-        "$mod, space, exec, quickshell ipc call default launcher toggle"
-        "$altMod, space, exec, quickshell ipc call default launcher toggle"
+        "$mod, space, exec, quickshell ipc call launcher toggle"
+        "$altMod, space, exec, quickshell ipc call launcher toggle"
 
         # Kilit Ekranı
-        "$mod SHIFT, L, exec, quickshell ipc call default lock toggle"
-        "$altMod SHIFT, L, exec, quickshell ipc call default lock toggle"
+        "$mod SHIFT, L, exec, quickshell ipc call lock toggle"
+        "$altMod SHIFT, L, exec, quickshell ipc call lock toggle"
 
         # Workspace geçişleri (SUPER)
         "$mod, 1, workspace, 1"
