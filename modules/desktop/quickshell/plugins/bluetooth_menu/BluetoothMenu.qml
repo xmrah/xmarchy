@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Controls
 import Quickshell
 import Quickshell.Wayland
 import Quickshell.Bluetooth
@@ -56,107 +55,117 @@ Item {
                     spacing: 12
 
                     // ── Başlık ve Kontroller ──
-                    Row {
+                    Item {
                         width: parent.width
-                        spacing: 8
+                        height: 24
 
-                        Text {
-                            text: "󰂯"
-                            color: shell.theme.accent
-                            font.family: shell.fontFamily
-                            font.pixelSize: 16
+                        Row {
+                            anchors.left: parent.left
                             anchors.verticalCenter: parent.verticalCenter
-                        }
-
-                        Text {
-                            text: "Bluetooth"
-                            color: shell.theme.fg
-                            font.family: shell.fontFamily
-                            font.pixelSize: 13
-                            font.bold: true
-                            anchors.verticalCenter: parent.verticalCenter
-                        }
-
-                        Item { width: 1; height: 1; Layout.fillWidth: true }
-
-                        // Tarama (Discover) Butonu
-                        Rectangle {
-                            width: 26
-                            height: 22
-                            radius: 4
-                            color: (root.adapter?.discovering ?? false) ? shell.theme.accent : shell.theme.surface
-                            anchors.verticalCenter: parent.verticalCenter
-                            visible: root.adapter?.enabled ?? false
+                            spacing: 8
 
                             Text {
-                                anchors.centerIn: parent
-                                text: "󰑐"
-                                color: (root.adapter?.discovering ?? false) ? shell.theme.bg : shell.theme.fg
+                                text: "󰂯"
+                                color: shell.theme.accent
                                 font.family: shell.fontFamily
-                                font.pixelSize: 12
+                                font.pixelSize: 16
+                                anchors.verticalCenter: parent.verticalCenter
                             }
-
-                            MouseArea {
-                                anchors.fill: parent
-                                cursorShape: Qt.PointingHandCursor
-                                onClicked: {
-                                    if (root.adapter) {
-                                        root.adapter.discovering = !root.adapter.discovering
-                                    }
-                                }
-                            }
-                        }
-
-                        // Aç/Kapat Toggle Anahtarı
-                        Rectangle {
-                            width: 44
-                            height: 22
-                            radius: 11
-                            color: (root.adapter?.enabled ?? false) ? shell.theme.accent : shell.theme.surface
-                            anchors.verticalCenter: parent.verticalCenter
-
-                            Rectangle {
-                                width: 16
-                                height: 16
-                                radius: 8
-                                color: (root.adapter?.enabled ?? false) ? shell.theme.bg : shell.theme.dim
-                                y: 3
-                                x: (root.adapter?.enabled ?? false) ? parent.width - 19 : 3
-                                Behavior on x { NumberAnimation { duration: 150 } }
-                            }
-
-                            MouseArea {
-                                anchors.fill: parent
-                                cursorShape: Qt.PointingHandCursor
-                                onClicked: {
-                                    if (root.adapter) {
-                                        root.adapter.enabled = !root.adapter.enabled
-                                    }
-                                }
-                            }
-                        }
-
-                        // Kapat (X) Butonu
-                        Rectangle {
-                            width: 22
-                            height: 22
-                            radius: 11
-                            color: closeBtMouse.containsMouse ? shell.theme.surface : "transparent"
-                            anchors.verticalCenter: parent.verticalCenter
 
                             Text {
-                                anchors.centerIn: parent
-                                text: "✕"
-                                color: shell.theme.dim
-                                font.pixelSize: 10
+                                text: "Bluetooth"
+                                color: shell.theme.fg
+                                font.family: shell.fontFamily
+                                font.pixelSize: 13
+                                font.bold: true
+                                anchors.verticalCenter: parent.verticalCenter
+                            }
+                        }
+
+                        Row {
+                            anchors.right: parent.right
+                            anchors.verticalCenter: parent.verticalCenter
+                            spacing: 8
+
+                            // Tarama (Discover) Butonu
+                            Rectangle {
+                                width: 26
+                                height: 22
+                                radius: 4
+                                color: (root.adapter?.discovering ?? false) ? shell.theme.accent : shell.theme.surface
+                                anchors.verticalCenter: parent.verticalCenter
+                                visible: root.adapter?.enabled ?? false
+
+                                Text {
+                                    anchors.centerIn: parent
+                                    text: "󰑐"
+                                    color: (root.adapter?.discovering ?? false) ? shell.theme.bg : shell.theme.fg
+                                    font.family: shell.fontFamily
+                                    font.pixelSize: 12
+                                }
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    cursorShape: Qt.PointingHandCursor
+                                    onClicked: {
+                                        if (root.adapter) {
+                                            root.adapter.discovering = !root.adapter.discovering
+                                        }
+                                    }
+                                }
                             }
 
-                            MouseArea {
-                                id: closeBtMouse
-                                anchors.fill: parent
-                                hoverEnabled: true
-                                cursorShape: Qt.PointingHandCursor
-                                onClicked: root.opened = false
+                            // Aç/Kapat Toggle Anahtarı
+                            Rectangle {
+                                width: 44
+                                height: 22
+                                radius: 11
+                                color: (root.adapter?.enabled ?? false) ? shell.theme.accent : shell.theme.surface
+                                anchors.verticalCenter: parent.verticalCenter
+
+                                Rectangle {
+                                    width: 16
+                                    height: 16
+                                    radius: 8
+                                    color: (root.adapter?.enabled ?? false) ? shell.theme.bg : shell.theme.dim
+                                    y: 3
+                                    x: (root.adapter?.enabled ?? false) ? parent.width - 19 : 3
+                                    Behavior on x { NumberAnimation { duration: 150 } }
+                                }
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    cursorShape: Qt.PointingHandCursor
+                                    onClicked: {
+                                        if (root.adapter) {
+                                            root.adapter.enabled = !root.adapter.enabled
+                                        }
+                                    }
+                                }
+                            }
+
+                            // Kapat (X) Butonu
+                            Rectangle {
+                                width: 22
+                                height: 22
+                                radius: 11
+                                color: closeBtMouse.containsMouse ? shell.theme.surface : "transparent"
+                                anchors.verticalCenter: parent.verticalCenter
+
+                                Text {
+                                    anchors.centerIn: parent
+                                    text: "✕"
+                                    color: shell.theme.dim
+                                    font.pixelSize: 10
+                                }
+
+                                MouseArea {
+                                    id: closeBtMouse
+                                    anchors.fill: parent
+                                    hoverEnabled: true
+                                    cursorShape: Qt.PointingHandCursor
+                                    onClicked: root.opened = false
+                                }
                             }
                         }
                     }
@@ -245,89 +254,101 @@ Item {
                                         border.color: modelData.connected ? shell.theme.accent : "transparent"
                                         border.width: 1
 
-                                        Row {
+                                        Item {
                                             anchors.fill: parent
                                             anchors.leftMargin: 8
                                             anchors.rightMargin: 8
-                                            spacing: 8
 
-                                            Text {
-                                                text: {
-                                                    var iconName = String(modelData.icon || "").toLowerCase()
-                                                    if (iconName.indexOf("head") !== -1 || iconName.indexOf("audio") !== -1) return "󰋋"
-                                                    if (iconName.indexOf("mouse") !== -1) return "󰍽"
-                                                    if (iconName.indexOf("keyboard") !== -1) return "󰌌"
-                                                    if (iconName.indexOf("phone") !== -1) return "󰏲"
-                                                    return "󰂯"
-                                                }
-                                                color: modelData.connected ? shell.theme.accent : shell.theme.fg
-                                                font.family: shell.fontFamily
-                                                font.pixelSize: 14
+                                            Row {
+                                                anchors.left: parent.left
+                                                anchors.right: btRightControls.left
+                                                anchors.rightMargin: 8
                                                 anchors.verticalCenter: parent.verticalCenter
-                                            }
-
-                                            Column {
-                                                width: parent.width - 120
-                                                anchors.verticalCenter: parent.verticalCenter
-                                                spacing: 2
+                                                spacing: 8
 
                                                 Text {
-                                                    text: modelData.name || modelData.deviceName || modelData.address || "Bilinmeyen Aygıt"
-                                                    color: shell.theme.fg
+                                                    text: {
+                                                        var iconName = String(modelData.icon || "").toLowerCase()
+                                                        if (iconName.indexOf("head") !== -1 || iconName.indexOf("audio") !== -1) return "󰋋"
+                                                        if (iconName.indexOf("mouse") !== -1) return "󰍽"
+                                                        if (iconName.indexOf("keyboard") !== -1) return "󰌌"
+                                                        if (iconName.indexOf("phone") !== -1) return "󰏲"
+                                                        return "󰂯"
+                                                    }
+                                                    color: modelData.connected ? shell.theme.accent : shell.theme.fg
                                                     font.family: shell.fontFamily
-                                                    font.pixelSize: 11
-                                                    font.bold: modelData.connected
-                                                    elide: Text.ElideRight
-                                                    width: parent.width
+                                                    font.pixelSize: 14
+                                                    anchors.verticalCenter: parent.verticalCenter
                                                 }
 
-                                                Text {
-                                                    text: modelData.connected ? "Bağlı" : (modelData.paired ? "Eşleşmiş" : "Eşleşmemiş")
-                                                    color: modelData.connected ? shell.theme.accent : shell.theme.dim
-                                                    font.family: shell.fontFamily
-                                                    font.pixelSize: 9
+                                                Column {
+                                                    width: parent.width - 24
+                                                    anchors.verticalCenter: parent.verticalCenter
+                                                    spacing: 2
+
+                                                    Text {
+                                                        text: modelData.name || modelData.deviceName || modelData.address || "Bilinmeyen Aygıt"
+                                                        color: shell.theme.fg
+                                                        font.family: shell.fontFamily
+                                                        font.pixelSize: 11
+                                                        font.bold: modelData.connected
+                                                        elide: Text.ElideRight
+                                                        width: parent.width
+                                                    }
+
+                                                    Text {
+                                                        text: modelData.connected ? "Bağlı" : (modelData.paired ? "Eşleşmiş" : "Eşleşmemiş")
+                                                        color: modelData.connected ? shell.theme.accent : shell.theme.dim
+                                                        font.family: shell.fontFamily
+                                                        font.pixelSize: 9
+                                                    }
                                                 }
                                             }
 
-                                            Item { width: 1; height: 1; Layout.fillWidth: true }
-
-                                            // Pil bilgisi (varsa)
-                                            Text {
-                                                visible: modelData.batteryAvailable
-                                                text: "󰁹 " + modelData.battery + "%"
-                                                color: shell.theme.dim
-                                                font.family: shell.fontFamily
-                                                font.pixelSize: 9
+                                            Row {
+                                                id: btRightControls
+                                                anchors.right: parent.right
                                                 anchors.verticalCenter: parent.verticalCenter
-                                            }
+                                                spacing: 6
 
-                                            // Bağlan / Ayır Butonu
-                                            Rectangle {
-                                                width: modelData.connected ? 42 : 50
-                                                height: 22
-                                                radius: 4
-                                                color: modelData.connected ? "#FF5555" : shell.theme.accent
-                                                anchors.verticalCenter: parent.verticalCenter
-
+                                                // Pil bilgisi (varsa)
                                                 Text {
-                                                    anchors.centerIn: parent
-                                                    text: modelData.connected ? "Ayır" : (modelData.paired ? "Bağlan" : "Eşleş")
-                                                    color: modelData.connected ? "#FFFFFF" : shell.theme.bg
+                                                    visible: modelData.batteryAvailable
+                                                    text: "󰁹 " + modelData.battery + "%"
+                                                    color: shell.theme.dim
                                                     font.family: shell.fontFamily
                                                     font.pixelSize: 9
-                                                    font.bold: true
+                                                    anchors.verticalCenter: parent.verticalCenter
                                                 }
 
-                                                MouseArea {
-                                                    anchors.fill: parent
-                                                    cursorShape: Qt.PointingHandCursor
-                                                    onClicked: {
-                                                        if (modelData.connected) {
-                                                            modelData.disconnect()
-                                                        } else if (modelData.paired) {
-                                                            modelData.connect()
-                                                        } else {
-                                                            modelData.pair()
+                                                // Bağlan / Ayır Butonu
+                                                Rectangle {
+                                                    width: modelData.connected ? 42 : 50
+                                                    height: 22
+                                                    radius: 4
+                                                    color: modelData.connected ? "#FF5555" : shell.theme.accent
+                                                    anchors.verticalCenter: parent.verticalCenter
+
+                                                    Text {
+                                                        anchors.centerIn: parent
+                                                        text: modelData.connected ? "Ayır" : (modelData.paired ? "Bağlan" : "Eşleş")
+                                                        color: modelData.connected ? "#FFFFFF" : shell.theme.bg
+                                                        font.family: shell.fontFamily
+                                                        font.pixelSize: 9
+                                                        font.bold: true
+                                                    }
+
+                                                    MouseArea {
+                                                        anchors.fill: parent
+                                                        cursorShape: Qt.PointingHandCursor
+                                                        onClicked: {
+                                                            if (modelData.connected) {
+                                                                modelData.disconnect()
+                                                            } else if (modelData.paired) {
+                                                                modelData.connect()
+                                                            } else {
+                                                                modelData.pair()
+                                                            }
                                                         }
                                                     }
                                                 }

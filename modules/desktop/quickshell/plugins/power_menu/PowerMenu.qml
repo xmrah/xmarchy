@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Controls
 import Quickshell
 import Quickshell.Wayland
 import Quickshell.Io
@@ -24,7 +23,7 @@ Item {
         root.opened = false
         if (index === 0) {
             // Kilitle
-            shell.lock.open()
+            shell.lock.locked = true
         } else if (index === 1) {
             // Askıya Al / Uyut
             powerProcess.command = ["systemctl", "suspend"]

@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Controls
 import Quickshell
 import Quickshell.Wayland
 import Quickshell.Services.Pipewire
@@ -75,35 +74,40 @@ Item {
                     spacing: 12
 
                     // Başlık
-                    Row {
+                    Item {
                         width: parent.width
-                        spacing: 8
+                        height: 24
 
-                        Text {
-                            text: "󰕾"
-                            color: shell.theme.accent
-                            font.family: shell.fontFamily
-                            font.pixelSize: 16
+                        Row {
+                            anchors.left: parent.left
                             anchors.verticalCenter: parent.verticalCenter
-                        }
+                            spacing: 8
 
-                        Text {
-                            text: "Ses Denetimi"
-                            color: shell.theme.fg
-                            font.family: shell.fontFamily
-                            font.pixelSize: 13
-                            font.bold: true
-                            anchors.verticalCenter: parent.verticalCenter
-                        }
+                            Text {
+                                text: "󰕾"
+                                color: shell.theme.accent
+                                font.family: shell.fontFamily
+                                font.pixelSize: 16
+                                anchors.verticalCenter: parent.verticalCenter
+                            }
 
-                        Item { width: 1; height: 1; Layout.fillWidth: true }
+                            Text {
+                                text: "Ses Denetimi"
+                                color: shell.theme.fg
+                                font.family: shell.fontFamily
+                                font.pixelSize: 13
+                                font.bold: true
+                                anchors.verticalCenter: parent.verticalCenter
+                            }
+                        }
 
                         Rectangle {
+                            anchors.right: parent.right
+                            anchors.verticalCenter: parent.verticalCenter
                             width: 22
                             height: 22
                             radius: 11
                             color: closeMouse.containsMouse ? shell.theme.surface : "transparent"
-                            anchors.verticalCenter: parent.verticalCenter
 
                             Text {
                                 anchors.centerIn: parent
@@ -127,9 +131,13 @@ Item {
                         width: parent.width
                         spacing: 6
 
-                        Row {
+                        Item {
                             width: parent.width
+                            height: 16
+
                             Text {
+                                anchors.left: parent.left
+                                anchors.verticalCenter: parent.verticalCenter
                                 text: "Hoparlör / Çıkış"
                                 color: shell.theme.dim
                                 font.family: shell.fontFamily
@@ -137,6 +145,7 @@ Item {
                             }
                             Text {
                                 anchors.right: parent.right
+                                anchors.verticalCenter: parent.verticalCenter
                                 property int volPct: root.sink?.audio?.volume ? Math.round(root.sink.audio.volume * 100) : 0
                                 property bool isMuted: root.sink?.audio?.muted ?? false
                                 text: isMuted ? "Sessiz" : (volPct + "%")
@@ -220,9 +229,13 @@ Item {
                         spacing: 6
                         visible: root.source !== null
 
-                        Row {
+                        Item {
                             width: parent.width
+                            height: 16
+
                             Text {
+                                anchors.left: parent.left
+                                anchors.verticalCenter: parent.verticalCenter
                                 text: "Mikrofon"
                                 color: shell.theme.dim
                                 font.family: shell.fontFamily
@@ -230,6 +243,7 @@ Item {
                             }
                             Text {
                                 anchors.right: parent.right
+                                anchors.verticalCenter: parent.verticalCenter
                                 property int micPct: root.source?.audio?.volume ? Math.round(root.source.audio.volume * 100) : 0
                                 property bool isMicMuted: root.source?.audio?.muted ?? false
                                 text: isMicMuted ? "Sessiz" : (micPct + "%")

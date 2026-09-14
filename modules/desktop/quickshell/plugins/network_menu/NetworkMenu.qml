@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Controls
 import Quickshell
 import Quickshell.Wayland
 import Quickshell.Networking
@@ -28,7 +27,7 @@ Item {
     readonly property var wifiDevice: {
         var devs = Networking.devices ? Networking.devices.values : []
         for (var i = 0; i < devs.length; i++) {
-            if (devs[i] && devs[i].type === DeviceType.Wifi) return devs[i]
+            if (devs[i] && ((typeof DeviceType !== "undefined" && devs[i].type === DeviceType.Wifi) || devs[i].type === 2 || (devs[i].name && devs[i].name.startsWith("wl")))) return devs[i]
         }
         return null
     }
@@ -68,75 +67,85 @@ Item {
                     spacing: 12
 
                     // ── Başlık ve Wi-Fi Toggle ──
-                    Row {
+                    Item {
                         width: parent.width
-                        spacing: 8
+                        height: 24
 
-                        Text {
-                            text: "󰤨"
-                            color: shell.theme.accent
-                            font.family: shell.fontFamily
-                            font.pixelSize: 16
+                        Row {
+                            anchors.left: parent.left
                             anchors.verticalCenter: parent.verticalCenter
-                        }
-
-                        Text {
-                            text: "Ağ & Wi-Fi"
-                            color: shell.theme.fg
-                            font.family: shell.fontFamily
-                            font.pixelSize: 13
-                            font.bold: true
-                            anchors.verticalCenter: parent.verticalCenter
-                        }
-
-                        Item { width: 1; height: 1; Layout.fillWidth: true }
-
-                        // Wi-Fi Aç/Kapa Anahtarı
-                        Rectangle {
-                            width: 44
-                            height: 22
-                            radius: 11
-                            color: Networking.wifiEnabled ? shell.theme.accent : shell.theme.surface
-                            anchors.verticalCenter: parent.verticalCenter
-
-                            Rectangle {
-                                width: 16
-                                height: 16
-                                radius: 8
-                                color: Networking.wifiEnabled ? shell.theme.bg : shell.theme.dim
-                                y: 3
-                                x: Networking.wifiEnabled ? parent.width - 19 : 3
-                                Behavior on x { NumberAnimation { duration: 150 } }
-                            }
-
-                            MouseArea {
-                                anchors.fill: parent
-                                cursorShape: Qt.PointingHandCursor
-                                onClicked: Networking.wifiEnabled = !Networking.wifiEnabled
-                            }
-                        }
-
-                        // Kapat (X) Butonu
-                        Rectangle {
-                            width: 22
-                            height: 22
-                            radius: 11
-                            color: closeNetMouse.containsMouse ? shell.theme.surface : "transparent"
-                            anchors.verticalCenter: parent.verticalCenter
+                            spacing: 8
 
                             Text {
-                                anchors.centerIn: parent
-                                text: "✕"
-                                color: shell.theme.dim
-                                font.pixelSize: 10
+                                text: "󰤨"
+                                color: shell.theme.accent
+                                font.family: shell.fontFamily
+                                font.pixelSize: 16
+                                anchors.verticalCenter: parent.verticalCenter
                             }
 
-                            MouseArea {
-                                id: closeNetMouse
-                                anchors.fill: parent
-                                hoverEnabled: true
-                                cursorShape: Qt.PointingHandCursor
-                                onClicked: root.opened = false
+                            Text {
+                                text: "Ağ & Wi-Fi"
+                                color: shell.theme.fg
+                                font.family: shell.fontFamily
+                                font.pixelSize: 13
+                                font.bold: true
+                                anchors.verticalCenter: parent.verticalCenter
+                            }
+                        }
+
+                        Row {
+                            anchors.right: parent.right
+                            anchors.verticalCenter: parent.verticalCenter
+                            spacing: 8
+
+                            // Wi-Fi Aç/Kapa Anahtarı
+                            Rectangle {
+                                width: 44
+                                height: 22
+                                radius: 11
+                                color: Networking.wifiEnabled ? shell.theme.accent : shell.theme.surface
+                                anchors.verticalCenter: parent.verticalCenter
+
+                                Rectangle {
+                                    width: 16
+                                    height: 16
+                                    radius: 8
+                                    color: Networking.wifiEnabled ? shell.theme.bg : shell.theme.dim
+                                    y: 3
+                                    x: Networking.wifiEnabled ? parent.width - 19 : 3
+                                    Behavior on x { NumberAnimation { duration: 150 } }
+                                }
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    cursorShape: Qt.PointingHandCursor
+                                    onClicked: Networking.wifiEnabled = !Networking.wifiEnabled
+                                }
+                            }
+
+                            // Kapat (X) Butonu
+                            Rectangle {
+                                width: 22
+                                height: 22
+                                radius: 11
+                                color: closeNetMouse.containsMouse ? shell.theme.surface : "transparent"
+                                anchors.verticalCenter: parent.verticalCenter
+
+                                Text {
+                                    anchors.centerIn: parent
+                                    text: "✕"
+                                    color: shell.theme.dim
+                                    font.pixelSize: 10
+                                }
+
+                                MouseArea {
+                                    id: closeNetMouse
+                                    anchors.fill: parent
+                                    hoverEnabled: true
+                                    cursorShape: Qt.PointingHandCursor
+                                    onClicked: root.opened = false
+                                }
                             }
                         }
                     }
@@ -240,44 +249,52 @@ Item {
                                             spacing: 6
 
                                             // Üst Sıra: Sinyal, İsim, Durum
-                                            Row {
+                                            Item {
                                                 width: parent.width
-                                                spacing: 8
+                                                height: 24
 
-                                                Text {
-                                                    text: {
-                                                        var s = modelData.signalStrength || 0
-                                                        if (s >= 75) return "󰤨"
-                                                        if (s >= 50) return "󰤥"
-                                                        if (s >= 25) return "󰤢"
-                                                        return "󰤟"
+                                                Row {
+                                                    anchors.left: parent.left
+                                                    anchors.right: netActionBtn.left
+                                                    anchors.rightMargin: 8
+                                                    anchors.verticalCenter: parent.verticalCenter
+                                                    spacing: 8
+
+                                                    Text {
+                                                        text: {
+                                                            var s = modelData.signalStrength || 0
+                                                            if (s >= 75) return "󰤨"
+                                                            if (s >= 50) return "󰤥"
+                                                            if (s >= 25) return "󰤢"
+                                                            return "󰤟"
+                                                        }
+                                                        color: modelData.connected ? shell.theme.accent : shell.theme.fg
+                                                        font.family: shell.fontFamily
+                                                        font.pixelSize: 13
+                                                        anchors.verticalCenter: parent.verticalCenter
                                                     }
-                                                    color: modelData.connected ? shell.theme.accent : shell.theme.fg
-                                                    font.family: shell.fontFamily
-                                                    font.pixelSize: 13
-                                                    anchors.verticalCenter: parent.verticalCenter
-                                                }
 
-                                                Text {
-                                                    text: modelData.name || "Gizli Ağ"
-                                                    color: modelData.connected ? shell.theme.fg : shell.theme.fg
-                                                    font.family: shell.fontFamily
-                                                    font.pixelSize: 11
-                                                    font.bold: modelData.connected
-                                                    elide: Text.ElideRight
-                                                    width: parent.width - 90
-                                                    anchors.verticalCenter: parent.verticalCenter
+                                                    Text {
+                                                        text: modelData.name || "Gizli Ağ"
+                                                        color: modelData.connected ? shell.theme.fg : shell.theme.fg
+                                                        font.family: shell.fontFamily
+                                                        font.pixelSize: 11
+                                                        font.bold: modelData.connected
+                                                        elide: Text.ElideRight
+                                                        width: parent.width - 24
+                                                        anchors.verticalCenter: parent.verticalCenter
+                                                    }
                                                 }
-
-                                                Item { width: 1; height: 1; Layout.fillWidth: true }
 
                                                 // Bağlı Rozeti veya Bağlan Butonu
                                                 Rectangle {
+                                                    id: netActionBtn
+                                                    anchors.right: parent.right
+                                                    anchors.verticalCenter: parent.verticalCenter
                                                     width: modelData.connected ? 48 : 54
                                                     height: 22
                                                     radius: 4
                                                     color: modelData.connected ? shell.theme.accent : shell.theme.surface
-                                                    anchors.verticalCenter: parent.verticalCenter
 
                                                     Text {
                                                         anchors.centerIn: parent
@@ -293,7 +310,6 @@ Item {
                                                         cursorShape: Qt.PointingHandCursor
                                                         onClicked: {
                                                             if (modelData.connected) {
-                                                                // Bağlantıyı kes
                                                                 if (modelData.disconnect) modelData.disconnect()
                                                             } else {
                                                                 if (root.selectedSsid === modelData.name) {
