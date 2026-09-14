@@ -24,6 +24,7 @@ Item {
             label: "Uygulamalar",
             icon: "󰀻",
             category: "Katalog",
+            subtext: "Yüklü grafik uygulamaları",
             description: "Sistemde kurulu tüm grafik uygulamaları listeleyin, arayın ve anında başlatın.",
             badge: "Apps ›",
             isMenu: true
@@ -33,6 +34,7 @@ Item {
             label: "Araçlar & Tetikleyiciler",
             icon: "󱓞",
             category: "Sistem Araçları",
+            subtext: "Ekran görüntüsü, renk seçici, PWA",
             description: "Ekran görüntüsü alma, ekran kaydı, canlı renk seçici, uyanık kalma ve pratik yardımcılar.",
             badge: "Tools ›",
             isMenu: true
@@ -42,6 +44,7 @@ Item {
             label: "Görünüm & Temalar",
             icon: "",
             category: "Kişiselleştirme",
+            subtext: "Xmarchy renkleri, temalar, ölçek",
             description: "Xmarchy renk paletleri, temalar, duvar kağıtları ve Wayland dinamik ekran ölçekleme ayarları.",
             badge: "Style ›",
             isMenu: true
@@ -51,6 +54,7 @@ Item {
             label: "NixOS & Sistem Yönetimi",
             icon: "",
             category: "NixOS Ekosistemi",
+            subtext: "Rebuild, update, çöp temizliği",
             description: "Sistem yapılandırma yenileme (rebuild), flake güncellemeleri, çöp temizliği ve servis kontrolleri.",
             badge: "NixOS ›",
             isMenu: true
@@ -60,6 +64,7 @@ Item {
             label: "Yapılandırma & Ağ",
             icon: "",
             category: "Ağ & Ayarlar",
+            subtext: "DNS sağlayıcıları, varsayılanlar",
             description: "Tek tıkla DNS sağlayıcı geçişi (Cloudflare, Google, DHCP), varsayılan editör ve terminal ayarları.",
             badge: "Setup ›",
             isMenu: true
@@ -69,6 +74,7 @@ Item {
             label: "Güç & Oturum",
             icon: "",
             category: "Oturum Yönetimi",
+            subtext: "Kilit, uyku, yeniden başlatma, kapat",
             description: "Ekran kilitleme, askıya alma, yeniden başlatma ve güvenli kapatma seçenekleri.",
             badge: "Power ›",
             isMenu: true
@@ -81,6 +87,7 @@ Item {
             label: "Ekran Görüntüsü (Seçili Alan)",
             icon: "󰄀",
             category: "Araçlar",
+            subtext: "Bölgesel ekran görüntüsü al",
             description: "Seçilen ekran bölgesini slurp ile yakalar ve panoya kopyalar.",
             action: "grim -g \"$(slurp)\" - | wl-copy && notify-send 'Ekran Görüntüsü' 'Seçili alan panoya kopyalandı'",
             badge: "grim+slurp",
@@ -91,6 +98,7 @@ Item {
             label: "Tam Ekran Görüntüsü",
             icon: "󰹑",
             category: "Araçlar",
+            subtext: "Tüm ekranı panoya çek",
             description: "Tüm monitörün ekran görüntüsünü alır ve panoya kopyalar.",
             action: "grim - | wl-copy && notify-send 'Ekran Görüntüsü' 'Tüm ekran panoya kopyalandı'",
             badge: "grim",
@@ -101,6 +109,7 @@ Item {
             label: "Canlı Renk Seçici",
             icon: "󰃉",
             category: "Araçlar",
+            subtext: "Piksel büyüteciyle HEX kodu al",
             description: "Piksel büyüteci ile ekrandan renk seçer (HEX) ve panoya kopyalar.",
             action: "hyprpicker -a",
             badge: "hyprpicker",
@@ -111,6 +120,7 @@ Item {
             label: "Uyanık Kal (Idle Inhibit)",
             icon: "󰅶",
             category: "Araçlar",
+            subtext: "Ekran koruyucuyu geçici durdur",
             description: "Ekran koruyucu ve otomatik askıya alma zamanlayıcısını açar veya kapatır.",
             action: "pkill hypridle || hypridle",
             badge: "hypridle",
@@ -121,6 +131,7 @@ Item {
             label: "Ağ Hız & Ping Testi",
             icon: "󰓅",
             category: "Araçlar",
+            subtext: "Cloudflare DNS gecikmesini ölç",
             description: "Ağ geçidine ve Cloudflare DNS sunucusuna canlı paket gecikmesini ölçer.",
             action: "kitty -e ping 1.1.1.1",
             badge: "ping",
@@ -131,6 +142,7 @@ Item {
             label: "Web Uygulaması Aç (PWA)",
             icon: "󰏖",
             category: "Araçlar",
+            subtext: "Bağımsız web penceresi başlat",
             description: "Belirtilen bir URL'yi bağımsız Chromium PWA penceresi olarak başlatır.",
             action: "xmarchy webapp https://google.com",
             badge: "PWA",
@@ -144,6 +156,7 @@ Item {
             label: "Tema: Xmarchy Dark",
             icon: "󰸌",
             category: "Görünüm",
+            subtext: "Derin lacivert-mor orijinal tema",
             description: "Modern, derin lacivert ve mor tonlarına sahip orijinal Xmarchy karanlık teması.",
             action: "xmarchy theme xmarchy-dark",
             badge: "Dark",
@@ -155,6 +168,7 @@ Item {
             label: "Tema: Catppuccin Mocha",
             icon: "󰸌",
             category: "Görünüm",
+            subtext: "Yumuşak pastel leylak estetiği",
             description: "Dinlendirici pastel leylak, lavanta ve mavi tonlarıyla Catppuccin estetiği.",
             action: "xmarchy theme catppuccin",
             badge: "Catppuccin",
@@ -166,6 +180,7 @@ Item {
             label: "Tema: Rosé Pine",
             icon: "󰸌",
             category: "Görünüm",
+            subtext: "Gül kurusu ve çam minimalist tasarım",
             description: "Sıcak gül kurusu, altın sarısı ve çam tonlarıyla minimalist tasarım.",
             action: "xmarchy theme rose-pine",
             badge: "Rose Pine",
@@ -177,6 +192,7 @@ Item {
             label: "Tema: Nord",
             icon: "󰸌",
             category: "Görünüm",
+            subtext: "Arktik kutup mavisi ve arduvaz",
             description: "Arktik kutup mavisi ve arduvaz grisi tonlarıyla soğuk berrak tema.",
             action: "xmarchy theme nord",
             badge: "Nord",
@@ -188,6 +204,7 @@ Item {
             label: "Tema: Cyberpunk",
             icon: "󰸌",
             category: "Görünüm",
+            subtext: "Neon camgöbeği ve parlak pembe",
             description: "Neon camgöbeği ve parlak pembe neon kontrastına sahip fütüristik tema.",
             action: "xmarchy theme cyberpunk",
             badge: "Cyberpunk",
@@ -199,6 +216,7 @@ Item {
             label: "Tema: Xmarchy Light",
             icon: "󰸌",
             category: "Görünüm",
+            subtext: "Göz yormayan aydınlık beyaz tema",
             description: "Yüksek kontrastlı, göz yormayan aydınlık beyaz masaüstü teması.",
             action: "xmarchy theme xmarchy-light",
             badge: "Light",
@@ -210,6 +228,7 @@ Item {
             label: "Monitör Ölçeği: 1x (Standart)",
             icon: "󰍹",
             category: "Ekran",
+            subtext: "100% piksel oranı",
             description: "Varsayılan 100% Wayland ölçeklendirme uygular.",
             action: "hyprctl keyword monitor ,preferred,auto,1",
             badge: "1x"
@@ -219,6 +238,7 @@ Item {
             label: "Monitör Ölçeği: 1.25x (Orta Büyütme)",
             icon: "󰍹",
             category: "Ekran",
+            subtext: "125% rahat okuma",
             description: "125% ölçek ile UI elemanlarını daha rahat okunur hale getirir.",
             action: "hyprctl keyword monitor ,preferred,auto,1.25",
             badge: "1.25x"
@@ -228,6 +248,7 @@ Item {
             label: "Monitör Ölçeği: 1.6x (HiDPI)",
             icon: "󰍹",
             category: "Ekran",
+            subtext: "160% 2K ekran ölçeği",
             description: "2K ve yüksek çözünürlüklü paneller için ideal 160% ölçekleme.",
             action: "hyprctl keyword monitor ,preferred,auto,1.6",
             badge: "1.6x"
@@ -237,6 +258,7 @@ Item {
             label: "Monitör Ölçeği: 2x (Retina)",
             icon: "󰍹",
             category: "Ekran",
+            subtext: "200% 4K Retina ölçeği",
             description: "4K ekranlar için tam iki katı Retina ölçekleme.",
             action: "hyprctl keyword monitor ,preferred,auto,2",
             badge: "2x"
@@ -249,6 +271,7 @@ Item {
             label: "NixOS Rebuild Switch",
             icon: "󰑐",
             category: "NixOS",
+            subtext: "Yapılandırmayı derle ve etkinleştir",
             description: "Sistem yapılandırmasını derler ve oturumu kapatmadan anında etkinleştirir.",
             action: "kitty -e sudo nixos-rebuild switch --flake /persist/nixos-config",
             badge: "switch",
@@ -259,6 +282,7 @@ Item {
             label: "Nix Flake Paket Güncellemesi",
             icon: "󰑓",
             category: "NixOS",
+            subtext: "flake.lock girdilerini güncelle",
             description: "flake.lock dosyasındaki girdi depolarını ve paket sürümlerini günceller.",
             action: "kitty -e nix flake update /persist/nixos-config",
             badge: "update",
@@ -269,6 +293,7 @@ Item {
             label: "Çöp Temizliği (Garbage Collect)",
             icon: "󰭌",
             category: "NixOS",
+            subtext: "Eski nesilleri ve artıkları sil",
             description: "Eski nesillerdeki artık paketleri temizler ve disk alanını boşaltır.",
             action: "kitty -e nix-collect-garbage -d",
             badge: "clean",
@@ -279,6 +304,7 @@ Item {
             label: "Fastfetch Sistem Künyesi",
             icon: "󰣆",
             category: "NixOS",
+            subtext: "Donanım ve OS özetini görüntüle",
             description: "Donanım, işletim sistemi, çekirdek ve masaüstü özetini terminalde gösterir.",
             action: "kitty -e xmarchy fetch",
             badge: "fetch",
@@ -289,6 +315,7 @@ Item {
             label: "Btop Donanım & Süreç Monitörü",
             icon: "󰍹",
             category: "NixOS",
+            subtext: "Grafik CPU/RAM/Disk/Ağ monitörü",
             description: "CPU, GPU, RAM, Disk ve Ağ süreçlerini grafik arayüzle canlı izleyin.",
             action: "kitty -e btop",
             badge: "btop",
@@ -299,6 +326,7 @@ Item {
             label: "Quickshell Kabuğunu Yeniden Başlat",
             icon: "󰜉",
             category: "NixOS",
+            subtext: "Barı ve panelleri sıfırla",
             description: "Masaüstü panellerini, barı ve bildirim motorunu yeniden yükler.",
             action: "systemctl --user restart quickshell",
             badge: "quickshell",
@@ -309,6 +337,7 @@ Item {
             label: "Pipewire Ses Servisini Yeniden Başlat",
             icon: "",
             category: "NixOS",
+            subtext: "Pipewire ve Wireplumber sıfırla",
             description: "Pipewire ses sunucusunu sıfırlayarak donanım bağlantılarını tazeler.",
             action: "systemctl --user restart pipewire wireplumber",
             badge: "pipewire",
@@ -322,6 +351,7 @@ Item {
             label: "DNS: Cloudflare (1.1.1.1)",
             icon: "󰅟",
             category: "Ağ & DNS",
+            subtext: "1.1.1.1, 1.0.0.1 gizlilik odaklı",
             description: "Hızlı ve gizlilik odaklı Cloudflare DNS (1.1.1.1, 1.0.0.1) uygular.",
             action: "xmarchy dns Cloudflare",
             badge: "Cloudflare",
@@ -332,6 +362,7 @@ Item {
             label: "DNS: Google (8.8.8.8)",
             icon: "󰊭",
             category: "Ağ & DNS",
+            subtext: "8.8.8.8, 8.8.4.4 genel DNS",
             description: "Google Public DNS (8.8.8.8, 8.8.4.4) sunucularını aktif eder.",
             action: "xmarchy dns Google",
             badge: "Google",
@@ -342,6 +373,7 @@ Item {
             label: "DNS: DHCP (Otomatik / Router)",
             icon: "󰩟",
             category: "Ağ & DNS",
+            subtext: "Modemin yerel ayarlarına dön",
             description: "Yerel modem ve yönlendiricinizin otomatik DNS ayarlarına döner.",
             action: "xmarchy dns DHCP",
             badge: "DHCP",
@@ -352,6 +384,7 @@ Item {
             label: "Varsayılan Terminal: Kitty",
             icon: "",
             category: "Uygulama",
+            subtext: "GPU hızlandırmalı modern terminal",
             description: "Donanım hızlandırmalı GPU destekli Kitty terminal emülatörü.",
             action: "kitty",
             badge: "Terminal"
@@ -361,6 +394,7 @@ Item {
             label: "Varsayılan Tarayıcı: Chromium",
             icon: "",
             category: "Uygulama",
+            subtext: "Açık kaynak hızlı web tarayıcısı",
             description: "Hızlı ve güvenli açık kaynak Chromium web tarayıcısı.",
             action: "chromium",
             badge: "Web"
@@ -373,6 +407,7 @@ Item {
             label: "Ekranı Kilitle",
             icon: "",
             category: "Güç",
+            subtext: "Oturumu hemen kilitle",
             description: "Oturumu güvenli şekilde kilitler ve kimlik doğrulama ekranına geçer.",
             action: "loginctl lock-session",
             badge: "Lock"
@@ -382,6 +417,7 @@ Item {
             label: "Askıya Al (Suspend)",
             icon: "󰒲",
             category: "Güç",
+            subtext: "Düşük güç tüketimli uyku kipine geç",
             description: "Bilgisayarı düşük güç tüketimli uyku durumuna geçirir.",
             action: "systemctl suspend",
             badge: "Sleep"
@@ -391,6 +427,7 @@ Item {
             label: "Oturumu Kapat (Logout)",
             icon: "󰍃",
             category: "Güç",
+            subtext: "Hyprland oturumunu sonlandır",
             description: "Hyprland Wayland oturumunu kapatıp giriş yöneticisine döner.",
             action: "hyprctl dispatch exit",
             badge: "Exit"
@@ -400,6 +437,7 @@ Item {
             label: "Bilgisayarı Yeniden Başlat",
             icon: "󰜉",
             category: "Güç",
+            subtext: "Sistemi güvenle yeniden başlat",
             description: "Tüm sistem servislerini güvenle sonlandırıp bilgisayarı yeniden başlatır.",
             action: "systemctl reboot",
             badge: "Reboot"
@@ -409,6 +447,7 @@ Item {
             label: "Bilgisayarı Kapat (Shutdown)",
             icon: "󰐥",
             category: "Güç",
+            subtext: "Donanım gücünü tamamen kes",
             description: "İşletim sistemini kapatır ve donanım gücünü tamamen keser.",
             action: "systemctl poweroff",
             badge: "Poweroff"
@@ -458,13 +497,20 @@ Item {
 
     function getBreadcrumbText() {
         if (root.query.length > 0) {
-            return "Arama Sonuçları"
+            return "Arama"
         }
         if (root.currentMenuId === "root") {
-            return "Kök Menü"
+            return "Kök"
         }
-        var found = root.rootCategories.find(function(c) { return c.id === root.currentMenuId })
-        return found ? ("Kök › " + found.label) : "Kök"
+        var shortNames = {
+            "apps": "Uygulamalar",
+            "tools": "Araçlar",
+            "style": "Görünüm",
+            "nixos": "NixOS",
+            "setup": "Ayarlar",
+            "power": "Güç"
+        }
+        return "Kök › " + (shortNames[root.currentMenuId] || root.currentMenuId)
     }
 
     function getAllStaticItems() {
@@ -491,6 +537,7 @@ Item {
                 var item = statics[i]
                 if (item.label.toLowerCase().indexOf(q) >= 0 ||
                     item.category.toLowerCase().indexOf(q) >= 0 ||
+                    (item.subtext && item.subtext.toLowerCase().indexOf(q) >= 0) ||
                     item.description.toLowerCase().indexOf(q) >= 0 ||
                     (item.badge && item.badge.toLowerCase().indexOf(q) >= 0)) {
                     matches.push(item)
@@ -505,14 +552,16 @@ Item {
                 var genName = app.genericName ? app.genericName.toLowerCase() : ""
                 var comm = app.comment ? app.comment.toLowerCase() : ""
                 if (name.indexOf(q) >= 0 || genName.indexOf(q) >= 0 || comm.indexOf(q) >= 0) {
+                    var cleanSub = app.genericName || app.comment || "Masaüstü Uygulaması"
                     matches.push({
                         id: "app." + (app.id || name),
                         label: app.name || "Uygulama",
                         icon: "󰣆",
                         appIcon: app.icon || "",
                         category: "Uygulama",
-                        description: app.genericName || app.comment || "Sistemde kurulu uygulama.",
-                        badge: "Uygulama",
+                        subtext: cleanSub,
+                        description: app.comment || app.genericName || "Sistemde kurulu uygulama.",
+                        badge: "",
                         isApp: true,
                         appEntry: app
                     })
@@ -532,14 +581,21 @@ Item {
             for (var a = 0; a < allApps.length; a++) {
                 var currentApp = allApps[a]
                 if (!currentApp || !currentApp.name) continue
+                var cleanAppSub = currentApp.genericName || currentApp.comment || ""
+                if (!cleanAppSub && currentApp.categories && currentApp.categories.length > 0) {
+                    cleanAppSub = currentApp.categories[0]
+                }
+                if (!cleanAppSub) cleanAppSub = "Masaüstü Uygulaması"
+
                 appList.push({
                     id: "app." + (currentApp.id || currentApp.name),
                     label: currentApp.name,
                     icon: "󰣆",
                     appIcon: currentApp.icon || "",
                     category: "Uygulama",
-                    description: currentApp.genericName || currentApp.comment || "Sistemde kurulu uygulama.",
-                    badge: "Uygulama",
+                    subtext: cleanAppSub,
+                    description: currentApp.comment || currentApp.genericName || "Sistemde kurulu grafiksel masaüstü uygulaması.",
+                    badge: "",
                     isApp: true,
                     appEntry: currentApp
                 })
@@ -587,6 +643,13 @@ Item {
             root.close()
             return
         }
+    }
+
+    function getActionButtonText(item) {
+        if (!item) return ""
+        if (item.isMenu) return "Alt Menüye Gir [↵]"
+        if (item.isApp) return "Uygulamayı Başlat [↵]"
+        return "Eylemi Çalıştır [↵]"
     }
 
     // ═══════════════ Görsel Pencere (PanelWindow) ═══════════════
@@ -654,6 +717,7 @@ Item {
                         Item {
                             Layout.fillWidth: true
                             Layout.fillHeight: true
+                            clip: true
 
                             TextInput {
                                 id: searchInput
@@ -731,34 +795,41 @@ Item {
                             }
                         }
 
-                        // Dinamik Breadcrumb / Yol Rozeti
+                        // Dinamik Breadcrumb / Yol Rozeti (Taşma korumalı)
                         Rectangle {
-                            height: 22
+                            id: breadcrumbBadge
+                            Layout.alignment: Qt.AlignVCenter
+                            Layout.preferredHeight: 22
+                            Layout.preferredWidth: Math.min(130, breadcrumbText.implicitWidth + 16)
                             radius: 11
                             color: shell.theme.bg
                             border.color: shell.theme.dim
                             border.width: 1
-                            Layout.alignment: Qt.AlignVCenter
-                            width: breadcrumbText.implicitWidth + 16
+                            clip: true
 
                             Text {
                                 id: breadcrumbText
                                 anchors.centerIn: parent
+                                width: parent.width - 12
                                 text: root.getBreadcrumbText()
                                 color: shell.theme.accent
                                 font.family: shell.fontFamily
                                 font.pixelSize: 10
                                 font.bold: true
+                                elide: Text.ElideRight
+                                horizontalAlignment: Text.AlignHCenter
                             }
                         }
 
-                        // ESC Rozeti
+                        // ESC Kapatma Butonu
                         Rectangle {
-                            height: 22
-                            width: 32
+                            Layout.alignment: Qt.AlignVCenter
+                            Layout.preferredHeight: 22
+                            Layout.preferredWidth: 36
                             radius: 4
                             color: shell.theme.bg
-                            Layout.alignment: Qt.AlignVCenter
+                            border.color: shell.theme.dim
+                            border.width: 1
 
                             Text {
                                 anchors.centerIn: parent
@@ -786,7 +857,7 @@ Item {
                     anchors.right: parent.right
                     height: 1
                     color: shell.theme.dim
-                    opacity: 0.3
+                    opacity: 0.2
                 }
 
                 // ═══════════ ORTA: Çift Panel (Liste + Canlı Önizleme) ═══════════
@@ -817,7 +888,7 @@ Item {
                                 required property var modelData
                                 required property int index
                                 width: ListView.view.width
-                                height: 44
+                                height: 46
                                 radius: 8
                                 color: index === root.selectedIndex ? shell.theme.accent : (rowMouse.containsMouse ? shell.theme.surface : "transparent")
 
@@ -849,11 +920,11 @@ Item {
                                         }
                                     }
 
-                                    // Başlık & Kategori Etiketi
+                                    // Başlık & Alt Açıklama
                                     Column {
                                         Layout.fillWidth: true
                                         Layout.alignment: Qt.AlignVCenter
-                                        spacing: 1
+                                        spacing: 2
 
                                         Text {
                                             text: modelData.label ?? ""
@@ -866,9 +937,9 @@ Item {
                                         }
 
                                         Text {
-                                            visible: root.query.length > 0 || modelData.isApp
-                                            text: modelData.category ?? ""
-                                            color: index === root.selectedIndex ? "#2a2b36" : shell.theme.dim
+                                            visible: text.length > 0
+                                            text: modelData.subtext ? modelData.subtext : (root.query.length > 0 ? (modelData.category ?? "") : "")
+                                            color: index === root.selectedIndex ? Qt.rgba(shell.theme.bg.r, shell.theme.bg.g, shell.theme.bg.b, 0.75) : shell.theme.dim
                                             font.family: shell.fontFamily
                                             font.pixelSize: 10
                                             elide: Text.ElideRight
@@ -876,9 +947,9 @@ Item {
                                         }
                                     }
 
-                                    // Sağ Rozet / Ok
+                                    // Sağ Rozet / Ok / Başlat Butonu
                                     Text {
-                                        text: modelData.isMenu ? "›" : (modelData.badge ?? "↵")
+                                        text: modelData.isMenu ? "›" : (modelData.isApp ? (index === root.selectedIndex ? "↵ Başlat" : "") : (modelData.badge ?? "↵"))
                                         color: index === root.selectedIndex ? shell.theme.bg : shell.theme.dim
                                         font.family: shell.fontFamily
                                         font.pixelSize: modelData.isMenu ? 16 : 10
@@ -1026,7 +1097,7 @@ Item {
                                 opacity: 0.85
                             }
 
-                            // Ayırıcı
+                            // Ayırıcı Çizgi
                             Rectangle {
                                 width: parent.width
                                 height: 1
@@ -1109,14 +1180,14 @@ Item {
                                 }
                             }
 
-                            // ─── ÖZEL CONTEXT 3: Araç / Tool Önizlemesi ───
+                            // ─── ÖZEL CONTEXT 3: Araç / DNS Önizlemesi ───
                             Column {
                                 width: parent.width
                                 spacing: 6
                                 visible: (rightPane.selItem?.isTool ?? false) || (rightPane.selItem?.isDns ?? false)
 
                                 Text {
-                                    text: rightPane.selItem?.isDns ? "DNS YAPILANDIRMASI" : "HEDEF ÇIKTI"
+                                    text: rightPane.selItem?.isDns ? "DNS YAPILANDIRMASI" : "HEDEF ÇIKTI & BİLGİ"
                                     color: shell.theme.dim
                                     font.family: shell.fontFamily
                                     font.pixelSize: 10
@@ -1125,17 +1196,122 @@ Item {
 
                                 Rectangle {
                                     width: parent.width
-                                    height: 26
+                                    height: 46
                                     radius: 6
                                     color: shell.theme.surface
+                                    border.color: shell.theme.dim
+                                    border.width: 1
 
-                                    Text {
-                                        anchors.centerIn: parent
-                                        text: rightPane.selItem?.badge ?? "Hazır"
-                                        color: shell.theme.accent
-                                        font.family: shell.fontFamily
-                                        font.pixelSize: 11
-                                        font.bold: true
+                                    Column {
+                                        anchors.fill: parent
+                                        anchors.margins: 6
+                                        spacing: 2
+
+                                        Text {
+                                            text: "Hedef: " + (rightPane.selItem?.badge ?? "Hazır")
+                                            color: shell.theme.accent
+                                            font.family: shell.fontFamily
+                                            font.pixelSize: 11
+                                            font.bold: true
+                                        }
+
+                                        Text {
+                                            text: rightPane.selItem?.isDns ? "Sistem ağ geçidine anında uygulanır" : "Panoya kopyalanır ve sistem bildirimi verilir"
+                                            color: shell.theme.dim
+                                            font.family: shell.fontFamily
+                                            font.pixelSize: 10
+                                        }
+                                    }
+                                }
+                            }
+
+                            // ─── ÖZEL CONTEXT 4: Uygulama Teknik Detayları ───
+                            Column {
+                                width: parent.width
+                                spacing: 6
+                                visible: rightPane.selItem?.isApp ?? false
+
+                                Text {
+                                    text: "UYGULAMA KÜNYESİ"
+                                    color: shell.theme.dim
+                                    font.family: shell.fontFamily
+                                    font.pixelSize: 10
+                                    font.bold: true
+                                }
+
+                                Rectangle {
+                                    width: parent.width
+                                    height: 46
+                                    radius: 6
+                                    color: shell.theme.surface
+                                    border.color: shell.theme.dim
+                                    border.width: 1
+
+                                    Column {
+                                        anchors.fill: parent
+                                        anchors.margins: 6
+                                        spacing: 2
+
+                                        Text {
+                                            text: "Masaüstü ID: " + (rightPane.selItem?.appEntry?.id ?? rightPane.selItem?.label ?? "")
+                                            color: shell.theme.fg
+                                            font.family: shell.fontFamily
+                                            font.pixelSize: 10
+                                            elide: Text.ElideRight
+                                            width: parent.width
+                                        }
+
+                                        Text {
+                                            text: "Durum: Sistemde kurulu & başlatmaya hazır"
+                                            color: shell.theme.accent
+                                            font.family: shell.fontFamily
+                                            font.pixelSize: 10
+                                        }
+                                    }
+                                }
+                            }
+
+                            // ─── ÖZEL CONTEXT 5: Kategori Rehberi ───
+                            Column {
+                                width: parent.width
+                                spacing: 6
+                                visible: rightPane.selItem?.isMenu ?? false
+
+                                Text {
+                                    text: "MENÜ GEZİNİM İPUCU"
+                                    color: shell.theme.dim
+                                    font.family: shell.fontFamily
+                                    font.pixelSize: 10
+                                    font.bold: true
+                                }
+
+                                Rectangle {
+                                    width: parent.width
+                                    height: 46
+                                    radius: 6
+                                    color: shell.theme.surface
+                                    border.color: shell.theme.dim
+                                    border.width: 1
+
+                                    Column {
+                                        anchors.fill: parent
+                                        anchors.margins: 6
+                                        spacing: 2
+
+                                        Text {
+                                            text: "Alt menüye girmek için [↵] veya [→] tuşuna basın"
+                                            color: shell.theme.accent
+                                            font.family: shell.fontFamily
+                                            font.pixelSize: 10
+                                            font.bold: true
+                                        }
+
+                                        Text {
+                                            text: "Geri dönmek için [←] veya [Backspace] kullanın"
+                                            color: shell.theme.dim
+                                            font.family: shell.fontFamily
+                                            font.pixelSize: 10
+                                        }
                                     }
                                 }
                             }
@@ -1143,7 +1319,7 @@ Item {
                             // Boşluk Doldurucu
                             Item { Layout.fillHeight: true }
 
-                            // Çalıştır / Gir Butonu
+                            // Çalıştır / Başlat / Gir Butonu
                             Rectangle {
                                 width: parent.width
                                 height: 34
@@ -1152,7 +1328,7 @@ Item {
 
                                 Text {
                                     anchors.centerIn: parent
-                                    text: rightPane.selItem?.isMenu ? "Alt Menüye Gir [↵]" : "Eylemi Çalıştır [↵]"
+                                    text: root.getActionButtonText(rightPane.selItem)
                                     color: shell.theme.bg
                                     font.family: shell.fontFamily
                                     font.pixelSize: 12
