@@ -365,6 +365,10 @@
         "$altMod SHIFT, F, exec, dolphin || thunar || nautilus"
         "$mod SHIFT, C, exec, hyprpicker -a"
         "$altMod SHIFT, C, exec, hyprpicker -a"
+        "$mod CTRL, N, exec, xmarchy-nightlight toggle"
+        "$altMod CTRL, N, exec, xmarchy-nightlight toggle"
+        "$mod, K, exec, xmarchy-keybindings"
+        "$altMod, K, exec, xmarchy-keybindings"
       ];
 
       # Ses kontrolleri

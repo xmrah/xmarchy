@@ -3,6 +3,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Wayland
 import Quickshell.Hyprland
+import Quickshell.Io
 
 Item {
     id: root
@@ -11,18 +12,39 @@ Item {
     property int popupX: 100
     property int popupY: 40
     readonly property int popupWidth: 380
-    readonly property int popupHeight: 220
+    readonly property int popupHeight: 295
 
     property string currentScale: "1"
     readonly property var scalePresets: ["1", "1.25", "1.6", "2", "3.2", "4"]
     readonly property var textSizes: [9, 10, 11, 12, 14, 16]
     property int selectedTextIndex: 2 // 11px
+    property bool nightlightActive: false
+
+    Process {
+        id: nlStatusProc
+        command: ["xmarchy-nightlight", "status"]
+        stdout: StdioCollector {
+            waitForEnd: true
+            onStreamFinished: {
+                root.nightlightActive = (text.trim() === "on")
+            }
+        }
+    }
+
+    Process {
+        id: nlToggleProc
+        command: ["xmarchy-nightlight", "toggle"]
+        onExited: {
+            nlStatusProc.running = true
+        }
+    }
 
     function openAt(x: int, y: int) {
         shell.closeAllMenus()
         root.popupX = Math.max(10, Math.min(x, 1920 - root.popupWidth - 10))
         root.popupY = shell.barHeight + 6
         root.opened = true
+        nlStatusProc.running = true
     }
 
     function toggle(x: int, y: int) {
@@ -253,6 +275,80 @@ Item {
                                         onClicked: root.applyScale(modelData)
                                     }
                                 }
+                            }
+                        }
+                    }
+
+                    // ═══════════════ 4. GECE IŞIĞI (NIGHTLIGHT) ═══════════════
+                    Rectangle {
+                        width: parent.width
+                        height: 40
+                        radius: 8
+                        color: root.nightlightActive ? shell.theme.surface : (nlMouse.containsMouse ? shell.theme.surface : "transparent")
+                        border.color: root.nightlightActive ? shell.theme.accent : shell.theme.dim
+                        border.width: 1
+
+                        RowLayout {
+                            anchors.fill: parent
+                            anchors.leftMargin: 12
+                            anchors.rightMargin: 12
+                            spacing: 10
+
+                            Text {
+                                text: "󰖔"
+                                color: root.nightlightActive ? "#fab387" : shell.theme.dim
+                                font.family: shell.fontFamily
+                                font.pixelSize: 16
+                            }
+
+                            Column {
+                                Layout.fillWidth: true
+                                spacing: 2
+
+                                Text {
+                                    text: "Gece Işığı (Mavi Işık Filtresi)"
+                                    color: root.nightlightActive ? shell.theme.fg : shell.theme.dim
+                                    font.family: shell.fontFamily
+                                    font.pixelSize: 11
+                                    font.bold: true
+                                }
+
+                                Text {
+                                    text: root.nightlightActive ? "4000K Sıcak Renk Tonu (Aktif)" : "6500K Standart Ekran Tonu (Kapalı)"
+                                    color: root.nightlightActive ? "#fab387" : shell.theme.dim
+                                    font.family: shell.fontFamily
+                                    font.pixelSize: 9
+                                }
+                            }
+
+                            Rectangle {
+                                width: 34
+                                height: 18
+                                radius: 9
+                                color: root.nightlightActive ? shell.theme.accent : shell.theme.surface
+                                border.color: shell.theme.dim
+                                border.width: 1
+
+                                Rectangle {
+                                    width: 14
+                                    height: 14
+                                    radius: 7
+                                    color: root.nightlightActive ? shell.theme.bg : shell.theme.dim
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    x: root.nightlightActive ? parent.width - 16 : 2
+                                    Behavior on x { NumberAnimation { duration: 150 } }
+                                }
+                            }
+                        }
+
+                        MouseArea {
+                            id: nlMouse
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: {
+                                root.nightlightActive = !root.nightlightActive
+                                nlToggleProc.running = true
                             }
                         }
                     }

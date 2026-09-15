@@ -23,6 +23,7 @@
     playerctl
     cliphist
     wofi
+    hyprsunset
   ];
 
   # XDG Desktop Portal (ekran paylaşımı, dosya seçici diyalogları)

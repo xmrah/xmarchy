@@ -251,6 +251,90 @@ let
     '';
   };
 
+  xmarchy-nightlight = pkgs.writeShellApplication {
+    name = "xmarchy-nightlight";
+    runtimeInputs = [ pkgs.hyprsunset pkgs.hyprland pkgs.procps pkgs.gawk pkgs.libnotify pkgs.coreutils ];
+    text = ''
+      CMD="''${1:-toggle}"
+      ON_TEMP=4000
+      OFF_TEMP=6500
+
+      if ! pgrep -x hyprsunset >/dev/null 2>&1; then
+        hyprsunset &
+        sleep 0.3
+      fi
+
+      case "$CMD" in
+        status)
+          CUR=$(hyprctl hyprsunset temperature 2>/dev/null | grep -oE '[0-9]+' | head -n1 || echo "")
+          if [ -n "$CUR" ] && [ "$CUR" -le 5000 ]; then
+            echo "on"
+          else
+            echo "off"
+          fi
+          ;;
+        on)
+          hyprctl hyprsunset temperature $ON_TEMP >/dev/null 2>&1 || true
+          notify-send -a "Xmarchy" -i weather-clear-night "Gece Işığı Aktif" "Renk sıcaklığı 4000K olarak ayarlandı."
+          ;;
+        off)
+          hyprctl hyprsunset temperature $OFF_TEMP >/dev/null 2>&1 || true
+          notify-send -a "Xmarchy" -i display-brightness "Gece Işığı Kapalı" "Renk sıcaklığı normale (6500K) döndürüldü."
+          ;;
+        toggle)
+          STATUS=$(hyprctl hyprsunset temperature 2>/dev/null | grep -oE '[0-9]+' | head -n1 || echo "")
+          if [ -n "$STATUS" ] && [ "$STATUS" -le 5000 ]; then
+            hyprctl hyprsunset temperature $OFF_TEMP >/dev/null 2>&1 || true
+            notify-send -a "Xmarchy" -i display-brightness "Gece Işığı Kapalı" "Renk sıcaklığı normale (6500K) döndürüldü."
+          else
+            hyprctl hyprsunset temperature $ON_TEMP >/dev/null 2>&1 || true
+            notify-send -a "Xmarchy" -i weather-clear-night "Gece Işığı Aktif" "Renk sıcaklığı 4000K olarak ayarlandı."
+          fi
+          ;;
+      esac
+    '';
+  };
+
+  xmarchy-keybindings = pkgs.writeShellApplication {
+    name = "xmarchy-keybindings";
+    runtimeInputs = [ pkgs.wofi pkgs.hyprland pkgs.gawk pkgs.coreutils ];
+    text = ''
+      KEYLIST="✦ UYGULAMALAR & BAŞLATICI
+  SUPER + Return               Terminali Aç (Kitty)
+  SUPER + B                    Tarayıcıyı Aç (Brave/Chromium/Firefox)
+  SUPER + Space                Uygulama Başlatıcı (Quickshell Launcher)
+  SUPER + SHIFT + F            Dosya Yöneticisi (Dolphin/Thunar)
+  SUPER + CTRL + T             Sistem Kaynak İzleyici (btop)
+  SUPER + SHIFT + C            Renk Seçici (Hyprpicker)
+  SUPER + Q                    Pencereyi Kapat
+
+✦ MENÜLER & DENETİM MERKEZİ
+  SUPER + CTRL + A             Ses Menüsü & Mikser (Audio)
+  SUPER + CTRL + B             Bluetooth Menüsü
+  SUPER + CTRL + W             Ağ & Wi-Fi Menüsü
+  SUPER + CTRL + D             Ekran, Ölçek & Gece Işığı
+  SUPER + CTRL + P             Güç Menüsü (Kapat/Yeniden Başlat)
+  SUPER + CTRL + C             Takvim & Saat Menüsü
+  SUPER + CTRL + N             Gece Işığı Aç/Kapat (Hyprsunset)
+  SUPER + K                    Bu Kısayol Rehberini Göster
+
+✦ PANO & ÇALIŞMA ALANLARI
+  SUPER + C                    Pano Geçmişi & Arama (Cliphist + Wofi)
+  SUPER + CTRL + V             Pano Geçmişi & Arama (Alternatif)
+  SUPER + S                    Sihirli Çalışma Alanı (Scratchpad) Aç/Kapat
+  SUPER + Z                    Odaktaki Pencereyi Scratchpad'e Gönder
+  SUPER + 1..9                 1-9 Numaralı Çalışma Alanına Geç
+  SUPER + SHIFT + 1..9         Pencereyi 1-9 Çalışma Alanına Taşı
+
+✦ MEDYA & YAKALAMA
+  Print                        Tam Ekran Görüntüsü Al
+  SUPER + Print                Bölge Ekran Görüntüsü Al
+  Fn + F1-F12 (Medya Tuşları)  Ses Aç/Kıs/Sustur, Parlaklık, Oynat/Durdur"
+
+      echo "$KEYLIST" | wofi --dmenu -p "Kısayol Rehberi" || true
+    '';
+  };
+
   xmarchy-cli = pkgs.writeShellApplication {
     name = "xmarchy";
     runtimeInputs = [
@@ -365,13 +449,60 @@ BANNER
           nixos-rebuild list-generations
           ;;
         webapp)
-          URL="''${1:-}"
-          if [ -z "$URL" ]; then
-            echo "Hata: Bir URL belirtmelisiniz!"
-            echo "Örnek: xmarchy webapp https://discord.com/app"
-            exit 1
+          ACTION="''${1:-}"
+          if [ "$ACTION" = "install" ]; then
+            shift || true
+            APP_NAME="''${1:-}"
+            APP_URL="''${2:-}"
+            if [ -z "$APP_NAME" ] || [ -z "$APP_URL" ]; then
+              echo "Kullanım: xmarchy webapp install <Uygulama Adı> <URL>"
+              echo "Örnek: xmarchy webapp install 'Claude' 'https://claude.ai'"
+              exit 1
+            fi
+            ICON_DIR="$HOME/.local/share/icons/hicolor/256x256/apps"
+            DESKTOP_DIR="$HOME/.local/share/applications"
+            mkdir -p "$ICON_DIR" "$DESKTOP_DIR"
+            SAFE_NAME=$(echo "$APP_NAME" | tr '[:upper:]' '[:lower:]' | tr -c '[:alnum:]' '-')
+            ICON_PATH="$ICON_DIR/$SAFE_NAME.png"
+            curl -fsSL --max-time 6 -o "$ICON_PATH" "https://www.google.com/s2/favicons?domain=$APP_URL&sz=256" || true
+            cat > "$DESKTOP_DIR/$SAFE_NAME.desktop" <<EOF
+[Desktop Entry]
+Version=1.0
+Name=$APP_NAME
+Comment=$APP_NAME Web Uygulaması
+Exec=chromium --app=$APP_URL %U
+Terminal=false
+Type=Application
+Icon=$SAFE_NAME
+Categories=Network;Utility;
+StartupNotify=true
+EOF
+            chmod +x "$DESKTOP_DIR/$SAFE_NAME.desktop"
+            echo -e "\033[1;32m✓ '$APP_NAME' başarıyla kuruldu! Başlatıcıda (SUPER + Space) arayabilirsiniz.\033[0m"
+          elif [ "$ACTION" = "remove" ]; then
+            shift || true
+            APP_NAME="''${1:-}"
+            SAFE_NAME=$(echo "$APP_NAME" | tr '[:upper:]' '[:lower:]' | tr -c '[:alnum:]' '-')
+            rm -f "$HOME/.local/share/applications/$SAFE_NAME.desktop"
+            echo -e "\033[1;33m✓ '$APP_NAME' uygulaması kaldırıldı.\033[0m"
+          else
+            URL="''${1:-}"
+            if [ -n "$URL" ]; then
+              exec chromium --app="$URL"
+            else
+              echo "Kullanım:"
+              echo "  xmarchy webapp install <Ad> <URL>   Yeni web uygulaması kurar"
+              echo "  xmarchy webapp remove <Ad>          Web uygulamasını kaldırır"
+              echo "  xmarchy webapp <URL>                URL'i uygulama modunda açar"
+            fi
           fi
-          exec chromium --app="$URL"
+          ;;
+        nightlight)
+          shift || true
+          exec xmarchy-nightlight "$@"
+          ;;
+        keys|keybindings)
+          exec xmarchy-keybindings
           ;;
         dns)
           PROVIDER="''${1:-}"
@@ -440,6 +571,8 @@ in
     xmarchy-capture
     xmarchy-power
     xmarchy-network-status
+    xmarchy-nightlight
+    xmarchy-keybindings
     xmarchy-cli
   ];
 }
