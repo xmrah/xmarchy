@@ -436,6 +436,105 @@ Item {
             action: "xmarchy webapp https://google.com",
             badge: "PWA",
             isTool: true
+        },
+        {
+            id: "tools.record_screen",
+            label: "Sesli Ekran Kaydı (Tam Ekran)",
+            icon: "󰕧",
+            category: "Medya Kayıt",
+            subtext: "Mikrofon ve sistem sesli video kaydı",
+            description: "Tüm ekranı 60 FPS sesli MP4 videosu olarak Videos/Recordings dizinine kaydeder (Tekrar basınca durur).",
+            action: "xmarchy-capture record-screen",
+            badge: "wf-recorder",
+            isTool: true
+        },
+        {
+            id: "tools.record_region",
+            label: "Sesli Ekran Kaydı (Seçili Alan)",
+            icon: "󰕧",
+            category: "Medya Kayıt",
+            subtext: "Seçilen pencere veya alan kaydı",
+            description: "Seçtiğiniz ekran bölgesini sesli video olarak kaydeder.",
+            action: "xmarchy-capture record-region",
+            badge: "wf-recorder",
+            isTool: true
+        },
+        {
+            id: "tools.record_stop",
+            label: "Ekran Kaydını Durdur",
+            icon: "󰙧",
+            category: "Medya Kayıt",
+            subtext: "Aktif video kaydını sonlandır",
+            description: "Devam eden wf-recorder video kaydını güvenle durdurur ve dosyayı kapatır.",
+            action: "xmarchy-capture record-stop",
+            badge: "stop",
+            isTool: true
+        },
+        {
+            id: "tools.ocr",
+            label: "Canlı Metin Kopyalama (OCR)",
+            icon: "󰗊",
+            category: "Araçlar",
+            subtext: "Ekrandaki resmi/yazıyı panoya metin yap",
+            description: "Seçtiğiniz bölgedeki metinleri optik karakter tanıma (Tesseract) ile panoya metin olarak kopyalar.",
+            action: "xmarchy-capture ocr",
+            badge: "Tesseract",
+            isTool: true
+        },
+        {
+            id: "tools.qr_scan",
+            label: "Ekrandan QR Kod Oku",
+            icon: "󰄶",
+            category: "Araçlar",
+            subtext: "Ekrandaki QR kodunu çöz ve kopyala",
+            description: "Ekranda seçtiğiniz QR kodu anında çözüp linki panoya kopyalar.",
+            action: "xmarchy-capture qr-scan",
+            badge: "zbar",
+            isTool: true
+        },
+        {
+            id: "tools.qr_gen",
+            label: "Panodaki Metni QR Koda Dönüştür",
+            icon: "󰐳",
+            category: "Araçlar",
+            subtext: "Panodaki link/yazıyı QR yap",
+            description: "Panodaki metni anında taranabilir büyük bir QR koda dönüştürüp ekranda açar.",
+            action: "xmarchy-capture qr-gen",
+            badge: "qrencode",
+            isTool: true
+        },
+        {
+            id: "tools.webcam",
+            label: "Webcam Aynası (Kamera Önizleme)",
+            icon: "󰖠",
+            category: "Medya",
+            subtext: "Kamerayı düşük gecikmeli aç",
+            description: "Web kameranızı düşük gecikmeli bağımsız bir yüzen ayna penceresi olarak açar.",
+            action: "xmarchy-capture webcam",
+            badge: "mpv",
+            isTool: true
+        },
+        {
+            id: "tools.easyeffects",
+            label: "Ses Efektleri & Gürültü Engelleme",
+            icon: "󰓃",
+            category: "Ses Stüdyosu",
+            subtext: "EasyEffects Pipewire ses stüdyosu",
+            description: "Mikrofon gürültü engelleme, ekolayzır ve stüdyo filtrelerini yapılandırır.",
+            action: "easyeffects",
+            badge: "EasyEffects",
+            isTool: true
+        },
+        {
+            id: "tools.pavucontrol",
+            label: "Grafiksel Ses Mikseri (Volume Control)",
+            icon: "󰓃",
+            category: "Ses Stüdyosu",
+            subtext: "Uygulama bazlı ses seviyesi ve cihazlar",
+            description: "Tüm ses giriş/çıkış cihazlarını ve çalışan uygulamaların ses kanallarını yönetir.",
+            action: "pavucontrol",
+            badge: "pavucontrol",
+            isTool: true
         }
     ]
 

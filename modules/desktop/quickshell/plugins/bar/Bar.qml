@@ -3,6 +3,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Wayland
 import Quickshell.Hyprland
+import Quickshell.Io
 import Quickshell.Services.Pipewire
 import Quickshell.Services.SystemTray
 import Quickshell.Services.UPower
@@ -226,13 +227,79 @@ PanelWindow {
                         anchors.fill: parent
                         hoverEnabled: true
                         cursorShape: Qt.PointingHandCursor
-                        acceptedButtons: Qt.LeftButton | Qt.RightButton
+                        acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
                         onClicked: function(mouse) {
-                            if (mouse.button === Qt.RightButton) {
+                            if (mouse.button === Qt.MiddleButton) {
+                                mprisPill.player?.previous()
+                            } else if (mouse.button === Qt.RightButton) {
                                 mprisPill.player?.next()
                             } else {
                                 mprisPill.player?.togglePlaying()
                             }
+                        }
+                    }
+                }
+
+                // ═══════════════ Ekran Kayıt (REC) Göstergesi ═══════════════
+                Rectangle {
+                    id: recIndicator
+                    property bool isRecording: false
+                    visible: isRecording
+                    height: 22
+                    width: 60
+                    radius: 11
+                    color: "#33ef4444"
+                    border.color: "#ef4444"
+                    border.width: 1
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    Timer {
+                        interval: 2000
+                        running: true
+                        repeat: true
+                        onTriggered: {
+                            recCheckProc.running = true
+                        }
+                    }
+
+                    Process {
+                        id: recCheckProc
+                        command: ["pgrep", "-x", "wf-recorder"]
+                        onExited: function(exitCode) {
+                            recIndicator.isRecording = (exitCode === 0)
+                        }
+                    }
+
+                    Row {
+                        anchors.centerIn: parent
+                        spacing: 5
+                        Rectangle {
+                            width: 6
+                            height: 6
+                            radius: 3
+                            color: "#ef4444"
+                            anchors.verticalCenter: parent.verticalCenter
+                            SequentialAnimation on opacity {
+                                loops: Animation.Infinite
+                                PropertyAnimation { to: 0.2; duration: 600 }
+                                PropertyAnimation { to: 1.0; duration: 600 }
+                            }
+                        }
+                        Text {
+                            text: "REC"
+                            color: "#ef4444"
+                            font.family: shell.fontFamily
+                            font.pixelSize: 10
+                            font.bold: true
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: {
+                            Hyprland.dispatch("exec xmarchy-capture record-stop")
                         }
                     }
                 }

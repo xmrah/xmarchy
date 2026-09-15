@@ -12,6 +12,14 @@
     grim
     slurp
     xdg-utils
+    wf-recorder
+    tesseract5
+    zbar
+    qrencode
+    mpv
+    easyeffects
+    pavucontrol
+    hyprpicker
   ];
 
   # XDG Desktop Portal (ekran paylaşımı, dosya seçici diyalogları)

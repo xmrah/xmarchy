@@ -66,19 +66,113 @@ let
 
   xmarchy-capture = pkgs.writeShellApplication {
     name = "xmarchy-capture";
-    runtimeInputs = [ pkgs.grim pkgs.slurp pkgs.wl-clipboard ];
+    runtimeInputs = [
+      pkgs.grim
+      pkgs.slurp
+      pkgs.wl-clipboard
+      pkgs.wf-recorder
+      pkgs.tesseract5
+      pkgs.zbar
+      pkgs.qrencode
+      pkgs.mpv
+      pkgs.libnotify
+      pkgs.procps
+      pkgs.coreutils
+    ];
     text = ''
       if [ "$#" -lt 1 ]; then
-        echo "Usage: xmarchy-capture [screen|region]"
+        echo "Kullanım: xmarchy-capture [screen|region|record-screen|record-region|record-stop|ocr|qr-scan|qr-gen|webcam]"
         exit 1
       fi
+
+      VID_DIR="$HOME/Videos/Recordings"
+      mkdir -p "$VID_DIR"
+      TIMESTAMP=$(date +%Y-%m-%d_%H-%M-%S)
+      VID_FILE="$VID_DIR/record_$TIMESTAMP.mp4"
 
       case "$1" in
         screen)
           grim - | wl-copy
+          notify-send "Ekran Görüntüsü" "Tüm ekran panoya kopyalandı." -i camera-photo || true
           ;;
         region)
-          grim -g "$(slurp)" - | wl-copy
+          GEOM=$(slurp)
+          if [ -n "$GEOM" ]; then
+            grim -g "$GEOM" - | wl-copy
+            notify-send "Ekran Görüntüsü" "Seçilen alan panoya kopyalandı." -i camera-photo || true
+          fi
+          ;;
+        record-screen)
+          if pgrep -x "wf-recorder" >/dev/null; then
+            pkill -INT -x wf-recorder
+            notify-send "Ekran Kaydı" "Kayıt durduruldu ve kaydedildi." -i media-record || true
+          else
+            notify-send "Ekran Kaydı Başladı" "Tüm ekran sesli olarak kaydediliyor..." -i media-record || true
+            wf-recorder --audio -f "$VID_FILE"
+          fi
+          ;;
+        record-region)
+          if pgrep -x "wf-recorder" >/dev/null; then
+            pkill -INT -x wf-recorder
+            notify-send "Ekran Kaydı" "Kayıt durduruldu ve kaydedildi." -i media-record || true
+          else
+            GEOM=$(slurp)
+            if [ -n "$GEOM" ]; then
+              notify-send "Ekran Kaydı Başladı" "Seçilen alan sesli olarak kaydediliyor..." -i media-record || true
+              wf-recorder -g "$GEOM" --audio -f "$VID_FILE"
+            fi
+          fi
+          ;;
+        record-stop)
+          if pgrep -x "wf-recorder" >/dev/null; then
+            pkill -INT -x wf-recorder
+            notify-send "Ekran Kaydı" "Kayıt tamamlandı: $VID_DIR" -i media-record || true
+          else
+            notify-send "Ekran Kaydı" "Şu anda aktif bir kayıt bulunmuyor." || true
+          fi
+          ;;
+        ocr)
+          GEOM=$(slurp)
+          if [ -n "$GEOM" ]; then
+            OCR_TEXT=$(grim -g "$GEOM" - | tesseract - stdout 2>/dev/null || true)
+            if [ -n "$OCR_TEXT" ]; then
+              echo "$OCR_TEXT" | wl-copy
+              notify-send "Canlı OCR" "Tanınan metin panoya kopyalandı!" -i edit-copy || true
+            else
+              notify-send "Canlı OCR" "Metin algılanamadı." || true
+            fi
+          fi
+          ;;
+        qr-scan)
+          GEOM=$(slurp)
+          if [ -n "$GEOM" ]; then
+            QR_TEXT=$(grim -g "$GEOM" - | zbarimg --raw - 2>/dev/null | tr -d "\r\n" || true)
+            if [ -n "$QR_TEXT" ]; then
+              echo "$QR_TEXT" | wl-copy
+              notify-send "QR Kod Okundu" "$QR_TEXT" -i edit-copy || true
+            else
+              notify-send "QR Kod" "Görselde QR kod bulunamadı." || true
+            fi
+          fi
+          ;;
+        qr-gen)
+          CLIP_TEXT=$(wl-paste 2>/dev/null || true)
+          if [ -n "$CLIP_TEXT" ]; then
+            qrencode -o - "$CLIP_TEXT" | mpv --geometry=350x350 --autofit=350x350 --keep-open=yes - || true
+          else
+            notify-send "QR Kod Üretici" "Panoda metin bulunamadı." || true
+          fi
+          ;;
+        webcam)
+          if [ -e /dev/video0 ]; then
+            mpv --demuxer-lavf-format=video4linux2 --demuxer-lavf-o-set=input_format=mjpeg av://v4l2:/dev/video0 --geometry=480x270 --autofit=480x270 --title="Xmarchy Webcam Mirror" --untimed || true
+          else
+            notify-send "Webcam" "/dev/video0 kamerası bulunamadı." || true
+          fi
+          ;;
+        *)
+          echo "Bilinmeyen parametre: $1"
+          exit 1
           ;;
       esac
     '';
@@ -208,7 +302,7 @@ BANNER
         echo "  fetch                  Xmarchy özel sistem künyesini gösterir"
         echo "  audio [up|down|mute]   Ses seviyesini ayarlar"
         echo "  bright [up|down]       Ekran parlaklığını ayarlar"
-        echo "  capture [screen|region] Ekran görüntüsü alır"
+        echo "  capture [screen|region|record-screen|ocr|qr-scan] Ekran görüntüsü, sesli kayıt, OCR ve QR araçları"
         echo "  power [lock|reboot|shutdown|sleep] Güç yönetimi"
         echo ""
       }
