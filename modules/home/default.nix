@@ -238,9 +238,11 @@
 
       # ═══════════ Katman Kuralları (Layer Rules) ═══════════
       layerrule = [
-        "animation slide, match:namespace quickshell"
-        "blur on, match:namespace quickshell"
-        "ignore_alpha 0, match:namespace quickshell"
+        # Quickshell: Menülerin ve launcher arkaplanının sağdan uçarak gelmesini engeller,
+        # oldukları yerde doğal ve sakin şekilde açılıp kapanmasını sağlar.
+        "no_anim on, match:namespace quickshell"
+
+        # Wofi Uygulama ve Pano Menüsü
         "animation popin 80%, match:namespace wofi"
         "blur on, match:namespace wofi"
         "ignore_alpha 0, match:namespace wofi"
