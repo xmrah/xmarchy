@@ -241,6 +241,9 @@
         "animation slide, quickshell"
         "blur, quickshell"
         "ignorezero, quickshell"
+        "animation popin 80%, wofi"
+        "blur, wofi"
+        "ignorezero, wofi"
       ];
 
       # Quickshell masaüstü kabuğunu başlat
@@ -256,10 +259,13 @@
         "$altMod, Return, exec, kitty"
         "$mod, B, exec, brave || chromium || firefox"
         "$altMod, B, exec, brave || chromium || firefox"
-        "$mod, C, killactive,"
-        "$altMod, C, killactive,"
         "$mod, Q, killactive,"
         "$altMod, Q, killactive,"
+        # Pano Geçmişi (Cliphist + Wofi)
+        "$mod, C, exec, cliphist list | wofi --dmenu -p 'Pano Geçmişi' | cliphist decode | wl-copy"
+        "$altMod, C, exec, cliphist list | wofi --dmenu -p 'Pano Geçmişi' | cliphist decode | wl-copy"
+        "$mod CTRL, V, exec, cliphist list | wofi --dmenu -p 'Pano Geçmişi' | cliphist decode | wl-copy"
+        "$altMod CTRL, V, exec, cliphist list | wofi --dmenu -p 'Pano Geçmişi' | cliphist decode | wl-copy"
         "$mod, M, exit,"
         "$altMod, M, exit,"
         "$mod, F, togglefloating,"
@@ -377,6 +383,153 @@
         ", XF86AudioStop, exec, playerctl stop"
       ];
     };
+  };
+
+  # ═══════════ Wofi Teması ve Konfigürasyonu ═══════════
+  xdg.configFile."wofi/config".text = ''
+    width=520
+    height=400
+    location=center
+    show=drun
+    prompt=  Ara...
+    filter_rate=100
+    allow_markup=true
+    no_actions=true
+    halign=fill
+    orientation=vertical
+    content_halign=fill
+    insensitive=true
+    allow_images=true
+    image_size=24
+    gtk_dark=true
+    hide_scroll=true
+  '';
+
+  xdg.configFile."wofi/style.css".text = ''
+    * {
+        font-family: "JetBrains Mono Nerd Font", monospace;
+        font-size:   13px;
+        outline:     none;
+        border:      none;
+        box-shadow:  none;
+    }
+
+    window {
+        background-color: rgba(15, 17, 26, 0.85);
+        border:           1px solid rgba(122, 162, 247, 0.4);
+        border-radius:    14px;
+        padding:          12px;
+    }
+
+    #inner-box {
+        background-color: transparent;
+        border-radius:    10px;
+        padding:          4px;
+    }
+
+    #outer-box {
+        background-color: transparent;
+        padding:          6px;
+    }
+
+    #input {
+        background-color: rgba(26, 28, 43, 0.9);
+        color:            #c0caf5;
+        border:           1px solid rgba(122, 162, 247, 0.5);
+        border-radius:    8px;
+        padding:          8px 14px;
+        margin-bottom:    8px;
+        caret-color:      #7aa2f7;
+    }
+
+    #input:focus {
+        border-color: rgba(122, 162, 247, 0.9);
+        background-color: rgba(26, 28, 43, 1.0);
+    }
+
+    #scroll {
+        background-color: transparent;
+        border-radius:    8px;
+    }
+
+    #entry {
+        background-color: transparent;
+        color:            #a9b1d6;
+        border-radius:    8px;
+        padding:          6px 12px;
+        margin:           2px 0;
+        transition:       background-color 150ms ease, color 100ms ease;
+    }
+
+    #entry:hover,
+    #entry:selected {
+        background-color: rgba(122, 162, 247, 0.2);
+        color:            #c0caf5;
+        border-left:      3px solid #7aa2f7;
+        padding-left:     10px;
+    }
+
+    #entry image {
+        margin-right:   8px;
+        opacity:        0.9;
+    }
+
+    #entry:selected image {
+        opacity: 1;
+    }
+
+    #entry label {
+        color: inherit;
+    }
+
+    scrollbar {
+        background-color: transparent;
+        border-radius:    4px;
+        width:            4px;
+    }
+
+    scrollbar slider {
+        background-color: rgba(122, 162, 247, 0.3);
+        border-radius:    4px;
+        min-height:       30px;
+    }
+
+    scrollbar slider:hover {
+        background-color: rgba(122, 162, 247, 0.6);
+    }
+  '';
+
+  # ═══════════ Pano Geçmişi (Cliphist) Daemon Servisleri ═══════════
+  systemd.user.services.cliphist = {
+    Unit = {
+      Description = "Clipboard history daemon (cliphist)";
+      PartOf = [ "graphical-session.target" ];
+      After = [ "graphical-session.target" ];
+      ConditionEnvironment = "WAYLAND_DISPLAY";
+    };
+    Service = {
+      Type = "simple";
+      ExecStart = "${pkgs.wl-clipboard}/bin/wl-paste --watch ${pkgs.cliphist}/bin/cliphist store";
+      Restart = "on-failure";
+      RestartSec = "3s";
+    };
+    Install.WantedBy = [ "graphical-session.target" ];
+  };
+
+  systemd.user.services.cliphist-images = {
+    Unit = {
+      Description = "Clipboard image history daemon (cliphist)";
+      PartOf = [ "graphical-session.target" ];
+      After = [ "graphical-session.target" ];
+      ConditionEnvironment = "WAYLAND_DISPLAY";
+    };
+    Service = {
+      Type = "simple";
+      ExecStart = "${pkgs.wl-clipboard}/bin/wl-paste --type image --watch ${pkgs.cliphist}/bin/cliphist store";
+      Restart = "on-failure";
+      RestartSec = "3s";
+    };
+    Install.WantedBy = [ "graphical-session.target" ];
   };
 
   home.stateVersion = "25.05";

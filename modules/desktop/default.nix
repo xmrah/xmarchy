@@ -21,6 +21,8 @@
     pavucontrol
     hyprpicker
     playerctl
+    cliphist
+    wofi
   ];
 
   # XDG Desktop Portal (ekran paylaşımı, dosya seçici diyalogları)
