@@ -29,9 +29,20 @@
   # mDNS ve yerel ağ keşfi
   networking.firewall.enable = true;
 
-  # ═══════════ Çekirdek (Kernel) ═══════════
+  # ═══════════ Çekirdek (Kernel) & Ağ Optimizasyonu ═══════════
   # Zen Kernel: Masaüstü tepkiselliği ve düşük gecikme için optimize
   boot.kernelPackages = pkgs.linuxPackages_zen;
+  boot.kernelModules = [ "tcp_bbr" ];
+  boot.kernelParams = [ "quiet" "splash" "panic=10" "oops=panic" ];
+
+  # Kernel Sysctl: TCP BBR, CAKE kuyruğu, bellek barajı ve Magic SysRq
+  boot.kernel.sysctl = {
+    "vm.max_map_count" = 2097152;
+    "net.core.default_qdisc" = "cake";
+    "net.ipv4.tcp_congestion_control" = "bbr";
+    "kernel.sysrq" = 1;
+    "vm.swappiness" = 100;
+  };
 
   # ═══════════ Boot ═══════════
   boot.loader.systemd-boot.enable = true;
@@ -39,12 +50,13 @@
   boot.loader.timeout = lib.mkDefault 3;
   boot.consoleLogLevel = 0;
   boot.initrd.verbose = false;
-  boot.kernelParams = [ "quiet" "splash" ];
 
   # ═══════════ Bellek & Disk Optimizasyonu (Systemd) ═══════════
   zramSwap = {
     enable = true;
     algorithm = "zstd";
+    memoryPercent = 100;
+    priority = 10;
   };
   services.fstrim.enable = true;
 
