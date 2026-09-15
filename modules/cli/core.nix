@@ -168,6 +168,8 @@ let
       pkgs.fastfetch
       pkgs.chromium
       pkgs.networkmanager
+      pkgs.nixos-rebuild
+      pkgs.nix
       xmarchy-audio
       xmarchy-bright
       xmarchy-capture
@@ -197,6 +199,9 @@ BANNER
         echo "  theme [ad]             Masaüstü temasını listeler veya canlı uygular"
         echo "                         (xmarchy-dark, catppuccin, rose-pine, nord, cyberpunk, xmarchy-light)"
         echo "  status                 Sistem ve masaüstü durum özetini gösterir"
+        echo "  update                 Sistem paketlerini (flake.lock) günceller ve derler"
+        echo "  rollback               Bir önceki çalışan sistem nesline anında geri döner"
+        echo "  generations            Mevcut sistem nesillerini listeler"
         echo "  webapp <url>           Belirtilen URL'yi bağımsız PWA penceresi olarak açar"
         echo "  dns [Cloudflare|Google|DHCP] DNS sunucusunu yapılandırır"
         echo "  scale [1|1.25|1.6|2]   Monitör ölçekleme oranını ayarlar"
@@ -244,6 +249,26 @@ BANNER
           echo "  Bellek:       $(free -h | awk '/Mem:/ {print $3 " / " $2}')"
           echo "  Çalışma:      $(uptime -p)"
           echo "──────────────────────────────────────────────"
+          ;;
+        update)
+          echo -e "\033[1;34m:: Xmarchy Sistemi Güncelleniyor...\033[0m"
+          FLAKE_DIR="''${XMARCHY_FLAKE_DIR:-/etc/nixos}"
+          if [ ! -d "$FLAKE_DIR" ] && [ -d "$HOME/Projects/xmarchy" ]; then
+            FLAKE_DIR="$HOME/Projects/xmarchy"
+          fi
+          echo "Hedef Flake: $FLAKE_DIR"
+          sudo nix flake update "$FLAKE_DIR"
+          sudo nixos-rebuild switch --flake "$FLAKE_DIR"
+          echo -e "\033[1;32m✓ Sistem başarıyla güncellendi ve etkinleştirildi!\033[0m"
+          ;;
+        rollback)
+          echo -e "\033[1;33m:: Önceki stabil nesile geri dönülüyor (Rollback)...\033[0m"
+          sudo nixos-rebuild switch --rollback
+          echo -e "\033[1;32m✓ Önceki nesil başarıyla etkinleştirildi!\033[0m"
+          ;;
+        generations)
+          echo -e "\033[1;36m:: Xmarchy Sistem Nesilleri (Generations):\033[0m"
+          nixos-rebuild list-generations
           ;;
         webapp)
           URL="''${1:-}"

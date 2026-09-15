@@ -24,6 +24,9 @@
     options = [ "defaults" "size=4G" "mode=755" ];
   };
 
+  fileSystems."/persist".neededForBoot = true;
+  fileSystems."/home".neededForBoot = true;
+
   # Kalici disk montaji (disko tarafindan tanimlanmali)
   # fileSystems."/persist" = {
   #   device = "/dev/disk/by-label/persist";
@@ -50,5 +53,19 @@
       { file = "/etc/ssh/ssh_host_ed25519_key"; parentDirectory = { mode = "0755"; }; }
       { file = "/etc/ssh/ssh_host_ed25519_key.pub"; parentDirectory = { mode = "0755"; }; }
     ];
+
+    # Kullanici seviyesinde kalici dizinler (Disko @home subvolume haricinde / tmpfs durumunda korur)
+    users.nixos = {
+      directories = [
+        "Downloads"
+        "Documents"
+        "Pictures"
+        "Projects"
+        ".config/xmarchy"
+        ".local/share"
+        { directory = ".ssh"; mode = "0700"; }
+        { directory = ".gnupg"; mode = "0700"; }
+      ];
+    };
   };
 }

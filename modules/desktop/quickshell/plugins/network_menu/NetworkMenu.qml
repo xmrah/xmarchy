@@ -11,7 +11,7 @@ Item {
     property int popupX: 100
     property int popupY: 40
     readonly property int popupWidth: 460
-    readonly property int popupHeight: 280
+    readonly property int popupHeight: 330
 
     // Ağ Durum Verileri
     property string netType: "ethernet"
@@ -327,6 +327,45 @@ Item {
                                         onClicked: root.setDns(modelData)
                                     }
                                 }
+                            }
+                        }
+                    }
+
+                    // ═══════════════ 4. Wi-Fi & Ağ Bağlantı Yönetimi ═══════════════
+                    Rectangle {
+                        width: parent.width
+                        height: 34
+                        radius: 8
+                        color: shell.theme.surface
+                        border.color: shell.theme.accent
+                        border.width: 1
+
+                        RowLayout {
+                            anchors.centerIn: parent
+                            spacing: 8
+
+                            Text {
+                                text: "󰤨"
+                                color: shell.theme.accent
+                                font.family: shell.fontFamily
+                                font.pixelSize: 14
+                            }
+
+                            Text {
+                                text: "Ağları Yönet / Wi-Fi Bağlan (NMTUI)"
+                                color: shell.theme.fg
+                                font.family: shell.fontFamily
+                                font.pixelSize: 11
+                                font.bold: true
+                            }
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: {
+                                root.opened = false
+                                Hyprland.dispatch("exec kitty -e nmtui")
                             }
                         }
                     }

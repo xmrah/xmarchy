@@ -11,9 +11,14 @@
 
     impermanence.url = "github:nix-community/impermanence";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, home-manager, impermanence, nixos-hardware, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, impermanence, nixos-hardware, disko, ... }@inputs:
   let
     system = "x86_64-linux";
   in
@@ -65,6 +70,33 @@
           ./modules/os/default.nix
           ./modules/developer/arsenal.nix
           ./modules/desktop/default.nix
+
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.extraSpecialArgs = { inherit inputs; };
+            home-manager.users.nixos = import ./modules/home/default.nix;
+          }
+        ];
+      };
+
+      # 3. Xmarchy Bare-Metal Kurulum Hedefi (Gerçek SSD/Donanım)
+      # Komut: nixos-rebuild switch --flake .#xmarchy
+      xmarchy = nixpkgs.lib.nixosSystem {
+        specialArgs = { inherit inputs; };
+        modules = [
+          {
+            nixpkgs.hostPlatform = system;
+            nixpkgs.config.allowUnfree = true;
+          }
+          disko.nixosModules.disko
+          ./modules/hardware/disko.nix
+          ./modules/os/default.nix
+          ./modules/developer/arsenal.nix
+          ./modules/hardware/auto.nix
+          ./modules/desktop/default.nix
+          ./modules/os/impermanence.nix
 
           home-manager.nixosModules.home-manager
           {
