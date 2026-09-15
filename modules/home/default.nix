@@ -197,53 +197,53 @@
         force_default_wallpaper = 0;
       };
 
-      # ═══════════ Pencere Kuralları (v2) ═══════════
-      windowrulev2 = [
+      # ═══════════ Pencere Kuralları (Window Rules) ═══════════
+      windowrule = [
         # Otomatik Float (Açılır sistem pencereleri, diyaloglar)
-        "float, class:^(pavucontrol)$"
-        "float, class:^(blueman-manager)$"
-        "float, class:^(nm-connection-editor)$"
-        "float, class:^(org.kde.polkit-kde-authentication-agent-1)$"
-        "float, title:^(Open File)$"
-        "float, title:^(Save File)$"
-        "float, title:^(Confirm to replace files)$"
-        "float, title:^(File Operation Progress)$"
-        "float, class:^(mpv)$"
-        "float, class:^(imv)$"
-        "float, class:^(org.gnome.Calculator)$"
+        "float on, match:class ^(pavucontrol)$"
+        "float on, match:class ^(blueman-manager)$"
+        "float on, match:class ^(nm-connection-editor)$"
+        "float on, match:class ^(org.kde.polkit-kde-authentication-agent-1)$"
+        "float on, match:title ^(Open File)$"
+        "float on, match:title ^(Save File)$"
+        "float on, match:title ^(Confirm to replace files)$"
+        "float on, match:title ^(File Operation Progress)$"
+        "float on, match:class ^(mpv)$"
+        "float on, match:class ^(imv)$"
+        "float on, match:class ^(org.gnome.Calculator)$"
 
         # Çalışma Alanı (Workspace) Atamaları
-        "workspace 1, class:^(chromium)$"
-        "workspace 1, class:^(brave-browser)$"
-        "workspace 1, class:^(firefox)$"
-        "workspace 1, class:^(zen)$"
-        "workspace 2, class:^(kitty)$"
-        "workspace 3, class:^(org.kde.dolphin)$"
-        "workspace 3, class:^(thunar)$"
-        "workspace 4, class:^(code)$"
-        "workspace 4, class:^(Code)$"
-        "workspace 4, class:^(codium)$"
-        "workspace 8, class:^(discord)$"
-        "workspace 8, class:^(vesktop)$"
-        "workspace 8, class:^(whatsapp)$"
-        "workspace 9, class:^(Spotify)$"
-        "workspace 9, title:^(Spotify)$"
+        "workspace 1, match:class ^(chromium)$"
+        "workspace 1, match:class ^(brave-browser)$"
+        "workspace 1, match:class ^(firefox)$"
+        "workspace 1, match:class ^(zen)$"
+        "workspace 2, match:class ^(kitty)$"
+        "workspace 3, match:class ^(org.kde.dolphin)$"
+        "workspace 3, match:class ^(thunar)$"
+        "workspace 4, match:class ^(code)$"
+        "workspace 4, match:class ^(Code)$"
+        "workspace 4, match:class ^(codium)$"
+        "workspace 8, match:class ^(discord)$"
+        "workspace 8, match:class ^(vesktop)$"
+        "workspace 8, match:class ^(whatsapp)$"
+        "workspace 9, match:class ^(Spotify)$"
+        "workspace 9, match:title ^(Spotify)$"
 
         # Opasite (Glassmorphism Derinliği)
-        "opacity 0.92 0.88, class:^(kitty)$"
-        "opacity 0.95 0.90, class:^(code)$"
-        "opacity 0.95 0.90, class:^(Code)$"
-        "opacity 0.95 0.90, class:^(codium)$"
+        "opacity 0.92 0.88, match:class ^(kitty)$"
+        "opacity 0.95 0.90, match:class ^(code)$"
+        "opacity 0.95 0.90, match:class ^(Code)$"
+        "opacity 0.95 0.90, match:class ^(codium)$"
       ];
 
       # ═══════════ Katman Kuralları (Layer Rules) ═══════════
       layerrule = [
-        "animation slide, quickshell"
-        "blur, quickshell"
-        "ignorezero, quickshell"
-        "animation popin 80%, wofi"
-        "blur, wofi"
-        "ignorezero, wofi"
+        "animation slide, match:namespace quickshell"
+        "blur on, match:namespace quickshell"
+        "ignore_alpha 0, match:namespace quickshell"
+        "animation popin 80%, match:namespace wofi"
+        "blur on, match:namespace wofi"
+        "ignore_alpha 0, match:namespace wofi"
       ];
 
       # Quickshell masaüstü kabuğunu başlat
