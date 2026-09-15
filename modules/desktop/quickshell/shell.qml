@@ -152,8 +152,15 @@ ShellRoot {
     IpcHandler { target: "osd"; function show(icon: string, value: int) { osd.show(icon, value) } }
     IpcHandler { target: "launcher"; function toggle() { launcher.toggle() } }
     IpcHandler { target: "theme"; function apply(name: string) { shell.applyTheme(name) } }
-    IpcHandler { target: "power"; function open() { powerMenu.open() } }
+    IpcHandler {
+        target: "power"
+        function open() { powerMenu.open() }
+        function toggle() { if (powerMenu.opened) powerMenu.opened = false; else powerMenu.open() }
+    }
     IpcHandler { target: "calendar"; function toggle() { calendarMenu.toggle() } }
-    IpcHandler { target: "weather"; function toggle() { weatherMenu.toggle(shell.width / 2 - 100, shell.barHeight + 6) } }
-    IpcHandler { target: "display"; function toggle() { displayMenu.toggle(shell.width - 400, shell.barHeight + 6) } }
+    IpcHandler { target: "weather"; function toggle() { weatherMenu.toggle(1920 / 2 - 100, shell.barHeight + 6) } }
+    IpcHandler { target: "display"; function toggle() { displayMenu.toggle(1920 - 400, shell.barHeight + 6) } }
+    IpcHandler { target: "audio"; function toggle() { audioMenu.toggle(1920 - 380, shell.barHeight + 6) } }
+    IpcHandler { target: "bluetooth"; function toggle() { bluetoothMenu.toggle(1920 - 340, shell.barHeight + 6) } }
+    IpcHandler { target: "network"; function toggle() { networkMenu.toggle(1920 - 480, shell.barHeight + 6) } }
 }

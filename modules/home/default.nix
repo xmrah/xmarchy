@@ -197,6 +197,52 @@
         force_default_wallpaper = 0;
       };
 
+      # ═══════════ Pencere Kuralları (v2) ═══════════
+      windowrulev2 = [
+        # Otomatik Float (Açılır sistem pencereleri, diyaloglar)
+        "float, class:^(pavucontrol)$"
+        "float, class:^(blueman-manager)$"
+        "float, class:^(nm-connection-editor)$"
+        "float, class:^(org.kde.polkit-kde-authentication-agent-1)$"
+        "float, title:^(Open File)$"
+        "float, title:^(Save File)$"
+        "float, title:^(Confirm to replace files)$"
+        "float, title:^(File Operation Progress)$"
+        "float, class:^(mpv)$"
+        "float, class:^(imv)$"
+        "float, class:^(org.gnome.Calculator)$"
+
+        # Çalışma Alanı (Workspace) Atamaları
+        "workspace 1, class:^(chromium)$"
+        "workspace 1, class:^(brave-browser)$"
+        "workspace 1, class:^(firefox)$"
+        "workspace 1, class:^(zen)$"
+        "workspace 2, class:^(kitty)$"
+        "workspace 3, class:^(org.kde.dolphin)$"
+        "workspace 3, class:^(thunar)$"
+        "workspace 4, class:^(code)$"
+        "workspace 4, class:^(Code)$"
+        "workspace 4, class:^(codium)$"
+        "workspace 8, class:^(discord)$"
+        "workspace 8, class:^(vesktop)$"
+        "workspace 8, class:^(whatsapp)$"
+        "workspace 9, class:^(Spotify)$"
+        "workspace 9, title:^(Spotify)$"
+
+        # Opasite (Glassmorphism Derinliği)
+        "opacity 0.92 0.88, class:^(kitty)$"
+        "opacity 0.95 0.90, class:^(code)$"
+        "opacity 0.95 0.90, class:^(Code)$"
+        "opacity 0.95 0.90, class:^(codium)$"
+      ];
+
+      # ═══════════ Katman Kuralları (Layer Rules) ═══════════
+      layerrule = [
+        "animation slide, quickshell"
+        "blur, quickshell"
+        "ignorezero, quickshell"
+      ];
+
       # Quickshell masaüstü kabuğunu başlat
       exec-once = [
         "quickshell"
@@ -287,6 +333,32 @@
         ", Print, exec, xmarchy-capture screen"
         "$mod, Print, exec, xmarchy-capture region"
         "$altMod, Print, exec, xmarchy-capture region"
+
+        # Scratchpad (Sihirli Gizli Çalışma Alanı)
+        "$mod, S, togglespecialworkspace, magic"
+        "$altMod, S, togglespecialworkspace, magic"
+        "$mod, Z, movetoworkspacesilent, special:magic"
+        "$altMod, Z, movetoworkspacesilent, special:magic"
+
+        # Quickshell Menü Kısayolları (SUPER ve ALT)
+        "$mod CTRL, A, exec, quickshell ipc call audio toggle"
+        "$altMod CTRL, A, exec, quickshell ipc call audio toggle"
+        "$mod CTRL, B, exec, quickshell ipc call bluetooth toggle"
+        "$altMod CTRL, B, exec, quickshell ipc call bluetooth toggle"
+        "$mod CTRL, W, exec, quickshell ipc call network toggle"
+        "$altMod CTRL, W, exec, quickshell ipc call network toggle"
+        "$mod CTRL, D, exec, quickshell ipc call display toggle"
+        "$altMod CTRL, D, exec, quickshell ipc call display toggle"
+        "$mod CTRL, P, exec, quickshell ipc call power toggle"
+        "$altMod CTRL, P, exec, quickshell ipc call power toggle"
+        "$mod CTRL, C, exec, quickshell ipc call calendar toggle"
+        "$altMod CTRL, C, exec, quickshell ipc call calendar toggle"
+        "$mod CTRL, T, exec, kitty -e btop"
+        "$altMod CTRL, T, exec, kitty -e btop"
+        "$mod SHIFT, F, exec, dolphin || thunar || nautilus"
+        "$altMod SHIFT, F, exec, dolphin || thunar || nautilus"
+        "$mod SHIFT, C, exec, hyprpicker -a"
+        "$altMod SHIFT, C, exec, hyprpicker -a"
       ];
 
       # Ses kontrolleri
@@ -299,6 +371,10 @@
 
       bindl = [
         ", XF86AudioMute, exec, xmarchy-audio mute"
+        ", XF86AudioPlay, exec, playerctl play-pause"
+        ", XF86AudioNext, exec, playerctl next"
+        ", XF86AudioPrev, exec, playerctl previous"
+        ", XF86AudioStop, exec, playerctl stop"
       ];
     };
   };

@@ -19,6 +19,14 @@ Item {
         root.opened = true
     }
 
+    function toggle(x: int, y: int) {
+        if (root.opened) {
+            root.opened = false
+        } else {
+            root.openAt(x, y)
+        }
+    }
+
     readonly property var adapter: Bluetooth.defaultAdapter
     readonly property var devices: Bluetooth.devices ? Bluetooth.devices.values : []
 

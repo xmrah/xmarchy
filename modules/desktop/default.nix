@@ -20,6 +20,7 @@
     easyeffects
     pavucontrol
     hyprpicker
+    playerctl
   ];
 
   # XDG Desktop Portal (ekran paylaşımı, dosya seçici diyalogları)
