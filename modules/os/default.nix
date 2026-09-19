@@ -19,6 +19,7 @@
 
   # ═══════════ Wayland & Grafik Ortam Değişkenleri ═══════════
   environment.sessionVariables = {
+    GTK_THEME = "catppuccin-mocha-blue-standard";
     NIXOS_OZONE_WL = "1";
     # Hyprland 0.56 (Aquamarine) VM Uyumluluk Kalkanı:
     AQ_DRM_DEVICES = "/dev/dri/card0";

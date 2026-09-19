@@ -85,7 +85,7 @@ let
         exit 1
       fi
 
-      VID_DIR="$HOME/Videos/Recordings"
+      VID_DIR="''${HOME}/Videos/Recordings"
       mkdir -p "$VID_DIR"
       TIMESTAMP=$(date +%Y-%m-%d_%H-%M-%S)
       VID_FILE="$VID_DIR/record_$TIMESTAMP.mp4"
@@ -404,7 +404,7 @@ BANNER
         theme)
           THEME_NAME="''${1:-}"
           if [ -z "$THEME_NAME" ]; then
-            CURRENT=$(jq -r .theme "$HOME/.config/xmarchy/current-theme.json" 2>/dev/null || echo "xmarchy-dark")
+            CURRENT=$(jq -r .theme "''${HOME}/.config/xmarchy/current-theme.json" 2>/dev/null || echo "xmarchy-dark")
             echo "Mevcut Tema: $CURRENT"
             echo ""
             echo "Kullanılabilir Temalar:"
@@ -423,31 +423,70 @@ BANNER
           ;;
         status)
           show_banner
+          UPTIME_SECS=$(cut -d. -f1 /proc/uptime 2>/dev/null || echo 0)
+          UPTIME_H=$((UPTIME_SECS / 3600))
+          UPTIME_M=$(((UPTIME_SECS % 3600) / 60))
+          UPTIME_STR="''${UPTIME_H} saat ''${UPTIME_M} dakika"
           echo "──────────────────────────────────────────────"
           echo "  OS:           Xmarchy (NixOS Linux Zen)"
           echo "  Masaüstü:     Hyprland Wayland Compositor"
           echo "  Kabuk:        Quickshell 0.3.0 QML"
-          echo "  Tema:         $(jq -r .theme "$HOME/.config/xmarchy/current-theme.json" 2>/dev/null || echo "xmarchy-dark")"
+          echo "  Tema:         $(jq -r .theme "''${HOME}/.config/xmarchy/current-theme.json" 2>/dev/null || echo "xmarchy-dark")"
           echo "  Bellek:       $(free -h | awk '/Mem:/ {print $3 " / " $2}')"
-          echo "  Çalışma:      $(uptime -p)"
+          echo "  Çalışma:      $UPTIME_STR"
           echo "──────────────────────────────────────────────"
           ;;
         rebuild)
           echo -e "\033[1;34m:: Xmarchy Sistemi Yeniden Derleniyor...\033[0m"
-          FLAKE_DIR="''${XMARCHY_FLAKE_DIR:-/etc/nixos}"
-          if [ ! -d "$FLAKE_DIR" ] && [ -d "$HOME/Projects/xmarchy" ]; then
-            FLAKE_DIR="$HOME/Projects/xmarchy"
+          FLAKE_DIR=""
+          if [ -n "''${XMARCHY_FLAKE_DIR:-}" ] && [ -f "''${XMARCHY_FLAKE_DIR}/flake.nix" ]; then
+            FLAKE_DIR="''${XMARCHY_FLAKE_DIR}"
+          elif [ -f "''${HOME}/Projects/xmarchy/flake.nix" ]; then
+            FLAKE_DIR="''${HOME}/Projects/xmarchy"
+          elif [ -f "''${PWD}/flake.nix" ]; then
+            FLAKE_DIR="''${PWD}"
+          elif [ -f "/etc/nixos/flake.nix" ]; then
+            FLAKE_DIR="/etc/nixos"
+          elif [ -f "/persist/nixos-config/flake.nix" ]; then
+            FLAKE_DIR="/persist/nixos-config"
           fi
+
+          if [ -z "$FLAKE_DIR" ]; then
+            echo -e "\033[1;31mHata: flake.nix dosyası bulunamadı!\033[0m"
+            echo "Aşağıdaki konumlarda flake.nix arandı ancak bulunamadı:"
+            echo "  • ''${HOME}/Projects/xmarchy/flake.nix"
+            echo "  • ''${PWD}/flake.nix"
+            echo "  • /etc/nixos/flake.nix"
+            echo ""
+            echo "İpucu: XMARCHY_FLAKE_DIR ortam değişkenini tanımlayabilirsiniz:"
+            echo "  export XMARCHY_FLAKE_DIR=/flake/yolu"
+            exit 1
+          fi
+
           echo "Hedef Flake: $FLAKE_DIR"
           sudo nixos-rebuild switch --flake "$FLAKE_DIR#xmarchy"
           echo -e "\033[1;32m✓ Sistem başarıyla derlendi ve etkinleştirildi!\033[0m"
           ;;
         update)
           echo -e "\033[1;34m:: Xmarchy Sistemi Güncelleniyor...\033[0m"
-          FLAKE_DIR="''${XMARCHY_FLAKE_DIR:-/etc/nixos}"
-          if [ ! -d "$FLAKE_DIR" ] && [ -d "$HOME/Projects/xmarchy" ]; then
-            FLAKE_DIR="$HOME/Projects/xmarchy"
+          FLAKE_DIR=""
+          if [ -n "''${XMARCHY_FLAKE_DIR:-}" ] && [ -f "''${XMARCHY_FLAKE_DIR}/flake.nix" ]; then
+            FLAKE_DIR="''${XMARCHY_FLAKE_DIR}"
+          elif [ -f "''${HOME}/Projects/xmarchy/flake.nix" ]; then
+            FLAKE_DIR="''${HOME}/Projects/xmarchy"
+          elif [ -f "''${PWD}/flake.nix" ]; then
+            FLAKE_DIR="''${PWD}"
+          elif [ -f "/etc/nixos/flake.nix" ]; then
+            FLAKE_DIR="/etc/nixos"
+          elif [ -f "/persist/nixos-config/flake.nix" ]; then
+            FLAKE_DIR="/persist/nixos-config"
           fi
+
+          if [ -z "$FLAKE_DIR" ]; then
+            echo -e "\033[1;31mHata: flake.nix dosyası bulunamadı!\033[0m"
+            exit 1
+          fi
+
           echo "Hedef Flake: $FLAKE_DIR"
           sudo nix flake update "$FLAKE_DIR"
           sudo nixos-rebuild switch --flake "$FLAKE_DIR#xmarchy"
@@ -473,8 +512,8 @@ BANNER
               echo "Örnek: xmarchy webapp install 'Claude' 'https://claude.ai'"
               exit 1
             fi
-            ICON_DIR="$HOME/.local/share/icons/hicolor/256x256/apps"
-            DESKTOP_DIR="$HOME/.local/share/applications"
+            ICON_DIR="''${HOME}/.local/share/icons/hicolor/256x256/apps"
+            DESKTOP_DIR="''${HOME}/.local/share/applications"
             mkdir -p "$ICON_DIR" "$DESKTOP_DIR"
             SAFE_NAME=$(echo "$APP_NAME" | tr '[:upper:]' '[:lower:]' | tr -c '[:alnum:]' '-')
             ICON_PATH="$ICON_DIR/$SAFE_NAME.png"
@@ -497,7 +536,7 @@ EOF
             shift || true
             APP_NAME="''${1:-}"
             SAFE_NAME=$(echo "$APP_NAME" | tr '[:upper:]' '[:lower:]' | tr -c '[:alnum:]' '-')
-            rm -f "$HOME/.local/share/applications/$SAFE_NAME.desktop"
+            rm -f "''${HOME}/.local/share/applications/$SAFE_NAME.desktop"
             echo -e "\033[1;33m✓ '$APP_NAME' uygulaması kaldırıldı.\033[0m"
           else
             URL="''${1:-}"
