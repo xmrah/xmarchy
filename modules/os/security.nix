@@ -2,29 +2,37 @@
 
 {
   # ═══════════════════════════════════════════════════════════════
-  # Xmarchy Security & Network Hardening
+  # Xmarchy Security Hardening
+  # Gerçek çekirdek, ağ ve bellek güvenlik sıkılaştırması
   # ═══════════════════════════════════════════════════════════════
 
-  # 1. TTL Bypass Stratejisi (Hotspot & Tethering Koruma)
-  # Tüm yeni paketler 65 TTL ile başlar (Katman 1 Sysctl + Katman 2 Mangle)
+  # Güvenlik Duvarı
+  networking.firewall.enable = true;
+
+  # Polkit & Yetkilendirme Güvenliği
+  security.polkit.enable = true;
+  security.sudo.wheelNeedsPassword = true;
+
+  # Çekirdek & Ağ Güvenlik Parametreleri (Sysctl Hardening)
   boot.kernel.sysctl = {
-    "net.ipv4.ip_default_ttl" = 65;
-  };
+    # SYN flood DoS saldırılarına karşı koruma
+    "net.ipv4.tcp_syncookies" = 1;
 
-  # 2. Güvenlik Duvarı (Firewall)
-  networking.firewall = {
-    enable = true;
+    # ICMP redirect paketlerini yok say (Man-in-the-Middle koruması)
+    "net.ipv4.conf.all.accept_redirects" = 0;
+    "net.ipv4.conf.default.accept_redirects" = 0;
+    "net.ipv6.conf.all.accept_redirects" = 0;
+    "net.ipv6.conf.default.accept_redirects" = 0;
 
-    extraCommands = ''
-      iptables -t mangle -A POSTROUTING -j TTL --ttl-set 65 2>/dev/null || true
-      iptables -t mangle -A PREROUTING -j TTL --ttl-set 65 2>/dev/null || true
-      iptables -t mangle -A FORWARD -j TTL --ttl-set 65 2>/dev/null || true
-    '';
+    # IP Spoofing koruması (Reverse Path Filtering)
+    "net.ipv4.conf.all.rp_filter" = 1;
+    "net.ipv4.conf.default.rp_filter" = 1;
 
-    extraStopCommands = ''
-      iptables -t mangle -D POSTROUTING -j TTL --ttl-set 65 2>/dev/null || true
-      iptables -t mangle -D PREROUTING -j TTL --ttl-set 65 2>/dev/null || true
-      iptables -t mangle -D FORWARD -j TTL --ttl-set 65 2>/dev/null || true
-    '';
+    # Bellek enjeksiyonu ve yetkisiz ptrace işlemlerini engelle
+    "kernel.yama.ptrace_scope" = 1;
+
+    # Çekirdek adres sızıntılarını kısıtla (KASLR koruması)
+    "kernel.kptr_restrict" = 1;
+    "kernel.dmesg_restrict" = 1;
   };
 }

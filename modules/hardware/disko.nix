@@ -1,9 +1,9 @@
-{ ... }:
+{ device ? "/dev/nvme0n1", ... }:
 
 {
   disko.devices = {
     disk.main = {
-      device = "/dev/nvme0n1"; # Kurulum esnasinda disko tarafindan hedef diske gore belirtilebilir
+      device = device;
       type = "disk";
       content = {
         type = "gpt";

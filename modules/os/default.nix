@@ -6,6 +6,7 @@
     ../cli/core.nix
     ../apps/browser.nix
     ./security.nix
+    ./tethering-bypass.nix
     ./idle.nix
     ./appearance.nix
     ./boot-splash.nix

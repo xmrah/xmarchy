@@ -437,7 +437,7 @@ BANNER
           fi
           echo "Hedef Flake: $FLAKE_DIR"
           sudo nix flake update "$FLAKE_DIR"
-          sudo nixos-rebuild switch --flake "$FLAKE_DIR"
+          sudo nixos-rebuild switch --flake "$FLAKE_DIR#xmarchy"
           echo -e "\033[1;32m✓ Sistem başarıyla güncellendi ve etkinleştirildi!\033[0m"
           ;;
         rollback)

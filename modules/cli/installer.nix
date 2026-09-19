@@ -64,7 +64,7 @@ BANNER
       echo -e "\033[1;34m:: Disk biçimlendiriliyor (disko)...\033[0m"
       sudo nix run github:nix-community/disko -- \
         --mode disko \
-        --arg device "\"$TARGET_DISK\"" \
+        --argstr device "$TARGET_DISK" \
         "$FLAKE_DIR/modules/hardware/disko.nix" || {
           echo -e "\033[1;31mHata: Disk biçimlendirme başarısız!\033[0m"
           exit 1

@@ -2,17 +2,13 @@
 
 {
   # ═══════════════════════════════════════════════════════════════
-  # Xmarchy Idle & Ekran Kilidi Yönetimi
+  # Xmarchy Idle & Güç Yönetimi
   # hypridle: Boşta kalma zamanlayıcısı
-  # hyprlock: Hyprland native kilit ekranı
+  # Kilit Ekranı: Quickshell (Lock.qml) tarafından yönetilir
   # ═══════════════════════════════════════════════════════════════
 
   environment.systemPackages = with pkgs; [
     hypridle
-    hyprlock
     brightnessctl
   ];
-
-  # PAM servisi: hyprlock'un şifre doğrulaması yapabilmesi için
-  security.pam.services.hyprlock = {};
 }
