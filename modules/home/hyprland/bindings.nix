@@ -31,8 +31,8 @@
       "$altMod, space, exec, quickshell ipc call launcher toggle"
 
       # Kilit Ekranı
-      "$mod SHIFT, L, exec, quickshell ipc call lock toggle"
-      "$altMod SHIFT, L, exec, quickshell ipc call lock toggle"
+      "$mod SHIFT, L, exec, quickshell ipc call lock lock"
+      "$altMod SHIFT, L, exec, quickshell ipc call lock lock"
 
       # Workspace geçişleri (SUPER)
       "$mod, 1, workspace, 1"

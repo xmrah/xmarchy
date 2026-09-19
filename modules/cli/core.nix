@@ -374,6 +374,9 @@ BANNER
         echo "Kullanım: xmarchy <komut> [argümanlar]"
         echo ""
         echo "Komutlar:"
+        echo "  rebuild                Sistem yapılandırmasını derler ve etkinleştirir"
+        echo "  update                 Flake bağımlılıklarını günceller ve derler"
+        echo "  rollback               Önceki çalışan sistem nesline geri döner"
         echo "  theme [ad]             Masaüstü temasını listeler veya canlı uygular"
         echo "                         (xmarchy-dark, catppuccin, rose-pine, nord, cyberpunk, xmarchy-light)"
         echo "  status                 Sistem ve masaüstü durum özetini gösterir"
@@ -428,6 +431,16 @@ BANNER
           echo "  Bellek:       $(free -h | awk '/Mem:/ {print $3 " / " $2}')"
           echo "  Çalışma:      $(uptime -p)"
           echo "──────────────────────────────────────────────"
+          ;;
+        rebuild)
+          echo -e "\033[1;34m:: Xmarchy Sistemi Yeniden Derleniyor...\033[0m"
+          FLAKE_DIR="''${XMARCHY_FLAKE_DIR:-/etc/nixos}"
+          if [ ! -d "$FLAKE_DIR" ] && [ -d "$HOME/Projects/xmarchy" ]; then
+            FLAKE_DIR="$HOME/Projects/xmarchy"
+          fi
+          echo "Hedef Flake: $FLAKE_DIR"
+          sudo nixos-rebuild switch --flake "$FLAKE_DIR#xmarchy"
+          echo -e "\033[1;32m✓ Sistem başarıyla derlendi ve etkinleştirildi!\033[0m"
           ;;
         update)
           echo -e "\033[1;34m:: Xmarchy Sistemi Güncelleniyor...\033[0m"

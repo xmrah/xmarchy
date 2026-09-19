@@ -112,8 +112,18 @@ Item {
 
     IpcHandler {
         target: "lock"
+
+        // Idempotent: Her zaman ekranı kilitler (zaten kilitliyse durumu bozmaz)
+        function lock() {
+            root.locked = true
+        }
+
+        // Manuel kısayol için: Sadece kilitli değilse kilitler.
+        // Güvenlik Kuralı: Kilit açma ASLA IPC üzerinden yapılamaz; sadece PAM şifre doğrulamasıyla açılır!
         function toggle() {
-            root.locked = !root.locked
+            if (!root.locked) {
+                root.locked = true
+            }
         }
     }
 }
