@@ -6,6 +6,9 @@
     ../cli/core.nix
     ../apps/browser.nix
     ./security.nix
+    ./idle.nix
+    ./appearance.nix
+    ./boot-splash.nix
     # Not: ai.nix (Ollama/ROCm), gaming.nix (Steam/Wine) ve impermanence 
     # canlı test ortamını şişirmemek ve çakışma yaratmamak için isteğe bağlı tutulmuştur.
   ];
@@ -84,8 +87,29 @@
   };
   services.blueman.enable = true;
 
-  # ═══════════ Güç & Pil Yönetimi (UPower) ═══════════
+  # ═══════════ Güç & Pil Yönetimi (UPower + Power Profiles) ═══════════
   services.upower.enable = true;
+  services.power-profiles-daemon.enable = true;
+
+  # Laptop Kapak (Lid) Yönetimi
+  services.logind.settings = {
+    Login = {
+      HandleLidSwitch = "suspend";
+      HandleLidSwitchExternalPower = "lock";
+      HandleLidSwitchDocked = "ignore";
+    };
+  };
+
+  # ═══════════ Dosya Yöneticisi Entegrasyonu (Thunar/GVFS) ═══════════
+  programs.thunar = {
+    enable = true;
+    plugins = with pkgs; [
+      thunar-archive-plugin
+      thunar-volman
+    ];
+  };
+  services.gvfs.enable = true;      # Çöp kutusu, harici disk bağlama, MTP
+  services.tumbler.enable = true;   # Küçük resim (thumbnail) önizleme servisi
 
   # ═══════════ Hyprland (Sistem Seviyesi) ═══════════
   programs.hyprland = {
@@ -109,7 +133,6 @@
   security.polkit.enable = true;
   # ═══════════ Quickshell Lock Ekranı PAM Servisi ═══════════
   security.pam.services.quickshell-lock = {};
-
 
   # ═══════════ Kullanıcı ═══════════
   users.mutableUsers = true; # Kullanicinin sifresini degistirebilmesi icin
@@ -170,6 +193,7 @@
     curl
     wget
     polkit_gnome  # Polkit şifre diyalogu
+    file-roller   # Arşiv yöneticisi (zip/tar/rar vb.)
   ];
 
   # Polkit Agent'ı Hyprland ile birlikte başlat

@@ -18,6 +18,7 @@
     zbar
     qrencode
     mpv
+    imv            # Hızlı Wayland resim görüntüleyici
     easyeffects
     pavucontrol
     hyprpicker

@@ -388,6 +388,7 @@ BANNER
         echo "  bright [up|down]       Ekran parlaklığını ayarlar"
         echo "  capture [screen|region|record-screen|ocr|qr-scan] Ekran görüntüsü, sesli kayıt, OCR ve QR araçları"
         echo "  power [lock|reboot|shutdown|sleep] Güç yönetimi"
+        echo "  install                Xmarchy diske kurulum yardımcısı (Disko + NixOS)"
         echo ""
       }
 
@@ -550,6 +551,9 @@ EOF
           ;;
         power)
           exec xmarchy-power "$@"
+          ;;
+        install)
+          exec xmarchy-install "$@"
           ;;
         help|--help|-h|"")
           show_help

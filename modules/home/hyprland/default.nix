@@ -4,6 +4,7 @@
   imports = [
     ./bindings.nix
     ./rules.nix
+    ./idle.nix
   ];
 
   # Hyprland Window Manager Yapılandırması

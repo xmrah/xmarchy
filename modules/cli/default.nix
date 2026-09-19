@@ -113,6 +113,10 @@ WOFI_CSS
     '';
   };
 in {
+  imports = [
+    ./installer.nix
+  ];
+
   environment.systemPackages = [
     xmarchy-theme-apply
   ];
