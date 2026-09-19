@@ -148,6 +148,8 @@ ShellRoot {
     property alias weatherMenu: weatherMenu
     property alias displayMenu: displayMenu
 
+    readonly property int screenWidth: Quickshell.screens.length > 0 ? Quickshell.screens[0].width : 1920
+
     // ═══════════ IPC Kontrolleri ═══════════
     IpcHandler { target: "osd"; function show(icon: string, value: int) { osd.show(icon, value) } }
     IpcHandler { target: "launcher"; function toggle() { launcher.toggle() } }
@@ -158,9 +160,9 @@ ShellRoot {
         function toggle() { if (powerMenu.opened) powerMenu.opened = false; else powerMenu.open() }
     }
     IpcHandler { target: "calendar"; function toggle() { calendarMenu.toggle() } }
-    IpcHandler { target: "weather"; function toggle() { weatherMenu.toggle(1920 / 2 - 100, shell.barHeight + 6) } }
-    IpcHandler { target: "display"; function toggle() { displayMenu.toggle(1920 - 400, shell.barHeight + 6) } }
-    IpcHandler { target: "audio"; function toggle() { audioMenu.toggle(1920 - 380, shell.barHeight + 6) } }
-    IpcHandler { target: "bluetooth"; function toggle() { bluetoothMenu.toggle(1920 - 340, shell.barHeight + 6) } }
-    IpcHandler { target: "network"; function toggle() { networkMenu.toggle(1920 - 480, shell.barHeight + 6) } }
+    IpcHandler { target: "weather"; function toggle() { weatherMenu.toggle(shell.screenWidth / 2 - 100, shell.barHeight + 6) } }
+    IpcHandler { target: "display"; function toggle() { displayMenu.toggle(shell.screenWidth - 400, shell.barHeight + 6) } }
+    IpcHandler { target: "audio"; function toggle() { audioMenu.toggle(shell.screenWidth - 380, shell.barHeight + 6) } }
+    IpcHandler { target: "bluetooth"; function toggle() { bluetoothMenu.toggle(shell.screenWidth - 340, shell.barHeight + 6) } }
+    IpcHandler { target: "network"; function toggle() { networkMenu.toggle(shell.screenWidth - 480, shell.barHeight + 6) } }
 }

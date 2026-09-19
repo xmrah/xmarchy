@@ -5,6 +5,7 @@
     ../cli/default.nix
     ../cli/core.nix
     ../apps/browser.nix
+    ./security.nix
     # Not: ai.nix (Ollama/ROCm), gaming.nix (Steam/Wine) ve impermanence 
     # canlı test ortamını şişirmemek ve çakışma yaratmamak için isteğe bağlı tutulmuştur.
   ];

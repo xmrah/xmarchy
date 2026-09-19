@@ -13,12 +13,24 @@ nix flake check
 ```
 Eğer sözdizimi veya referans hatası varsa derlemeye geçmeden önce düzelt.
 
-## 3. Adım: VM Derleme ve Çalıştırma
-Kullanıcıya testi başlatması için komutu öner (veya kullanıcı onay verirse çalıştır):
+## 3. Adım: VM Derleme (Build)
+VM paketini izole olarak derle ve `result-vm` sembolik bağını oluştur:
 ```bash
-nix run .#vm
+nix build .#vm -o result-vm
+```
+*Not: Bu adım, sistemi derleyerek derleme hatalarını baştan yakalar ve `result-vm/bin/run-xmarchy-vm` dosyasını hazırlar.*
+
+## 4. Adım: VM Çalıştırma (Run)
+Derlenmiş VM'i doğrudan QEMU üzerinden başlat:
+```bash
+./result-vm/bin/run-xmarchy-vm
 ```
 
-## 4. Adım: Kontrol Kriterleri
+## 5. Adım: Kontrol Kriterleri
 - QEMU penceresinde Hyprland ve Quickshell barının açılıp açılmadığını doğrula.
 - RAM (4096MB) ve CPU (4 çekirdek) ayarlarının `flake.nix` içindeki `xmarchy-vm` tanımına uygun olduğunu teyit et.
+- Kısayolları test et:
+  - `SUPER + Return` (Kitty Terminal)
+  - `SUPER + Space` (Quickshell Launcher)
+  - `SUPER + F1` veya `SUPER + /` (Kısayol Rehberi)
+  - `SUPER + H, J, K, L` (Pencere Odak Gezinmesi)

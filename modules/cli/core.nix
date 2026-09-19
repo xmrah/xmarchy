@@ -316,7 +316,7 @@ let
   SUPER + CTRL + P             Güç Menüsü (Kapat/Yeniden Başlat)
   SUPER + CTRL + C             Takvim & Saat Menüsü
   SUPER + CTRL + N             Gece Işığı Aç/Kapat (Hyprsunset)
-  SUPER + K                    Bu Kısayol Rehberini Göster
+  SUPER + F1 (veya SUPER + /)   Bu Kısayol Rehberini Göster
 
 ✦ PANO & ÇALIŞMA ALANLARI
   SUPER + C                    Pano Geçmişi & Arama (Cliphist + Wofi)

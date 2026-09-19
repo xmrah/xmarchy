@@ -3,6 +3,7 @@
 {
   imports = [
     ./quickshell/default.nix
+    ../apps/ai-launchers.nix
   ];
 
   # Hyprland Wayland masaüstü bağımlılıkları
@@ -23,6 +24,7 @@
     playerctl
     cliphist
     wofi
+    thunar
     hyprsunset
   ];
 
